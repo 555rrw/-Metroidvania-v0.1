@@ -510,6 +510,10 @@ func kill() -> void:
 		game_node.load_room(MetSys.get_current_room_id())
 
 func on_enter() -> void:
+	event = false
+	velocity = Vector2.ZERO
+	current_state = State.IDLE
+	modulate.a = 1.0
 	reset_position = position
 
 # --- Helper Utilities ---

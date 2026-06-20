@@ -83,6 +83,9 @@ func _on_room_loaded() -> void:
 	# Locate the target portal or spawn location
 	var target_spawn_pos = Vector2.ZERO
 	var found_spawn = false
+	var room_size := _get_room_size()
+
+	_apply_camera_limits(room_size)
 
 	# Search room children for portals/bench
 	if not target_portal_name.is_empty() and map:
@@ -90,28 +93,66 @@ func _on_room_loaded() -> void:
 		var portals = _find_nodes_of_type(map, "Portal")
 		for p in portals:
 			if p.name == target_portal_name:
-				target_spawn_pos = p.global_position
+				target_spawn_pos = _get_portal_exit_position(p, room_size)
 				found_spawn = true
 				break
 
 	if not found_spawn and map:
-		# Search for SavePoint (bench)
-		var bench = map.get_node_or_null("SavePoint")
-		if bench:
-			target_spawn_pos = bench.global_position
+		var spawn_point = map.get_node_or_null("SpawnPoint")
+		if spawn_point:
+			target_spawn_pos = spawn_point.global_position
 			found_spawn = true
 
 	if not found_spawn and map:
 		# Default to room origin plus a small offset
-		target_spawn_pos = map.global_position + Vector2(100, 300)
+		target_spawn_pos = map.global_position + Vector2(120, max(120.0, room_size.y - 98.0))
 
 	# Teleport player
 	$Player.global_position = target_spawn_pos
+	$Player.velocity = Vector2.ZERO
 	$Player.on_enter()
 
 	# Fade player back in
 	$Player.modulate.a = 1.0
 	target_portal_name = ""
+
+func _get_room_size() -> Vector2:
+	var fallback := Vector2(
+		ProjectSettings.get_setting("display/window/size/viewport_width", 1280),
+		ProjectSettings.get_setting("display/window/size/viewport_height", 720)
+	)
+	if not map:
+		return fallback
+
+	var background = map.get_node_or_null("Background")
+	if background is Control:
+		var size := (background as Control).size
+		if size.x > 0.0 and size.y > 0.0:
+			return size
+
+	return fallback
+
+func _apply_camera_limits(room_size: Vector2) -> void:
+	var camera := $PlayerCamera as Camera2D
+	if not camera or not map:
+		return
+
+	var origin := map.global_position
+	var view_size := get_viewport().get_visible_rect().size / camera.zoom
+	var room_width: float = max(room_size.x, view_size.x)
+	var room_height: float = max(room_size.y, view_size.y)
+
+	camera.limit_left = int(origin.x)
+	camera.limit_top = int(origin.y)
+	camera.limit_right = int(origin.x + room_width)
+	camera.limit_bottom = int(origin.y + room_height)
+	camera.reset_smoothing()
+
+func _get_portal_exit_position(portal: Node2D, room_size: Vector2) -> Vector2:
+	var room_origin := map.global_position if map else Vector2.ZERO
+	var room_mid_x := room_origin.x + room_size.x * 0.5
+	var exit_x := 80.0 if portal.global_position.x < room_mid_x else -80.0
+	return portal.global_position + Vector2(exit_x, 0.0)
 
 # Recursive helper to find nodes by type name
 func _find_nodes_of_type(root_node: Node, type_name: String) -> Array[Node]:

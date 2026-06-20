@@ -26,10 +26,9 @@ func _ready() -> void:
 	knockback_resistance = 1.0 # Heavy boss, no knockback
 	super._ready()
 
-	# Setup sprite sheet frames
-	# Assume boss.png has a 4x2 grid or just horizontal 4 frames
-	enemy_sprite.hframes = 4
+	enemy_sprite.hframes = 1
 	enemy_sprite.vframes = 1
+	enemy_sprite.frame = 0
 	jump_timer = jump_cooldown
 
 func _enemy_ai(delta: float) -> void:
@@ -59,8 +58,7 @@ func _enemy_ai(delta: float) -> void:
 			velocity.x = boss_direction * speed
 			enemy_sprite.flip_h = (boss_direction == 1)
 
-			# Animate walk
-			enemy_sprite.frame = (Engine.get_frames_drawn() / 8) % 4
+			enemy_sprite.frame = 0
 
 			if jump_timer <= 0.0 and is_on_floor() and abs(to_player.x) < 400.0:
 				boss_state = BossState.JUMP_START
@@ -80,7 +78,7 @@ func _enemy_ai(delta: float) -> void:
 				boss_state = BossState.LEAPING
 
 		BossState.LEAPING:
-			enemy_sprite.frame = 1
+			enemy_sprite.frame = 0
 			if is_on_floor() and velocity.y >= 0:
 				# Land and slam
 				boss_state = BossState.SLAM
@@ -91,14 +89,14 @@ func _enemy_ai(delta: float) -> void:
 
 		BossState.SLAM:
 			# Slam visual recovery
-			enemy_sprite.frame = 2
+			enemy_sprite.frame = 0
 			state_timer -= delta
 			if state_timer <= 0.0:
 				boss_state = BossState.WALK
 
 		BossState.STAGGER:
 			# Staggered state (vulnerable, sitting down)
-			enemy_sprite.frame = 3
+			enemy_sprite.frame = 0
 			velocity.x = 0
 			state_timer -= delta
 			if state_timer <= 0.0:

@@ -1,13 +1,13 @@
 [gd_scene load_steps=5 format=3 uid="uid://cxsc37k2bvdg8"]
 
 [ext_resource type="Script" path="res://src/enemies/FalseKnight.gd" id="1_dnyg"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/false_knight.png" id="2_dnyg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/clean/false_knight_clean.png" id="2_dnyg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_false_knight"]
-size = Vector2(80, 112)
+size = Vector2(100, 132)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
-size = Vector2(88, 120)
+size = Vector2(112, 144)
 
 [node name="FalseKnight" type="CharacterBody2D"]
 collision_layer = 4
@@ -16,9 +16,8 @@ script = ExtResource("1_dnyg")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 0
-scale = Vector2(2.5, 2.5)
+scale = Vector2(0.85, 0.85)
 texture = ExtResource("2_dnyg")
-hframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 4)

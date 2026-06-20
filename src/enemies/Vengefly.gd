@@ -15,9 +15,9 @@ var frame_timer: float = 0.0
 func _ready() -> void:
 	super._ready()
 	start_pos = global_position
-	# Setup hframes for the sprite sheet
-	enemy_sprite.hframes = 4
+	enemy_sprite.hframes = 1
 	enemy_sprite.vframes = 1
+	enemy_sprite.frame = 0
 
 func _enemy_ai(delta: float) -> void:
 	var players = get_tree().get_nodes_in_group(&"player")
@@ -47,10 +47,11 @@ func _enemy_ai(delta: float) -> void:
 				start_pos = global_position
 
 	# Animate frame
-	frame_timer += delta
-	if frame_timer >= (1.0 / anim_fps):
-		frame_timer = 0.0
-		enemy_sprite.frame = (enemy_sprite.frame + 1) % enemy_sprite.hframes
+	if enemy_sprite.hframes > 1:
+		frame_timer += delta
+		if frame_timer >= (1.0 / anim_fps):
+			frame_timer = 0.0
+			enemy_sprite.frame = (enemy_sprite.frame + 1) % enemy_sprite.hframes
 
 	move_and_slide()
 

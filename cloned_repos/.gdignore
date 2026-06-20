@@ -1,0 +1,2 @@
+Godot should not import archived upstream projects directly.
+Runtime assets copied into res://assets are the supported game inputs.

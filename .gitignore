@@ -1,5 +1,8 @@
 # Godot editor cache
 .godot/
 
+# Local scratch files
+.scratch/
+
 # Cloned source repositories
 cloned_repos/

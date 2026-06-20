@@ -46,6 +46,7 @@ layout_mode = 2
 stretch_mode = 5
 
 [node name="AbilityLabel" type="Label" parent="."]
+visible = false
 texture_filter = 0
 layout_mode = 1
 anchors_preset = 2
@@ -60,6 +61,7 @@ text = "Abilities: None"
 vertical_alignment = 1
 
 [node name="SourceLabel" type="Label" parent="."]
+visible = false
 texture_filter = 0
 layout_mode = 1
 anchors_preset = 2
@@ -105,4 +107,4 @@ offset_top = 24.0
 offset_right = -24.0
 offset_bottom = 136.0
 grow_horizontal = 0
-scale = Vector2(1.2, 1.2)
+scale = Vector2(0.75, 0.75)

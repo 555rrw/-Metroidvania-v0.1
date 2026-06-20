@@ -19,6 +19,9 @@ size = Vector2(40, 720)
 [node name="RoomInstance" type="Node2D" parent="."]
 script = ExtResource("6_room2")
 
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(120, 622)
+
 [node name="SkyBackdrop" type="Sprite2D" parent="."]
 z_index = -9
 modulate = Color(0.12, 0.23, 0.16, 0.45)
@@ -55,6 +58,7 @@ offset_bottom = 720.0
 color = Color(0.054902, 0.0862745, 0.0627451, 1)
 
 [node name="GreenpathLabel" type="Label" parent="Background"]
+visible = false
 modulate = Color(1, 1, 1, 0.196078)
 layout_mode = 0
 offset_left = 64.0
@@ -65,6 +69,7 @@ theme_override_font_sizes/font_size = 24
 text = "Greenpath (Greenpath)"
 
 [node name="TutorialLabel" type="Label" parent="Background"]
+visible = false
 modulate = Color(1, 1, 1, 0.458824)
 layout_mode = 0
 offset_left = 2200.0

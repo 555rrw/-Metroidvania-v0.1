@@ -32,6 +32,9 @@ func _check_boss() -> void:
 [node name="RoomInstance" type="Node2D" parent="."]
 script = ExtResource("3_room3")
 
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(120, 622)
+
 [node name="ControllerEcho" type="Sprite2D" parent="."]
 z_index = -5
 modulate = Color(0.55, 0.7, 1, 0.28)
@@ -46,6 +49,7 @@ offset_bottom = 720.0
 color = Color(0.0901961, 0.0784314, 0.121569, 1)
 
 [node name="BossRoomLabel" type="Label" parent="Background"]
+visible = false
 modulate = Color(1, 1, 1, 0.196078)
 layout_mode = 0
 offset_left = 64.0
@@ -56,6 +60,7 @@ theme_override_font_sizes/font_size = 24
 text = "Ancestral Mound (Boss Chamber)"
 
 [node name="TutorialLabel" type="Label" parent="Background"]
+visible = false
 modulate = Color(1, 1, 1, 0.458824)
 layout_mode = 0
 offset_left = 64.0
