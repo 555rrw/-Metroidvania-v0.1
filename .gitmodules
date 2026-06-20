@@ -1,15 +1,20 @@
 [submodule "cloned_repos/Hollow-Knight-Imitation"]
 	path = cloned_repos/Hollow-Knight-Imitation
 	url = https://github.com/DanielDFY/Hollow-Knight-Imitation.git
+	ignore = untracked
 [submodule "cloned_repos/Metroidvania-System"]
 	path = cloned_repos/Metroidvania-System
 	url = https://github.com/KoBeWi/Metroidvania-System.git
+	ignore = untracked
 [submodule "cloned_repos/godot-platformer-2d"]
 	path = cloned_repos/godot-platformer-2d
 	url = https://github.com/gdquest-demos/godot-platformer-2d.git
+	ignore = untracked
 [submodule "cloned_repos/CloneProject_HollowKnight"]
 	path = cloned_repos/CloneProject_HollowKnight
 	url = https://github.com/Antonius-k/CloneProject_HollowKnight.git
+	ignore = untracked
 [submodule "cloned_repos/GodotHollowKnightController"]
 	path = cloned_repos/GodotHollowKnightController
 	url = https://github.com/ChrisMGeo/GodotHollowKnightController.git
+	ignore = untracked
