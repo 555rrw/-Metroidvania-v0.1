@@ -134,7 +134,9 @@ func _ready() -> void:
 func _load_all_animations() -> void:
 	animations["idle"] = _load_animation_frames("idle")
 	animations["walk"] = _load_animation_frames("walk")
-	animations["jump"] = _load_animation_frames("jump")
+	animations["jump"] = _load_animation_frames_range("jump", 1, 9)
+	animations["fall"] = _load_animation_frames_range("jump", 10, 12)
+	animations["double_jump"] = _load_animation_frames("double_jump")
 	animations["dash"] = _load_animation_frames("dash")
 	animations["wall_slide"] = _load_animation_frames("wall_slide")
 	animations["hurt"] = _load_animation_frames("hurt")
@@ -161,7 +163,21 @@ func _load_animation_frames(dir_name: String) -> Array[Texture2D]:
 				break
 	return frames
 
+func _load_animation_frames_range(dir_name: String, start_idx: int, end_idx: int) -> Array[Texture2D]:
+	var frames: Array[Texture2D] = []
+	for i in range(start_idx, end_idx + 1):
+		var path := "res://assets/sprites/player/%s/%d.PNG" % [dir_name, i]
+		if ResourceLoader.exists(path):
+			frames.append(load(path) as Texture2D)
+		else:
+			path = "res://assets/sprites/player/%s/%d.png" % [dir_name, i]
+			if ResourceLoader.exists(path):
+				frames.append(load(path) as Texture2D)
+	return frames
+
 func play_anim(anim_name: String, fps: float = 10.0) -> void:
+	if current_animation_name == "attack" and attack_duration_timer > 0.0 and anim_name in ["idle", "walk", "jump", "fall", "double_jump"]:
+		return
 	if current_animation_name == anim_name and anim_fps == fps:
 		return
 	current_animation_name = anim_name
@@ -231,7 +247,10 @@ func _physics_process(delta: float) -> void:
 				pass
 
 		State.JUMP:
-			play_anim("jump", 10.0)
+			if current_jumps == 2:
+				play_anim("double_jump", 12.0)
+			else:
+				play_anim("jump", 10.0)
 			_apply_gravity(delta, velocity.y >= 0.0)
 			_apply_horizontal(move_input, air_speed, air_acceleration, air_deceleration, delta)
 
@@ -249,7 +268,7 @@ func _physics_process(delta: float) -> void:
 				_start_wall_slide(wall_sum)
 
 		State.FALL:
-			play_anim("jump", 10.0)
+			play_anim("fall", 10.0)
 			_apply_gravity(delta, true)
 			_apply_horizontal(move_input, air_speed, air_acceleration, air_deceleration, delta)
 
@@ -305,7 +324,7 @@ func _physics_process(delta: float) -> void:
 		State.HURT:
 			play_anim("hurt", 10.0)
 			hurt_timer -= delta
-			velocity.x = hurt_knockback_dir * knockback_force
+			velocity.x = move_toward(velocity.x, 0.0, air_deceleration * delta)
 			_apply_gravity(delta, true)
 
 			if hurt_timer <= 0.0:
@@ -314,7 +333,7 @@ func _physics_process(delta: float) -> void:
 		State.FOCUS:
 			pass
 
-	sprite.flip_h = facing_direction == -1
+	sprite.flip_h = facing_direction == 1
 
 	if Input.is_action_just_pressed("attack") and attack_cooldown_timer <= 0.0 and not (current_state in [State.HURT, State.FOCUS]):
 		_perform_attack()

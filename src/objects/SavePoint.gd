@@ -2,39 +2,75 @@ extends Area2D
 class_name SavePoint
 
 @onready var prompt = $Label
+@onready var glow = $Glow
+@onready var seat = $Seat
 var player_in_range: Player = null
+var resting: bool = false
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	prompt.visible = false
+	if glow:
+		glow.modulate.a = 0.0
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
 		player_in_range = body
+		prompt.text = "UP: REST"
 		prompt.visible = true
+		_fade_glow(0.65)
 
 func _on_body_exited(body: Node2D) -> void:
 	if body is Player:
 		player_in_range = null
 		prompt.visible = false
+		_fade_glow(0.0)
 
 func _process(_delta: float) -> void:
-	if player_in_range and Input.is_action_just_pressed("up"):
-		# Restore health
-		player_in_range.health = player_in_range.max_health
-		player_in_range.health_changed.emit(player_in_range.health)
-		player_in_range.reset_position = global_position
+	if player_in_range and Input.is_action_just_pressed("up") and not resting:
+		_rest_at_bench()
 
-		# Save game progress
-		var game = get_tree().get_first_node_in_group(&"game")
-		if game:
-			game.save_game()
+func _rest_at_bench() -> void:
+	resting = true
+	var player := player_in_range
+	if not player:
+		resting = false
+		return
 
-		# Visual prompt update
-		prompt.text = "Saved!"
-		var tween = create_tween()
-		tween.tween_property(prompt, "modulate:g", 1.0, 1.0)
-		await get_tree().create_timer(1.5).timeout
-		if player_in_range:
-			prompt.text = "Press UP to Rest"
+	player.event = true
+	player.velocity = Vector2.ZERO
+	player.global_position = global_position + Vector2(-18, -42)
+	player.health = player.max_health
+	player.health_changed.emit(player.health)
+	player.reset_position = global_position + Vector2(-18, -42)
+
+	var game = get_tree().get_first_node_in_group(&"game")
+	if game:
+		var event_name := "bench_rest_" + str(int(global_position.x)) + "_" + str(int(global_position.y))
+		if not (event_name in game.events):
+			game.events.append(event_name)
+		game.save_game()
+
+	prompt.text = "RESTED - MAP UPDATED"
+	prompt.modulate = Color(0.75, 0.92, 1.0, 1.0)
+	_fade_glow(1.0)
+	if seat:
+		var seat_tween := create_tween()
+		seat_tween.tween_property(seat, "scale:y", 0.78, 0.12)
+		seat_tween.tween_property(seat, "scale:y", 1.0, 0.18)
+
+	await get_tree().create_timer(0.85).timeout
+	if player:
+		player.event = false
+	if player_in_range:
+		prompt.text = "UP: REST"
+		prompt.modulate = Color.WHITE
+		_fade_glow(0.65)
+	resting = false
+
+func _fade_glow(alpha: float) -> void:
+	if not glow:
+		return
+	var tween := create_tween()
+	tween.tween_property(glow, "modulate:a", alpha, 0.18)

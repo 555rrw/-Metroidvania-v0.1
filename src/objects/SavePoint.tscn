@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bchg46k2lv6qu"]
+[gd_scene load_steps=4 format=3 uid="uid://bchg46k2lv6qu"]
 
 [ext_resource type="Script" path="res://src/objects/SavePoint.gd" id="1_dnyg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gdquest/props/checkpoint08_crystal.png" id="2_crystal"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bench"]
 size = Vector2(96, 40)
@@ -10,18 +11,31 @@ collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_dnyg")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Glow" type="ColorRect" parent="."]
+offset_left = -68.0
+offset_top = -54.0
+offset_right = 68.0
+offset_bottom = 22.0
+color = Color(0.38, 0.72, 1, 0.28)
+
+[node name="Seat" type="ColorRect" parent="."]
 offset_left = -48.0
 offset_top = -8.0
 offset_right = 48.0
 offset_bottom = 12.0
 color = Color(0.247059, 0.27451, 0.313726, 1)
 
-[node name="Backrest" type="ColorRect" parent="ColorRect"]
+[node name="Backrest" type="ColorRect" parent="Seat"]
 layout_mode = 0
 offset_top = -20.0
 offset_right = 96.0
 color = Color(0.180392, 0.207843, 0.25098, 1)
+
+[node name="Crystal" type="Sprite2D" parent="."]
+modulate = Color(0.55, 0.85, 1, 0.8)
+position = Vector2(0, -28)
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("2_crystal")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -10)
@@ -33,7 +47,7 @@ offset_left = -72.0
 offset_top = -56.0
 offset_right = 72.0
 offset_bottom = -33.0
-text = "Press UP to Rest"
+text = "UP: REST"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_use_anchors_ = true
