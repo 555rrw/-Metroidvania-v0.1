@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bchg85y2l7gdw"]
 
 [ext_resource type="Script" path="res://src/enemies/Crawlid.gd" id="1_dnyg"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/clean/crawlid_clean.png" id="2_dnyg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/enemy/ground_insect1.png" id="2_dnyg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_crawlid"]
 size = Vector2(40, 24)
@@ -16,7 +16,7 @@ script = ExtResource("1_dnyg")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 0
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.42, 0.42)
 texture = ExtResource("2_dnyg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

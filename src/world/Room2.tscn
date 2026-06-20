@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cxsc37k2bvdh2"]
+[gd_scene load_steps=19 format=3 uid="uid://cxsc37k2bvdh2"]
 
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="1_room2"]
 [ext_resource type="PackedScene" uid="uid://cxsc37k2bvdq7" path="res://src/objects/Spikes.tscn" id="2_room2"]
@@ -11,6 +11,12 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/gdquest/props/hookTarget02_ball.png" id="9_room2"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/framework/ruins_mid_walls_0002_a.png" id="10_room2"]
 [ext_resource type="PackedScene" path="res://src/objects/AbilityGate.tscn" id="11_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/UnstablePlatform.tscn" id="12_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/SawTrap.tscn" id="13_room2"]
+[ext_resource type="PackedScene" path="res://src/enemies/Gunner.tscn" id="14_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/SwitchTrigger.tscn" id="15_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/TriggerDoor.tscn" id="16_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/FallingTrap.tscn" id="17_room2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -179,6 +185,31 @@ position = Vector2(0, 0)
 [node name="Waypoint2" type="Marker2D" parent="MovingPlatform"]
 position = Vector2(960, 0)
 
+[node name="UnstablePlatformA" parent="." instance=ExtResource("12_room2")]
+position = Vector2(1290, 456)
+
+[node name="UnstablePlatformB" parent="." instance=ExtResource("12_room2")]
+position = Vector2(1540, 404)
+
+[node name="UnstablePlatformC" parent="." instance=ExtResource("12_room2")]
+position = Vector2(1780, 354)
+
+[node name="SawTrap" parent="." instance=ExtResource("13_room2")]
+position = Vector2(1360, 638)
+
+[node name="FallingTrap" parent="." instance=ExtResource("17_room2")]
+position = Vector2(1580, 168)
+
+[node name="TriggerDoor" parent="." instance=ExtResource("16_room2")]
+position = Vector2(2072, 590)
+event_name = "room2_switch_door"
+
+[node name="SwitchTrigger" parent="." instance=ExtResource("15_room2")]
+position = Vector2(1900, 610)
+event_name = "room2_switch_door"
+door_path = NodePath("../TriggerDoor")
+trap_path = NodePath("../FallingTrap")
+
 [node name="DashUpgrade" parent="." instance=ExtResource("4_room2")]
 position = Vector2(2300, 640)
 ability_name = "dash"
@@ -192,3 +223,6 @@ position = Vector2(1100, 320)
 
 [node name="Vengefly2" parent="." instance=ExtResource("5_room2")]
 position = Vector2(1800, 320)
+
+[node name="Gunner" parent="." instance=ExtResource("14_room2")]
+position = Vector2(2240, 628)

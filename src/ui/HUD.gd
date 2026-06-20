@@ -9,6 +9,10 @@ const SourceArchive = preload("res://src/integration/SourceArchive.gd")
 @onready var popup_label = $PopupLabel
 @onready var ability_label = $AbilityLabel
 @onready var source_label = $SourceLabel
+@onready var pause_overlay = $PauseOverlay
+@onready var continue_button: Button = $PauseOverlay/MenuPanel/ContinueButton
+@onready var menu_button: Button = $PauseOverlay/MenuPanel/MenuButton
+@onready var quit_button: Button = $PauseOverlay/MenuPanel/QuitButton
 
 var texture_full = preload("res://assets/sprites/UI/health_full.png")
 var texture_empty = preload("res://assets/sprites/UI/health_empty.png")
@@ -16,8 +20,13 @@ var texture_empty = preload("res://assets/sprites/UI/health_empty.png")
 var player_ref: Player = null
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	popup_label.visible = false
 	popup_label.modulate.a = 0.0
+	pause_overlay.visible = false
+	continue_button.pressed.connect(_on_continue_pressed)
+	menu_button.pressed.connect(_on_menu_pressed)
+	quit_button.pressed.connect(_on_quit_pressed)
 
 	# Find player and connect signals
 	var players = get_tree().get_nodes_in_group(&"player")
@@ -39,6 +48,31 @@ func setup_player(player: Player) -> void:
 func _process(_delta: float) -> void:
 	# Keep abilities text updated
 	_update_abilities()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_ESCAPE or event.keycode == KEY_P:
+			_toggle_pause()
+			get_viewport().set_input_as_handled()
+
+func _toggle_pause() -> void:
+	_set_paused(not pause_overlay.visible)
+
+func _set_paused(paused: bool) -> void:
+	pause_overlay.visible = paused
+	get_tree().paused = paused
+	if paused:
+		continue_button.grab_focus()
+
+func _on_continue_pressed() -> void:
+	_set_paused(false)
+
+func _on_menu_pressed() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://src/ui/MainMenu.tscn")
+
+func _on_quit_pressed() -> void:
+	get_tree().quit()
 
 func update_health(current_health: int) -> void:
 	# Clear or update TextureRect children

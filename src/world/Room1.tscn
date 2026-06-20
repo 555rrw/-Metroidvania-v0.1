@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cxsc37k2bvdh1"]
+[gd_scene load_steps=18 format=3 uid="uid://cxsc37k2bvdh1"]
 
 [ext_resource type="PackedScene" uid="uid://bchg46k2lv6qu" path="res://src/objects/SavePoint.tscn" id="1_room1"]
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="2_room1"]
@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/menu/title.png" id="7_room1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/framework/floor1.png" id="8_room1"]
 [ext_resource type="PackedScene" path="res://src/objects/AbilityGate.tscn" id="9_room1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/background/spawn.png" id="10_room1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/door_entry/door_entry.png" id="11_room1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/door_entry/door_framework.png" id="12_room1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -57,6 +60,13 @@ modulate = Color(1, 1, 1, 0.08)
 position = Vector2(90, 120)
 scale = Vector2(0.35, 0.35)
 texture = ExtResource("7_room1")
+
+[node name="SpawnBackdrop" type="Sprite2D" parent="."]
+z_index = -7
+modulate = Color(0.75, 0.86, 1, 0.22)
+position = Vector2(230, 132)
+scale = Vector2(0.72, 0.72)
+texture = ExtResource("10_room1")
 
 [node name="RuinFloorTexture" type="Sprite2D" parent="."]
 z_index = -6
@@ -239,6 +249,18 @@ position = Vector2(300, 660)
 position = Vector2(1820, 620)
 target_room = "res://src/world/Room2.tscn"
 target_portal_name = "PortalFromRoom1"
+
+[node name="EntryDoorDecoration" type="Sprite2D" parent="."]
+z_index = -2
+position = Vector2(1816, 598)
+scale = Vector2(0.54, 0.54)
+texture = ExtResource("11_room1")
+
+[node name="DoorFrameDecoration" type="Sprite2D" parent="."]
+z_index = -3
+position = Vector2(1816, 588)
+scale = Vector2(0.54, 0.54)
+texture = ExtResource("12_room1")
 
 [node name="ShortcutGate" parent="." instance=ExtResource("9_room1")]
 position = Vector2(1540, 330)

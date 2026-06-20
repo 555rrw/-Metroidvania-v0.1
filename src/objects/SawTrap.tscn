@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/objects/SawTrap.gd" id="1_saw"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/trap/saw/saw0000.png" id="2_saw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_saw"]
+radius = 36.0
+
+[node name="SawTrap" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_saw")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 0
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("2_saw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_saw")

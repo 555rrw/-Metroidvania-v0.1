@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/objects/UnstablePlatform.gd" id="1_unstable"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/platform/unstable_mid/dream_plat_mid0000.png" id="2_unstable"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_unstable"]
+size = Vector2(190, 28)
+
+[node name="UnstablePlatform" type="AnimatableBody2D"]
+collision_layer = 1
+collision_mask = 0
+script = ExtResource("1_unstable")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 0
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("2_unstable")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_unstable")
+one_way_collision = true
+
+[node name="TriggerArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TriggerArea"]
+position = Vector2(0, -20)
+shape = SubResource("RectangleShape2D_unstable")
