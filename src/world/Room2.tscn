@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cxsc37k2bvdh2"]
+[gd_scene load_steps=13 format=3 uid="uid://cxsc37k2bvdh2"]
 
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="1_room2"]
 [ext_resource type="PackedScene" uid="uid://cxsc37k2bvdq7" path="res://src/objects/Spikes.tscn" id="2_room2"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/mountains.png" id="8_room2"]
 [ext_resource type="Texture2D" path="res://assets/sprites/gdquest/props/hookTarget02_ball.png" id="9_room2"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/framework/ruins_mid_walls_0002_a.png" id="10_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/AbilityGate.tscn" id="11_room2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -181,6 +182,10 @@ position = Vector2(960, 0)
 [node name="DashUpgrade" parent="." instance=ExtResource("4_room2")]
 position = Vector2(2300, 640)
 ability_name = "dash"
+
+[node name="DashGate" parent="." instance=ExtResource("11_room2")]
+position = Vector2(2395, 590)
+required_ability = &"dash"
 
 [node name="Vengefly" parent="." instance=ExtResource("5_room2")]
 position = Vector2(1100, 320)

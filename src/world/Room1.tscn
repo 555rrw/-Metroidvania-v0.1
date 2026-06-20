@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cxsc37k2bvdh1"]
+[gd_scene load_steps=15 format=3 uid="uid://cxsc37k2bvdh1"]
 
 [ext_resource type="PackedScene" uid="uid://bchg46k2lv6qu" path="res://src/objects/SavePoint.tscn" id="1_room1"]
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="2_room1"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/mountains.png" id="6_room1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/menu/title.png" id="7_room1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/framework/floor1.png" id="8_room1"]
+[ext_resource type="PackedScene" path="res://src/objects/AbilityGate.tscn" id="9_room1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -23,6 +24,9 @@ size = Vector2(280, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_plat3"]
 size = Vector2(240, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat4"]
+size = Vector2(260, 24)
 
 [node name="Room1" type="Node2D"]
 
@@ -212,6 +216,22 @@ color = Color(0.203922, 0.231373, 0.27451, 1)
 shape = SubResource("RectangleShape2D_plat3")
 one_way_collision = true
 
+[node name="Platform4" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1640, 410)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/Platform4"]
+offset_left = -130.0
+offset_top = -12.0
+offset_right = 130.0
+offset_bottom = 12.0
+color = Color(0.203922, 0.231373, 0.27451, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Platform4"]
+shape = SubResource("RectangleShape2D_plat4")
+one_way_collision = true
+
 [node name="SavePoint" parent="." instance=ExtResource("1_room1")]
 position = Vector2(300, 660)
 
@@ -219,6 +239,15 @@ position = Vector2(300, 660)
 position = Vector2(1820, 620)
 target_room = "res://src/world/Room2.tscn"
 target_portal_name = "PortalFromRoom1"
+
+[node name="ShortcutGate" parent="." instance=ExtResource("9_room1")]
+position = Vector2(1540, 330)
+required_ability = &"double_jump"
+
+[node name="PortalToRoom5" parent="." instance=ExtResource("2_room1")]
+position = Vector2(1640, 360)
+target_room = "res://src/world/Room5.tscn"
+target_portal_name = "ShortcutReturn"
 
 [node name="Crawlid" parent="." instance=ExtResource("3_room1")]
 position = Vector2(750, 646)

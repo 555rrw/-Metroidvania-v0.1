@@ -38,12 +38,16 @@ func _ready() -> void:
 		save_mgr.load_from_text(SAVE_PATH)
 
 		# Restore player and game state
-		events.assign(save_mgr.get_value("events"))
-		$Player.abilities.assign(save_mgr.get_value("abilities"))
-		$Player.health = save_mgr.get_value("health")
+		events.assign(save_mgr.get_value("events", []))
+		$Player.abilities.assign(save_mgr.get_value("abilities", []))
+		$Player.max_health = int(save_mgr.get_value("max_health", $Player.max_health))
+		$Player.max_soul = int(save_mgr.get_value("max_soul", $Player.max_soul))
+		$Player.health = clampi(int(save_mgr.get_value("health", $Player.max_health)), 0, $Player.max_health)
+		$Player.soul = clampi(int(save_mgr.get_value("soul", 0)), 0, $Player.max_soul)
 		$Player.health_changed.emit($Player.health)
+		$Player.soul_changed.emit($Player.soul, $Player.max_soul)
 
-		var current_room = save_mgr.get_value("current_room")
+		var current_room = save_mgr.get_value("current_room", "")
 		if not current_room.is_empty():
 			starting_map = current_room
 	else:
@@ -75,6 +79,9 @@ func save_game() -> void:
 	save_mgr.set_value("events", events)
 	save_mgr.set_value("abilities", $Player.abilities)
 	save_mgr.set_value("health", $Player.health)
+	save_mgr.set_value("max_health", $Player.max_health)
+	save_mgr.set_value("soul", $Player.soul)
+	save_mgr.set_value("max_soul", $Player.max_soul)
 	save_mgr.set_value("current_room", MetSys.get_current_room_id())
 	save_mgr.save_as_text(SAVE_PATH)
 

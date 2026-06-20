@@ -9,3 +9,7 @@ $ln;Abyss
 1,0,-1,0||0|uid://cxsc37k2bvdh2
 [4,0,0]
 0,0,1,0||1|uid://cxsc37k2bvdh3
+[5,0,0]
+1,0,1,0||2|uid://croomfour001a
+[6,0,0]
+0,0,1,0||3|uid://croomfive001b

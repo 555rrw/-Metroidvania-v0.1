@@ -25,10 +25,23 @@ func _on_body_entered(body: Node2D) -> void:
 		# Show unlock message on HUD
 		var game = get_tree().get_first_node_in_group(&"game")
 		if game and game.hud:
-			game.hud.show_unlock_message("UNLOCKED " + ability_name.to_upper() + "!")
+			game.hud.show_unlock_message(_unlock_message())
+		if game:
+			game.save_game()
 
 		# Fade out and free
 		set_deferred("monitoring", false)
 		var tween = create_tween()
 		tween.tween_property(self, "scale", Vector2.ZERO, 0.3)
 		tween.tween_callback(queue_free)
+
+func _unlock_message() -> String:
+	match ability_name:
+		"dash":
+			return "MOTHWING CLOAK UNLOCKED"
+		"double_jump":
+			return "MONARCH WINGS UNLOCKED"
+		"vengeful_spirit":
+			return "VENGEFUL SPIRIT LEARNED"
+		_:
+			return "UNLOCKED " + ability_name.to_upper()

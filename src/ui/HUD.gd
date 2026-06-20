@@ -4,6 +4,8 @@ class_name HUD
 const SourceArchive = preload("res://src/integration/SourceArchive.gd")
 
 @onready var masks_container = $MasksContainer
+@onready var soul_fill = $SoulMeter/SoulFill
+@onready var soul_label = $SoulMeter/SoulLabel
 @onready var popup_label = $PopupLabel
 @onready var ability_label = $AbilityLabel
 @onready var source_label = $SourceLabel
@@ -26,7 +28,10 @@ func setup_player(player: Player) -> void:
 	player_ref = player
 	if not player.health_changed.is_connected(update_health):
 		player.health_changed.connect(update_health)
+	if not player.soul_changed.is_connected(update_soul):
+		player.soul_changed.connect(update_soul)
 	update_health(player.health)
+	update_soul(player.soul, player.max_soul)
 
 	# Update ability label
 	_update_abilities()
@@ -44,6 +49,16 @@ func update_health(current_health: int) -> void:
 			mask.texture = texture_full
 		else:
 			mask.texture = texture_empty
+
+func update_soul(current_soul: int, max_soul: int) -> void:
+	if not soul_fill:
+		return
+	var pct := 0.0
+	if max_soul > 0:
+		pct = clamp(float(current_soul) / float(max_soul), 0.0, 1.0)
+	soul_fill.size.x = 156.0 * pct
+	if soul_label:
+		soul_label.text = "SOUL %02d" % current_soul
 
 func _update_abilities() -> void:
 	if not player_ref:

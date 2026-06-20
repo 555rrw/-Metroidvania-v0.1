@@ -16,12 +16,19 @@ Main scene: `res://src/world/Game.tscn`.
 ## Full Source Retention
 
 The five upstream repositories are retained as git submodules under `cloned_repos/`.
-`SourceArchive.gd` scans those folders at startup and indexes every non-`.git` file. The HUD displays the indexed repo/file count so the playable project exposes source-corpus usage in runtime.
+`SourceArchive.gd` scans those folders at startup and indexes every non-`.git` file for runtime provenance. The source count is kept off the shipped HUD so the playable slice presents as a game, not an integration debug screen.
 
 ## Playable v1 Feature Set
 
-- Three MetSys rooms: Crossroads, Greenpath, boss chamber.
-- Player movement: run, coyote jump, jump buffer, variable jump height, dash unlock, double jump unlock, wall slide/jump, nail attack, pogo bounce, hurt/invincibility, save respawn.
-- Enemies: Crawlid patrol, Vengefly chase/hover, False Knight boss with leap/slam/stagger/death reward.
-- Objects: save point, room portals, spikes, moving platform, ability unlocks.
-- UI: health masks, ability readout, unlock popup, MetSys minimap, source archive readout.
+- Five MetSys rooms: Crossroads, Greenpath, False Knight chamber, Spirit Sanctum, shortcut cache.
+- Player movement: run, tuned acceleration/deceleration, coyote jump, jump buffer, variable jump height, dash unlock, double jump unlock, wall slide/jump, look up/down camera.
+- Combat: directional nail hitboxes, pogo bounce, hit pause, recoil, Soul gain, Focus heal, Vengeful Spirit spell, hurt/invincibility, save respawn.
+- Enemies: Crawlid patrol, Vengefly chase/hover, False Knight phase boss with leap/slam/shockwave/stagger/death reward.
+- Objects: save point, room portals, spikes, moving platform, ability gates, spell/ability unlocks, secret Soul pickup.
+- UI: health masks, Soul meter, unlock popup, MetSys minimap.
+
+## Hollow Knight Gap Closed in This Slice
+
+- Progression loop now has ability gate -> boss reward -> spell shrine -> secret shortcut return.
+- Combat now has readable attack directions, Soul spend/gain, hit feedback, and a boss pattern closer to a Hollow Knight-style early fight.
+- Presentation remains asset-mix prototype quality, but formal debug/source labels are hidden from the shipped HUD.

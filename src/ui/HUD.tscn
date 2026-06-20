@@ -45,6 +45,40 @@ custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 stretch_mode = 5
 
+[node name="SoulMeter" type="Control" parent="."]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 82.0
+offset_right = 204.0
+offset_bottom = 112.0
+
+[node name="SoulBack" type="ColorRect" parent="SoulMeter"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 10.0
+offset_right = 164.0
+offset_bottom = 24.0
+color = Color(0.0156863, 0.0196078, 0.027451, 0.82)
+
+[node name="SoulFill" type="ColorRect" parent="SoulMeter"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 13.0
+offset_right = 4.0
+offset_bottom = 21.0
+color = Color(0.72, 0.92, 1, 0.95)
+
+[node name="SoulLabel" type="Label" parent="SoulMeter"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = -6.0
+offset_right = 172.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.82, 0.92, 1, 0.88)
+theme_override_font_sizes/font_size = 12
+text = "SOUL 00"
+vertical_alignment = 1
+
 [node name="AbilityLabel" type="Label" parent="."]
 visible = false
 texture_filter = 0

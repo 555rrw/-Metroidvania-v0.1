@@ -140,8 +140,8 @@ target_portal_name = "PortalToRoom3"
 
 [node name="VictoryPortal" parent="." instance=ExtResource("1_room3")]
 position = Vector2(1180, 620)
-target_room = "res://src/world/Room1.tscn"
-target_portal_name = "PortalToRoom2"
+target_room = "res://src/world/Room4.tscn"
+target_portal_name = "PortalFromRoom3"
 
 [node name="FalseKnight" parent="." instance=ExtResource("2_room3")]
 position = Vector2(640, 580)
