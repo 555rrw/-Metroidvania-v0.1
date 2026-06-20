@@ -1,0 +1,221 @@
+[gd_scene load_steps=11 format=3 uid="uid://cxsc37k2bvdh1"]
+
+[ext_resource type="PackedScene" uid="uid://bchg46k2lv6qu" path="res://src/objects/SavePoint.tscn" id="1_room1"]
+[ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="2_room1"]
+[ext_resource type="PackedScene" uid="uid://bchg85y2l7gdw" path="res://src/enemies/Crawlid.tscn" id="3_room1"]
+[ext_resource type="Script" path="res://addons/MetroidvaniaSystem/Scripts/RoomInstance.gd" id="4_room1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/sky.png" id="5_room1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/mountains.png" id="6_room1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/menu/title.png" id="7_room1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/framework/floor1.png" id="8_room1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
+size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
+size = Vector2(1920, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat1"]
+size = Vector2(240, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat2"]
+size = Vector2(280, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat3"]
+size = Vector2(240, 24)
+
+[node name="Room1" type="Node2D"]
+
+[node name="RoomInstance" type="Node2D" parent="."]
+script = ExtResource("4_room1")
+
+[node name="SkyBackdrop" type="Sprite2D" parent="."]
+z_index = -9
+modulate = Color(0.22, 0.27, 0.36, 0.45)
+centered = false
+scale = Vector2(2.2, 1.4)
+texture = ExtResource("5_room1")
+
+[node name="MountainBackdrop" type="Sprite2D" parent="."]
+z_index = -8
+modulate = Color(0.18, 0.2, 0.25, 0.5)
+position = Vector2(0, 170)
+centered = false
+scale = Vector2(2.0, 1.2)
+texture = ExtResource("6_room1")
+
+[node name="SourceTitleWatermark" type="Sprite2D" parent="."]
+z_index = -7
+modulate = Color(1, 1, 1, 0.08)
+position = Vector2(90, 120)
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("7_room1")
+
+[node name="RuinFloorTexture" type="Sprite2D" parent="."]
+z_index = -6
+modulate = Color(0.55, 0.6, 0.7, 0.22)
+position = Vector2(1080, 520)
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("8_room1")
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -10
+offset_right = 1920.0
+offset_bottom = 720.0
+color = Color(0.0784314, 0.0862745, 0.109804, 1)
+
+[node name="CrossroadsLabel" type="Label" parent="Background"]
+modulate = Color(1, 1, 1, 0.196078)
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 444.0
+offset_bottom = 104.0
+theme_override_font_sizes/font_size = 24
+text = "Forgotten Crossroads (Forgotten Crossroads)"
+
+[node name="TutorialLabel" type="Label" parent="Background"]
+modulate = Color(1, 1, 1, 0.458824)
+layout_mode = 0
+offset_left = 80.0
+offset_top = 400.0
+offset_right = 460.0
+offset_bottom = 460.0
+text = "A/D or Arrow Keys: Move
+Z / Space: Jump
+X / J: Nail Attack
+Up Arrow: Look Up"
+
+[node name="TutorialLabel2" type="Label" parent="Background"]
+modulate = Color(1, 1, 1, 0.458824)
+layout_mode = 0
+offset_left = 1360.0
+offset_top = 360.0
+offset_right = 1760.0
+offset_bottom = 420.0
+text = "Attack down in the air on enemies
+to bounce up (Down Strike Pogo)!"
+
+[node name="StaticEnvironment" type="Node2D" parent="."]
+
+[node name="Floor" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(960, 680)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/Floor"]
+offset_left = -960.0
+offset_top = -20.0
+offset_right = 960.0
+offset_bottom = 20.0
+color = Color(0.141176, 0.160784, 0.192157, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Floor"]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Ceiling" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(960, 20)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/Ceiling"]
+offset_left = -960.0
+offset_top = -20.0
+offset_right = 960.0
+offset_bottom = 20.0
+color = Color(0.141176, 0.160784, 0.192157, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Ceiling"]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="LeftWall" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(20, 360)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/LeftWall"]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+color = Color(0.141176, 0.160784, 0.192157, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/LeftWall"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="RightWall" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1900, 360)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/RightWall"]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+color = Color(0.141176, 0.160784, 0.192157, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/RightWall"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="Platform1" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(600, 480)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/Platform1"]
+offset_left = -120.0
+offset_top = -12.0
+offset_right = 120.0
+offset_bottom = 12.0
+color = Color(0.203922, 0.231373, 0.27451, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Platform1"]
+shape = SubResource("RectangleShape2D_plat1")
+one_way_collision = true
+
+[node name="Platform2" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1000, 380)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/Platform2"]
+offset_left = -140.0
+offset_top = -12.0
+offset_right = 140.0
+offset_bottom = 12.0
+color = Color(0.203922, 0.231373, 0.27451, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Platform2"]
+shape = SubResource("RectangleShape2D_plat2")
+one_way_collision = true
+
+[node name="Platform3" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1400, 460)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/Platform3"]
+offset_left = -120.0
+offset_top = -12.0
+offset_right = 120.0
+offset_bottom = 12.0
+color = Color(0.203922, 0.231373, 0.27451, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Platform3"]
+shape = SubResource("RectangleShape2D_plat3")
+one_way_collision = true
+
+[node name="SavePoint" parent="." instance=ExtResource("1_room1")]
+position = Vector2(300, 660)
+
+[node name="PortalToRoom2" parent="." instance=ExtResource("2_room1")]
+position = Vector2(1820, 620)
+target_room = "res://src/world/Room2.tscn"
+target_portal_name = "PortalFromRoom1"
+
+[node name="Crawlid" parent="." instance=ExtResource("3_room1")]
+position = Vector2(750, 646)
+
+[node name="Crawlid2" parent="." instance=ExtResource("3_room1")]
+position = Vector2(1250, 646)

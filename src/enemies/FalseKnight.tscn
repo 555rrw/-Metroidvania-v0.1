@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://cxsc37k2bvdg8"]
+
+[ext_resource type="Script" path="res://src/enemies/FalseKnight.gd" id="1_dnyg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/false_knight.png" id="2_dnyg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_false_knight"]
+size = Vector2(80, 112)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
+size = Vector2(88, 120)
+
+[node name="FalseKnight" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_dnyg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 0
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_dnyg")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_false_knight")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_hitbox")
+
+[node name="SFXPlayer" type="AudioStreamPlayer2D" parent="."]
+max_distance = 1600.0
+max_polyphony = 3

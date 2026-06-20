@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://bchg85y2l7gdw"]
+
+[ext_resource type="Script" path="res://src/enemies/Crawlid.gd" id="1_dnyg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/crawlid.png" id="2_dnyg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_crawlid"]
+size = Vector2(40, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
+size = Vector2(44, 28)
+
+[node name="Crawlid" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_dnyg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 0
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("2_dnyg")
+hframes = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_crawlid")
+
+[node name="WallRay" type="RayCast2D" parent="."]
+target_position = Vector2(-25, 0)
+collision_mask = 1
+
+[node name="LedgeRay" type="RayCast2D" parent="."]
+position = Vector2(-20, 10)
+target_position = Vector2(0, 25)
+collision_mask = 1
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_hitbox")

@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://cxsc37k2bvdg9"]
+
+[ext_resource type="Script" path="res://src/world/Game.gd" id="1_dnyg"]
+[ext_resource type="PackedScene" uid="uid://cxsc37k2bvdq6" path="res://src/player/Player.tscn" id="2_dnyg"]
+[ext_resource type="Script" path="res://src/player/PlayerCamera.gd" id="3_dnyg"]
+[ext_resource type="PackedScene" uid="uid://cslbbl2s06c8x" path="res://src/ui/HUD.tscn" id="4_dnyg"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_dnyg")
+starting_map = "res://src/world/Room1.tscn"
+
+[node name="Player" parent="." instance=ExtResource("2_dnyg")]
+position = Vector2(100, 300)
+
+[node name="PlayerCamera" type="Camera2D" parent="." node_paths=PackedStringArray("target")]
+position = Vector2(100, 300)
+zoom = Vector2(1.2, 1.2)
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+script = ExtResource("3_dnyg")
+target = NodePath("../Player")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource("4_dnyg")]
+layout_mode = 3
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true

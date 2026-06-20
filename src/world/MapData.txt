@@ -1,0 +1,11 @@
+$ln;Abyss
+[0,0,0]
+-1,0,0,0||0|uid://cxsc37k2bvdh1
+[1,0,0]
+1,0,-1,0||0|uid://cxsc37k2bvdh1
+[2,0,0]
+-1,0,1,0||0|uid://cxsc37k2bvdh2
+[3,0,0]
+1,0,-1,0||0|uid://cxsc37k2bvdh2
+[4,0,0]
+0,0,1,0||1|uid://cxsc37k2bvdh3

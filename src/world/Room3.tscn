@@ -1,0 +1,158 @@
+[gd_scene load_steps=8 format=3 uid="uid://cxsc37k2bvdh3"]
+
+[ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="1_room3"]
+[ext_resource type="PackedScene" uid="uid://cxsc37k2bvdg8" path="res://src/enemies/FalseKnight.tscn" id="2_room3"]
+[ext_resource type="Script" path="res://addons/MetroidvaniaSystem/Scripts/RoomInstance.gd" id="3_room3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/godot_hk_controller/Warrior_SheetnoEffect.png" id="4_room3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
+size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h"]
+size = Vector2(1280, 40)
+
+[sub_resource type="GDScript" id="GDScript_barrier"]
+script/source = "extends StaticBody2D
+
+func _ready() -> void:
+	_check_boss()
+
+func _check_boss() -> void:
+	var game = get_tree().get_first_node_in_group(&\"game\")
+	if game and \"boss_defeated\" in game.events:
+		var tween = create_tween()
+		tween.tween_property(self, \"modulate:a\", 0.0, 0.4)
+		tween.tween_callback(queue_free)
+	else:
+		get_tree().create_timer(0.5).timeout.connect(_check_boss)
+"
+
+[node name="Room3" type="Node2D"]
+
+[node name="RoomInstance" type="Node2D" parent="."]
+script = ExtResource("3_room3")
+
+[node name="ControllerEcho" type="Sprite2D" parent="."]
+z_index = -5
+modulate = Color(0.55, 0.7, 1, 0.28)
+position = Vector2(160, 500)
+scale = Vector2(0.22, 0.22)
+texture = ExtResource("4_room3")
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -10
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0.0901961, 0.0784314, 0.121569, 1)
+
+[node name="BossRoomLabel" type="Label" parent="Background"]
+modulate = Color(1, 1, 1, 0.196078)
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 444.0
+offset_bottom = 104.0
+theme_override_font_sizes/font_size = 24
+text = "Ancestral Mound (Boss Chamber)"
+
+[node name="TutorialLabel" type="Label" parent="Background"]
+modulate = Color(1, 1, 1, 0.458824)
+layout_mode = 0
+offset_left = 64.0
+offset_top = 112.0
+offset_right = 464.0
+offset_bottom = 172.0
+text = "Defeat the False Knight!
+Unlock Double Jump (Press Jump in Air)!
+Once Double Jump is Unlocked"
+
+[node name="StaticEnvironment" type="Node2D" parent="."]
+
+[node name="Floor" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(640, 680)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/Floor"]
+offset_left = -640.0
+offset_top = -20.0
+offset_right = 640.0
+offset_bottom = 20.0
+color = Color(0.180392, 0.160784, 0.219608, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Floor"]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="Ceiling" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(640, 20)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/Ceiling"]
+offset_left = -640.0
+offset_top = -20.0
+offset_right = 640.0
+offset_bottom = 20.0
+color = Color(0.180392, 0.160784, 0.219608, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Ceiling"]
+shape = SubResource("RectangleShape2D_wall_h")
+
+[node name="LeftWall" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(20, 360)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/LeftWall"]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+color = Color(0.180392, 0.160784, 0.219608, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/LeftWall"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="RightWall" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1260, 360)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/RightWall"]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+color = Color(0.180392, 0.160784, 0.219608, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/RightWall"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="PortalFromRoom2" parent="." instance=ExtResource("1_room3")]
+position = Vector2(80, 620)
+target_room = "res://src/world/Room2.tscn"
+target_portal_name = "PortalToRoom3"
+
+[node name="VictoryPortal" parent="." instance=ExtResource("1_room3")]
+position = Vector2(1180, 620)
+target_room = "res://src/world/Room1.tscn"
+target_portal_name = "PortalToRoom2"
+
+[node name="FalseKnight" parent="." instance=ExtResource("2_room3")]
+position = Vector2(640, 580)
+
+[node name="BossBarrier" type="StaticBody2D" parent="."]
+position = Vector2(1100, 560)
+collision_layer = 5
+collision_mask = 0
+script = SubResource("GDScript_barrier")
+
+[node name="ColorRect" type="ColorRect" parent="BossBarrier"]
+offset_left = -20.0
+offset_top = -100.0
+offset_right = 20.0
+offset_bottom = 100.0
+color = Color(0.380392, 0.141176, 0.141176, 1)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BossBarrier"]
+polygon = PackedVector2Array(-20, -100, 20, -100, 20, 100, -20, 100)

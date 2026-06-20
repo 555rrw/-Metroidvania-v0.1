@@ -1,0 +1,5 @@
+# Godot editor cache
+.godot/
+
+# Cloned source repositories
+cloned_repos/

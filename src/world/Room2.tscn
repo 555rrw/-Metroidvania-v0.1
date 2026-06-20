@@ -1,0 +1,184 @@
+[gd_scene load_steps=12 format=3 uid="uid://cxsc37k2bvdh2"]
+
+[ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="1_room2"]
+[ext_resource type="PackedScene" uid="uid://cxsc37k2bvdq7" path="res://src/objects/Spikes.tscn" id="2_room2"]
+[ext_resource type="PackedScene" uid="uid://bixj85y2l7gdw" path="res://src/objects/MovingPlatform.tscn" id="3_room2"]
+[ext_resource type="PackedScene" uid="uid://bshw36lkvodq6" path="res://src/objects/AbilityUnlock.tscn" id="4_room2"]
+[ext_resource type="PackedScene" uid="uid://cxsc85y2l7gdw" path="res://src/enemies/Vengefly.tscn" id="5_room2"]
+[ext_resource type="Script" path="res://addons/MetroidvaniaSystem/Scripts/RoomInstance.gd" id="6_room2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/sky.png" id="7_room2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/mountains.png" id="8_room2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gdquest/props/hookTarget02_ball.png" id="9_room2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/framework/ruins_mid_walls_0002_a.png" id="10_room2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
+size = Vector2(40, 720)
+
+[node name="Room2" type="Node2D"]
+
+[node name="RoomInstance" type="Node2D" parent="."]
+script = ExtResource("6_room2")
+
+[node name="SkyBackdrop" type="Sprite2D" parent="."]
+z_index = -9
+modulate = Color(0.12, 0.23, 0.16, 0.45)
+centered = false
+scale = Vector2(3.0, 1.4)
+texture = ExtResource("7_room2")
+
+[node name="MountainBackdrop" type="Sprite2D" parent="."]
+z_index = -8
+modulate = Color(0.1, 0.18, 0.12, 0.55)
+position = Vector2(0, 160)
+centered = false
+scale = Vector2(2.8, 1.2)
+texture = ExtResource("8_room2")
+
+[node name="HookTargetDecoration" type="Sprite2D" parent="."]
+z_index = -5
+modulate = Color(0.8, 1, 0.9, 0.55)
+position = Vector2(2210, 260)
+scale = Vector2(0.55, 0.55)
+texture = ExtResource("9_room2")
+
+[node name="RuinWallTexture" type="Sprite2D" parent="."]
+z_index = -6
+modulate = Color(0.55, 0.95, 0.65, 0.18)
+position = Vector2(840, 492)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("10_room2")
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -10
+offset_right = 2560.0
+offset_bottom = 720.0
+color = Color(0.054902, 0.0862745, 0.0627451, 1)
+
+[node name="GreenpathLabel" type="Label" parent="Background"]
+modulate = Color(1, 1, 1, 0.196078)
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 444.0
+offset_bottom = 104.0
+theme_override_font_sizes/font_size = 24
+text = "Greenpath (Greenpath)"
+
+[node name="TutorialLabel" type="Label" parent="Background"]
+modulate = Color(1, 1, 1, 0.458824)
+layout_mode = 0
+offset_left = 2200.0
+offset_top = 400.0
+offset_right = 2500.0
+offset_bottom = 460.0
+text = "C or Shift: Dash (Press C/Shift to Dash)
+(Once Dash is Unlocked)"
+
+[node name="StaticEnvironment" type="Node2D" parent="."]
+
+[node name="FloorLeft" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(250, 680)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/FloorLeft"]
+offset_left = -250.0
+offset_top = -20.0
+offset_right = 250.0
+offset_bottom = 20.0
+color = Color(0.121569, 0.180392, 0.141176, 1)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/FloorLeft"]
+polygon = PackedVector2Array(-250, -20, 250, -20, 250, 20, -250, 20)
+
+[node name="FloorRight" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(2310, 680)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/FloorRight"]
+offset_left = -250.0
+offset_top = -20.0
+offset_right = 250.0
+offset_bottom = 20.0
+color = Color(0.121569, 0.180392, 0.141176, 1)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/FloorRight"]
+polygon = PackedVector2Array(-250, -20, 250, -20, 250, 20, -250, 20)
+
+[node name="Ceiling" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1280, 20)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/Ceiling"]
+offset_left = -1280.0
+offset_top = -20.0
+offset_right = 1280.0
+offset_bottom = 20.0
+color = Color(0.121569, 0.180392, 0.141176, 1)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/Ceiling"]
+polygon = PackedVector2Array(-1280, -20, 1280, -20, 1280, 20, -1280, 20)
+
+[node name="LeftWall" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(20, 360)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/LeftWall"]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+color = Color(0.121569, 0.180392, 0.141176, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/LeftWall"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="RightWall" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(2540, 360)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/RightWall"]
+offset_left = -20.0
+offset_top = -360.0
+offset_right = 20.0
+offset_bottom = 360.0
+color = Color(0.121569, 0.180392, 0.141176, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/RightWall"]
+shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="PortalFromRoom1" parent="." instance=ExtResource("1_room2")]
+position = Vector2(80, 620)
+target_room = "res://src/world/Room1.tscn"
+target_portal_name = "PortalToRoom2"
+
+[node name="PortalToRoom3" parent="." instance=ExtResource("1_room2")]
+position = Vector2(2480, 620)
+target_room = "res://src/world/Room3.tscn"
+target_portal_name = "PortalFromRoom2"
+
+[node name="AcidPool" parent="." instance=ExtResource("2_room2")]
+position = Vector2(1280, 696)
+
+[node name="MovingPlatform" parent="." instance=ExtResource("3_room2")]
+position = Vector2(800, 520)
+
+[node name="Waypoint1" type="Marker2D" parent="MovingPlatform"]
+position = Vector2(0, 0)
+
+[node name="Waypoint2" type="Marker2D" parent="MovingPlatform"]
+position = Vector2(960, 0)
+
+[node name="DashUpgrade" parent="." instance=ExtResource("4_room2")]
+position = Vector2(2300, 640)
+ability_name = "dash"
+
+[node name="Vengefly" parent="." instance=ExtResource("5_room2")]
+position = Vector2(1100, 320)
+
+[node name="Vengefly2" parent="." instance=ExtResource("5_room2")]
+position = Vector2(1800, 320)
