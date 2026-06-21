@@ -1,7 +1,8 @@
 extends Area2D
 class_name Spikes
 
-@export var damage: int = 1
+# gemini3.5: Changed damage to 999 to implement instant death for traps, mimicking DanielDFY's Deadly trap
+@export var damage: int = 999
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
