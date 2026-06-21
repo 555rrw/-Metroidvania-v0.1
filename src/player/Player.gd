@@ -201,6 +201,7 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		play_anim("idle")
+		# gemini3.5: Apply blue glow pulse modulation when sitting at a bench
 		var pulse := 0.85 + 0.15 * sin(Time.get_ticks_msec() * 0.005)
 		sprite.modulate.r = 0.72 * pulse
 		sprite.modulate.g = 0.88 * pulse
@@ -212,7 +213,7 @@ func _physics_process(delta: float) -> void:
 			sprite.modulate.g = 1.0
 			sprite.modulate.b = 1.0
 
-	# Debug cheat to unlock all abilities instantly for testing
+	# gemini3.5: Debug cheat to unlock all abilities instantly for testing
 	if Input.is_physical_key_pressed(KEY_F1):
 		var added_any := false
 		for ab in [ABILITY_DASH, ABILITY_DOUBLE_JUMP, ABILITY_VENGEFUL_SPIRIT]:
@@ -319,6 +320,7 @@ func _physics_process(delta: float) -> void:
 					dash_timer = 0.0
 					_perform_jump()
 				elif _can_double_jump():
+					# gemini3.5: Allow canceling mid-air dash with double jump
 					dash_timer = 0.0
 					_perform_double_jump()
 
@@ -342,6 +344,7 @@ func _physics_process(delta: float) -> void:
 
 			if Input.is_action_just_released("jump") and velocity.y < 0.0:
 				velocity.y *= vy_multiplier
+			# gemini3.5: Allow double jump from active wall jump state
 			if Input.is_action_just_pressed("jump") and _can_double_jump():
 				_perform_double_jump()
 			elif wall_jump_timer <= 0.0:
@@ -493,11 +496,13 @@ func _perform_double_jump() -> void:
 	current_state = State.JUMP
 	current_jumps = 2
 	_play_sfx(sfx_jump)
+	# gemini3.5: Double jump tracing log
 	print("Player: Double Jump performed! velocity.y = ", velocity.y)
 
 func _start_wall_slide(direction: int) -> void:
 	current_state = State.WALL_SLIDE
 	wall_direction = direction
+	# gemini3.5: Reset jumps when wall sliding
 	current_jumps = 0
 
 func _perform_wall_jump() -> void:
@@ -525,6 +530,7 @@ func _can_double_jump() -> bool:
 	return _has_ability(ABILITY_DOUBLE_JUMP) and current_jumps < 2
 
 func _has_ability(ability: StringName) -> bool:
+	# gemini3.5: Robust string comparison for ability checking
 	for a in abilities:
 		if str(a) == str(ability):
 			return true
@@ -652,6 +658,7 @@ func take_damage(amount: int, dir: Vector2) -> void:
 		invincible_timer = 1.15
 		hurt_knockback_dir = -1.0 if dir.x > 0.0 else 1.0
 		velocity = Vector2(hurt_knockback_dir * knockback_force, -250.0)
+		# gemini3.5: Reset jumps when taking damage
 		current_jumps = 0
 
 func kill() -> void:

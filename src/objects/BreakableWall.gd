@@ -1,5 +1,7 @@
+# gemini3.5: Entire script created for spell-gated breakable wall
 extends StaticBody2D
 class_name BreakableWall
+
 
 const HitInfo = preload("res://src/combat/HitInfo.gd")
 var is_broken := false

@@ -51,9 +51,11 @@ func _rest_at_bench() -> void:
 		if not (event_name in game.events):
 			game.events.append(event_name)
 		game.save_game()
+		# gemini3.5: Show bench rested notification on HUD
 		if game.hud:
 			game.hud.show_unlock_message("BENCH RESTED - MAP UPDATED")
 
+	# gemini3.5: Change text prompt to say SAVED!
 	prompt.text = "SAVED!"
 	prompt.modulate = Color(0.75, 0.92, 1.0, 1.0)
 	_fade_glow(1.0)
