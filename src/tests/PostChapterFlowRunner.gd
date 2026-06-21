@@ -55,11 +55,29 @@ func _load_room_via_portal(game: Game, portal: Portal) -> void:
 	game.target_portal_name = portal.target_portal_name
 	game.load_room(portal.target_room)
 
+func _assert_node(root: Node, path: NodePath, expected_type: String) -> Node:
+	var node := root.get_node_or_null(path)
+	if not node:
+		_fail("%s missing node: %s" % [root.name, path])
+		return null
+	if not node.is_class(expected_type) and node.get_class() != expected_type:
+		var script: Script = node.get_script() as Script
+		var global_name: String = script.get_global_name() if script else ""
+		if global_name != expected_type:
+			_fail("%s node has wrong type: %s expected %s got %s/%s" % [root.name, path, expected_type, node.get_class(), global_name])
+			return null
+	return node
+
+func _assert_chapter_width(room: Node, label: String) -> void:
+	var background := room.get_node_or_null("Background") as ColorRect
+	if not background or background.size.x < 2400.0:
+		_fail(label + " is not a chapter-scale DanielDFY route")
+
 func _run() -> void:
 	_backup_save()
 	_clear_save()
 
-	# GPT5.5_LOCK: verified 2026-06-21. Covers Room3 clear -> Room4 spell -> Room5 secret -> Room1 shortcut.
+	# GPT5.5_LOCK: verified 2026-06-21. Covers Room3 clear -> DanielDFY-style Room4/Room5 -> Room1 shortcut.
 	var game := GAME_SCENE.instantiate() as Game
 	game.starting_map = "res://src/world/Room3.tscn"
 	game.target_portal_name = "PortalFromRoom2"
@@ -110,15 +128,68 @@ func _run() -> void:
 		return
 
 	var room4 := game.map
+	_assert_chapter_width(room4, "Room4")
+	var moving_platform := _assert_node(room4, "MovingPlatform", "MovingPlatform") as MovingPlatform
+	var unstable_a := _assert_node(room4, "UnstablePlatformA", "UnstablePlatform") as UnstablePlatform
+	var unstable_b := _assert_node(room4, "UnstablePlatformB", "UnstablePlatform") as UnstablePlatform
+	var unstable_c := _assert_node(room4, "UnstablePlatformC", "UnstablePlatform") as UnstablePlatform
+	var saw := _assert_node(room4, "SawTrap", "SawTrap") as SawTrap
+	var falling_trap := _assert_node(room4, "SanctumFallingTrap", "FallingTrap") as FallingTrap
+	var sanctum_switch := _assert_node(room4, "SanctumSwitch", "SwitchTrigger") as SwitchTrigger
+	var sanctum_door := _assert_node(room4, "SanctumDoor", "TriggerDoor") as TriggerDoor
+	var spell_gate := _assert_node(room4, "SpellExitGate", "AbilityGate") as AbilityGate
+	var practice_wall := _assert_node(room4, "SpiritPracticeWall", "BreakableWall") as BreakableWall
+	var sanctum_gunner := _assert_node(room4, "SanctumGunner", "Gunner") as Gunner
+	var sanctum_relic := _assert_node(room4, "SanctumRelic", "SecretPickup") as SecretPickup
 	var spirit := room4.get_node_or_null("SpiritUpgrade") as AbilityUnlock
 	var portal_to_room5 := room4.get_node_or_null("PortalToRoom5") as Portal
 	if not spirit or not portal_to_room5:
 		_fail("Room4 spell reward or PortalToRoom5 missing")
 		return
+	if not moving_platform.get_node_or_null("OuterPoint"):
+		_fail("Room4 MovingPlatform missing DanielDFY patrol waypoint")
+		return
+	if not unstable_a or not unstable_b or not unstable_c or not saw or not falling_trap or not sanctum_gunner or not sanctum_relic:
+		_fail("Room4 DanielDFY trap/enemy/resource chain incomplete")
+		return
+	if spell_gate.required_ability != &"vengeful_spirit":
+		_fail("Room4 SpellExitGate must require Vengeful Spirit")
+		return
+	spell_gate._check_open()
+	await get_tree().process_frame
+	if spell_gate.opened:
+		_fail("Room4 SpellExitGate opened before Vengeful Spirit")
+		return
 	spirit._on_body_entered(player)
 	await get_tree().create_timer(0.35).timeout
 	if not (&"vengeful_spirit" in player.abilities):
 		_fail("Room4 did not grant Vengeful Spirit")
+		return
+
+	practice_wall.sfx_clink = null
+	practice_wall.sfx_shatter = null
+	practice_wall.particles = null
+	practice_wall.take_damage(1, Vector2.RIGHT, HitInfo.new(&"nail_side", player, 1, Vector2.RIGHT, 0, false))
+	await get_tree().process_frame
+	if practice_wall.is_broken:
+		_fail("Room4 SpiritPracticeWall broke from nail")
+		return
+	practice_wall.take_damage(2, Vector2.RIGHT, HitInfo.new(&"vengeful_spirit", player, 2, Vector2.RIGHT, 0, true))
+	var room4_wall_broke := practice_wall.is_broken
+	await get_tree().process_frame
+	if not room4_wall_broke:
+		_fail("Room4 SpiritPracticeWall did not break from Vengeful Spirit")
+		return
+
+	sanctum_switch.turn_on()
+	await get_tree().process_frame
+	if not sanctum_door.opened or not game.events.has("room4_sanctum_switch"):
+		_fail("Room4 SanctumSwitch did not open door and record event")
+		return
+	spell_gate._check_open()
+	await get_tree().process_frame
+	if not spell_gate.opened:
+		_fail("Room4 SpellExitGate did not open after Vengeful Spirit")
 		return
 
 	_load_room_via_portal(game, portal_to_room5)
@@ -127,10 +198,72 @@ func _run() -> void:
 		return
 
 	var room5 := game.map
+	_assert_chapter_width(room5, "Room5")
+	var spell_entry_gate := _assert_node(room5, "SpellGate", "AbilityGate") as AbilityGate
+	var spell_shortcut_wall := _assert_node(room5, "SpellShortcutWall", "BreakableWall") as BreakableWall
+	var room5_moving := _assert_node(room5, "MovingPlatform", "MovingPlatform") as MovingPlatform
+	var room5_unstable_a := _assert_node(room5, "UnstablePlatformA", "UnstablePlatform") as UnstablePlatform
+	var room5_unstable_b := _assert_node(room5, "UnstablePlatformB", "UnstablePlatform") as UnstablePlatform
+	var room5_unstable_c := _assert_node(room5, "UnstablePlatformC", "UnstablePlatform") as UnstablePlatform
+	var saw_a := _assert_node(room5, "SawTrapA", "SawTrap") as SawTrap
+	var saw_b := _assert_node(room5, "SawTrapB", "SawTrap") as SawTrap
+	var shortcut_switch := _assert_node(room5, "ShortcutSwitch", "SwitchTrigger") as SwitchTrigger
+	var shortcut_door := _assert_node(room5, "ShortcutDoor", "TriggerDoor") as TriggerDoor
+	var shortcut_seal := _assert_node(room5, "ShortcutSeal", "AbilityGate") as AbilityGate
+	var shortcut_trap := _assert_node(room5, "ShortcutFallingTrap", "FallingTrap") as FallingTrap
+	var shortcut_gunner := _assert_node(room5, "ShortcutGunner", "Gunner") as Gunner
 	var secret := room5.get_node_or_null("SecretPickup") as SecretPickup
 	var shortcut := room5.get_node_or_null("ShortcutReturn") as Portal
 	if not secret or not shortcut:
 		_fail("Room5 secret or ShortcutReturn missing")
+		return
+	if not room5_moving.get_node_or_null("OuterPoint"):
+		_fail("Room5 MovingPlatform missing DanielDFY patrol waypoint")
+		return
+	if not room5_unstable_a or not room5_unstable_b or not room5_unstable_c or not saw_a or not saw_b or not shortcut_trap or not shortcut_gunner:
+		_fail("Room5 DanielDFY trap/enemy chain incomplete")
+		return
+	if shortcut.target_room != "res://src/world/Room1.tscn" or shortcut.target_portal_name != "PortalToRoom5":
+		_fail("Room5 ShortcutReturn route must land on Room1 shortcut portal")
+		return
+	if spell_entry_gate.required_ability != &"vengeful_spirit":
+		_fail("Room5 SpellGate must require Vengeful Spirit")
+		return
+	spell_entry_gate._check_open()
+	await get_tree().process_frame
+	if not spell_entry_gate.opened:
+		_fail("Room5 SpellGate did not open with Vengeful Spirit")
+		return
+
+	spell_shortcut_wall.sfx_clink = null
+	spell_shortcut_wall.sfx_shatter = null
+	spell_shortcut_wall.particles = null
+	spell_shortcut_wall.take_damage(1, Vector2.RIGHT, HitInfo.new(&"nail_side", player, 1, Vector2.RIGHT, 0, false))
+	await get_tree().process_frame
+	if spell_shortcut_wall.is_broken:
+		_fail("Room5 SpellShortcutWall broke from nail")
+		return
+	spell_shortcut_wall.take_damage(2, Vector2.RIGHT, HitInfo.new(&"vengeful_spirit", player, 2, Vector2.RIGHT, 0, true))
+	var room5_wall_broke := spell_shortcut_wall.is_broken
+	await get_tree().process_frame
+	if not room5_wall_broke:
+		_fail("Room5 SpellShortcutWall did not break from Vengeful Spirit")
+		return
+
+	shortcut_seal._check_open()
+	await get_tree().process_frame
+	if shortcut_seal.opened:
+		_fail("Room5 ShortcutSeal opened before switch event")
+		return
+	shortcut_switch.turn_on()
+	await get_tree().process_frame
+	if not shortcut_door.opened or not game.events.has("room5_shortcut_door"):
+		_fail("Room5 ShortcutSwitch did not open door and record event")
+		return
+	shortcut_seal._check_open()
+	await get_tree().process_frame
+	if not shortcut_seal.opened:
+		_fail("Room5 ShortcutSeal did not open from switch event")
 		return
 	var soul_before := player.soul
 	secret._on_body_entered(player)

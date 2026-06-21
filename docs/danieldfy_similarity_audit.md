@@ -1,11 +1,11 @@
 # DanielDFY Hollow-Knight-Imitation Similarity Audit
 
-Date: 2026-06-20
+Date: 2026-06-21
 Reference: `DanielDFY/Hollow-Knight-Imitation` at `c443c6262ab85d007c8ed6f3abb42a8b077df007`.
 
 ## Verdict
 
-Current Godot build clears the first-version threshold for DanielDFY-style feature parity: 84 / 100.
+Current Godot build clears the first-version threshold for DanielDFY-style feature parity: 88 / 100.
 
 This is not a pixel-perfect Unity scene recreation. The score measures playable systems, screenshot coverage, script-behavior coverage, and direct resource use from the DanielDFY project.
 
@@ -16,11 +16,11 @@ This is not a pixel-perfect Unity scene recreation. The score measures playable 
 | Menu, pause, HUD flow | 15 | 13 | `MainMenu.tscn`, `HUD.tscn` pause overlay, health masks, Start/Load/Quit, Continue/Menu/Quit. |
 | Player controller parity | 20 | 17 | Run, jump, double jump, wall slide/jump, dash, up/side/down nail, recoil, hurt, invulnerability, death reload. |
 | Enemy parity | 15 | 13 | Patrol/chase enemy, flying chase enemy, gunner enemy, projectile spawn, contact damage, death handling. |
-| Trap and switch parity | 20 | 18 | Moving platform, unstable platform, falling trap, saw/spikes, projectile destruction, attackable switch, door opening, event persistence. |
-| Scene/screenshot coverage | 15 | 12 | Menu, Spawn-like Room1, enemy chase, climb/wall movement, trigger trap, pause, attack, enemy attacking, moving platform all represented. |
-| Direct DanielDFY resource use | 15 | 11 | Menu/title/pointer/fleur, spawn/menu backgrounds, door/entry, platform/unstable platform, trigger atlas, saw/spike, enemy sprites imported and used. |
+| Trap and switch parity | 20 | 19 | Moving platform, unstable platform, falling trap, saw/spikes, projectile destruction, attackable switch, door opening, event persistence; Room4/Room5 now both use these in route-critical positions. |
+| Scene/screenshot coverage | 15 | 14 | Menu, Spawn-like Room1, enemy chase, climb/wall movement, trigger trap, pause, attack, enemy attacking, moving platform all represented; later chapters now stage trigger-door/trap and moving-platform gauntlets. |
+| Direct DanielDFY resource use | 15 | 12 | Menu/title/pointer/fleur, spawn/menu backgrounds, door/entry, platform/unstable platform, trigger atlas, saw/spike, enemy sprites imported and used more broadly in Room4/Room5. |
 
-Total: 84 / 100.
+Total: 88 / 100.
 
 ## Script Behavior Mapping
 
@@ -48,6 +48,7 @@ Total: 84 / 100.
 - `Godot --headless --path . --quit-after 2`: main scene opens from the new DanielDFY-style menu.
 - `.scratch/RouteRunner.tscn`: loads Room1 through Room5 successfully.
 - `.scratch/DanielFeatureRunner.tscn`: verifies Room2 switch opens door, switch triggers falling trap, unstable platform triggers, gunner spawns projectile.
+- `src/tests/PostChapterFlowRunner.tscn`: verifies Room3 boss reward -> Room4 spell route -> Room5 shortcut gauntlet -> Room1 shortcut return, including spell-only walls, switch doors, falling traps, moving platforms, unstable platforms, saws, and gunners.
 
 ## Remaining Gaps
 

@@ -21,7 +21,7 @@ The five upstream repositories are retained as git submodules under `cloned_repo
 ## Playable v1 Feature Set
 
 - Main menu: DanielDFY-style Start/Load/Quit flow using original menu background/title/border/pointer assets.
-- Five MetSys rooms: Crossroads/Spawn-style start, GPT5.5-locked Greenpath dash/trap chapter, False Knight chamber, Spirit Sanctum, shortcut cache.
+- Five MetSys rooms: Crossroads/Spawn-style start, GPT5.5-locked Greenpath dash/trap chapter, False Knight chamber, GPT5.5-locked Spirit Sanctum route, GPT5.5-locked shortcut gauntlet/cache.
 - Player movement: run, tuned acceleration/deceleration, coyote jump, jump buffer, variable jump height, dash unlock, double jump unlock, wall slide/jump, look up/down camera.
 - Combat: directional nail hitboxes, pogo bounce, hit pause, recoil, Soul gain, Focus heal, Vengeful Spirit spell, hurt/invincibility, save respawn.
 - Enemies: DanielDFY-skinned Crawlid patrol, Vengefly chase/hover, Gunner projectile enemy, Warrior-sheet-supported spear enemy, False Knight phase boss with leap/slam/shockwave/stagger/death reward.
