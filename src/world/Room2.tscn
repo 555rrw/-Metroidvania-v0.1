@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://cxsc37k2bvdh2"]
+[gd_scene load_steps=20 format=3 uid="uid://cxsc37k2bvdh2"]
 
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="1_room2"]
 [ext_resource type="PackedScene" uid="uid://cxsc37k2bvdq7" path="res://src/objects/Spikes.tscn" id="2_room2"]
@@ -7,8 +7,16 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/sky.png" id="7_room2"]
 [ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/mountains.png" id="8_room2"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/framework/ruins_mid_walls_0002_a.png" id="10_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/MovingPlatform.tscn" id="11_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/AbilityUnlock.tscn" id="12_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/AbilityGate.tscn" id="13_room2"]
 [ext_resource type="PackedScene" path="res://src/enemies/Gunner.tscn" id="14_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/UnstablePlatform.tscn" id="15_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/SawTrap.tscn" id="16_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/SwitchTrigger.tscn" id="17_room2"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/platform/platform1.png" id="18_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/TriggerDoor.tscn" id="19_room2"]
+[ext_resource type="PackedScene" path="res://src/objects/FallingTrap.tscn" id="20_room2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -176,6 +184,53 @@ texture = ExtResource("18_room2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Platform4"]
 shape = SubResource("RectangleShape2D_platform")
+
+[node name="DashUpgrade" parent="." instance=ExtResource("12_room2")]
+position = Vector2(470, 625)
+ability_name = "dash"
+id = "room2_dash_reward_gpt55"
+
+[node name="MovingPlatform" parent="." instance=ExtResource("11_room2")]
+position = Vector2(600, 600)
+speed = 145.0
+wait_time = 0.45
+
+[node name="OuterPoint" type="Marker2D" parent="MovingPlatform"]
+position = Vector2(260, 0)
+
+[node name="UnstablePlatformA" parent="." instance=ExtResource("15_room2")]
+position = Vector2(1030, 545)
+trigger_delay = 0.22
+
+[node name="UnstablePlatformB" parent="." instance=ExtResource("15_room2")]
+position = Vector2(1360, 430)
+trigger_delay = 0.22
+
+[node name="UnstablePlatformC" parent="." instance=ExtResource("15_room2")]
+position = Vector2(1700, 545)
+trigger_delay = 0.22
+
+[node name="SawTrap" parent="." instance=ExtResource("16_room2")]
+position = Vector2(1510, 640)
+
+[node name="FallingTrap" parent="." instance=ExtResource("20_room2")]
+position = Vector2(2110, 210)
+fall_distance = 450.0
+fall_time = 0.72
+
+[node name="SwitchTrigger" parent="." instance=ExtResource("17_room2")]
+position = Vector2(2110, 618)
+event_name = "room2_switch_door"
+door_path = NodePath("../TriggerDoor")
+trap_path = NodePath("../FallingTrap")
+
+[node name="TriggerDoor" parent="." instance=ExtResource("19_room2")]
+position = Vector2(2240, 571)
+event_name = "room2_switch_door"
+
+[node name="DashGate" parent="." instance=ExtResource("13_room2")]
+position = Vector2(2385, 575)
+required_ability = &"dash"
 
 [node name="PortalFromRoom1" parent="." instance=ExtResource("1_room2")]
 position = Vector2(80, 620)
