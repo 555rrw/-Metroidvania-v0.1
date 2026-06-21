@@ -32,7 +32,10 @@ func _process(delta: float) -> void:
 			enemy_sprite.modulate = Color(1, 1, 1, 1)
 
 func _physics_process(delta: float) -> void:
-	if knockback_timer > 0.0:
+	if is_dead:
+		velocity.y += 1500.0 * delta # Ragdoll gravity
+		move_and_slide()
+	elif knockback_timer > 0.0:
 		knockback_timer -= delta
 		move_and_slide()
 	else:
@@ -64,15 +67,19 @@ func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:
 func die() -> void:
 	is_dead = true
 	_spawn_death_burst()
-	# Fade out and free
+	# Disable hitboxes but leave world collision (mask 1) so it can fall and bounce
 	set_deferred("collision_layer", 0)
-	set_deferred("collision_mask", 0)
 	var hitbox = get_node_or_null("Hitbox")
 	if hitbox:
 		hitbox.set_deferred("monitoring", false)
+		
+	# Apply DanielDFY style death impulse
+	var facing = -1.0 if enemy_sprite.flip_h else 1.0
+	velocity = Vector2(-facing * 180.0, -350.0) # deathForce impulse
 
+	# Fade out over destroyDelay (approx 1.5s)
 	var tween = create_tween()
-	tween.tween_property(self, "scale", Vector2.ZERO, 0.25)
+	tween.tween_property(self, "modulate:a", 0.0, 1.5)
 	tween.tween_callback(queue_free)
 
 func _spawn_death_burst() -> void:
