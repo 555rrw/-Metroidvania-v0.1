@@ -16,8 +16,10 @@ script = ExtResource("1_dnyg")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 0
-scale = Vector2(0.46, 0.46)
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_dnyg")
+region_enabled = true
+region_rect = Rect2(250, 590, 160, 150)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_vengefly")

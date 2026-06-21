@@ -72,6 +72,7 @@ offset_bottom = 21.0
 color = Color(0.72, 0.92, 1, 0.95)
 
 [node name="SoulLabel" type="Label" parent="SoulMeter"]
+visible = false
 layout_mode = 0
 offset_left = 0.0
 offset_top = -6.0
@@ -135,6 +136,7 @@ vertical_alignment = 1
 
 [node name="Minimap" parent="." instance=ExtResource("2_dnyg")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
