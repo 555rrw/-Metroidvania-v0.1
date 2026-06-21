@@ -301,9 +301,13 @@ func _physics_process(delta: float) -> void:
 			if dash_timer <= 0.0:
 				velocity.x *= dash_exit_speed_multiplier
 				current_state = State.IDLE if is_on_floor() else State.FALL
-			elif Input.is_action_just_pressed("jump") and is_on_floor():
-				dash_timer = 0.0
-				_perform_jump()
+			elif Input.is_action_just_pressed("jump"):
+				if is_on_floor():
+					dash_timer = 0.0
+					_perform_jump()
+				elif _can_double_jump():
+					dash_timer = 0.0
+					_perform_double_jump()
 
 		State.WALL_SLIDE:
 			play_anim("wall_slide", 10.0)
@@ -325,7 +329,9 @@ func _physics_process(delta: float) -> void:
 
 			if Input.is_action_just_released("jump") and velocity.y < 0.0:
 				velocity.y *= vy_multiplier
-			if wall_jump_timer <= 0.0:
+			if Input.is_action_just_pressed("jump") and _can_double_jump():
+				_perform_double_jump()
+			elif wall_jump_timer <= 0.0:
 				current_state = State.FALL
 			elif is_on_floor():
 				current_state = State.IDLE
@@ -478,6 +484,7 @@ func _perform_double_jump() -> void:
 func _start_wall_slide(direction: int) -> void:
 	current_state = State.WALL_SLIDE
 	wall_direction = direction
+	current_jumps = 0
 
 func _perform_wall_jump() -> void:
 	jump_buffer_timer = 0.0
@@ -504,7 +511,10 @@ func _can_double_jump() -> bool:
 	return _has_ability(ABILITY_DOUBLE_JUMP) and current_jumps < 2
 
 func _has_ability(ability: StringName) -> bool:
-	return ability in abilities
+	for a in abilities:
+		if str(a) == str(ability):
+			return true
+	return false
 
 # GPT5.5_LOCK: verified 2026-06-21. Keep InputMap "attack" -> _perform_attack -> _configure_nail_hitbox path intact.
 func _perform_attack() -> void:
@@ -628,6 +638,7 @@ func take_damage(amount: int, dir: Vector2) -> void:
 		invincible_timer = 1.15
 		hurt_knockback_dir = -1.0 if dir.x > 0.0 else 1.0
 		velocity = Vector2(hurt_knockback_dir * knockback_force, -250.0)
+		current_jumps = 0
 
 func kill() -> void:
 	position = reset_position
