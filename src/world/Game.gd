@@ -5,6 +5,13 @@ class_name Game
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
 const SourceArchive = preload("res://src/integration/SourceArchive.gd")
 const SAVE_PATH = "user://hollow_knight_save.sav"
+const DEV_ROOMS := [
+	{"key": "1", "name": "Room1", "path": "res://src/world/Room1.tscn"},
+	{"key": "2", "name": "Room2", "path": "res://src/world/Room2.tscn"},
+	{"key": "3", "name": "Room3", "path": "res://src/world/Room3.tscn"},
+	{"key": "4", "name": "Room4", "path": "res://src/world/Room4.tscn"},
+	{"key": "5", "name": "Room5", "path": "res://src/world/Room5.tscn"},
+]
 
 @export_file("*.tscn") var starting_map: String = "res://src/world/Room1.tscn"
 
@@ -13,13 +20,17 @@ static var _singleton: Node = null
 var target_portal_name: String = ""
 var events: Array[String] = []
 var source_archive_summary: Dictionary = {}
+var developer_mode_open: bool = false
 
 @onready var hud: HUD = $CanvasLayer/HUD
+@onready var developer_panel: Control = $CanvasLayer/DeveloperPanel
+@onready var developer_info_label: Label = $CanvasLayer/DeveloperPanel/InfoLabel
 
 func _ready() -> void:
 	_singleton = self
 	add_to_group(&"game")
 	source_archive_summary = SourceArchive.scan()
+	_set_developer_mode(false)
 
 	# Clear MetSys state
 	MetSys.reset_state()
@@ -122,6 +133,78 @@ func _on_room_loaded() -> void:
 	# Fade player back in
 	$Player.modulate.a = 1.0
 	target_portal_name = ""
+	_update_developer_panel()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_F10:
+			_set_developer_mode(not developer_mode_open)
+			get_viewport().set_input_as_handled()
+			return
+
+		if developer_mode_open:
+			var room_index := _developer_key_to_room_index(event.keycode)
+			if room_index >= 0:
+				dev_jump_to_room(room_index + 1)
+				get_viewport().set_input_as_handled()
+				return
+
+func _developer_key_to_room_index(keycode: Key) -> int:
+	match keycode:
+		KEY_1, KEY_KP_1:
+			return 0
+		KEY_2, KEY_KP_2:
+			return 1
+		KEY_3, KEY_KP_3:
+			return 2
+		KEY_4, KEY_KP_4:
+			return 3
+		KEY_5, KEY_KP_5:
+			return 4
+		_:
+			return -1
+
+func _set_developer_mode(open: bool) -> void:
+	developer_mode_open = open
+	if developer_panel:
+		developer_panel.visible = developer_mode_open
+	_update_developer_panel()
+
+func dev_jump_to_room(room_number: int) -> void:
+	var index := room_number - 1
+	if index < 0 or index >= DEV_ROOMS.size():
+		push_warning("Developer room number out of range: %s" % room_number)
+		return
+
+	var room: Dictionary = DEV_ROOMS[index]
+	target_portal_name = ""
+	var player := $Player as Player
+	if player:
+		player.event = false
+		player.velocity = Vector2.ZERO
+		player.modulate.a = 1.0
+
+	load_room(str(room["path"]))
+	if hud:
+		hud.show_unlock_message("DEV WARP: " + str(room["name"]))
+	_update_developer_panel()
+
+func _update_developer_panel() -> void:
+	if not developer_info_label:
+		return
+
+	var current_room := "None"
+	if map:
+		current_room = map.name
+
+	var lines := [
+		"DEV MODE - F10 toggle",
+		"Current: " + current_room,
+		"",
+	]
+	for room in DEV_ROOMS:
+		lines.append("%s  %s" % [room["key"], room["name"]])
+	developer_info_label.text = "\n".join(lines)
 
 func _get_room_size() -> Vector2:
 	var fallback := Vector2(
