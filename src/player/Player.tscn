@@ -16,7 +16,7 @@ script = ExtResource("1_dnyg")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 0
-scale = Vector2(0.8, 0.8)
+scale = Vector2(0.7, 0.7)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 4)
