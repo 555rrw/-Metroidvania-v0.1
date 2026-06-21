@@ -201,7 +201,16 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		play_anim("idle")
+		var pulse := 0.85 + 0.15 * sin(Time.get_ticks_msec() * 0.005)
+		sprite.modulate.r = 0.72 * pulse
+		sprite.modulate.g = 0.88 * pulse
+		sprite.modulate.b = 1.0
 		return
+	else:
+		if sprite.modulate.r != 1.0 or sprite.modulate.g != 1.0 or sprite.modulate.b != 1.0:
+			sprite.modulate.r = 1.0
+			sprite.modulate.g = 1.0
+			sprite.modulate.b = 1.0
 
 	_update_common_timers(delta)
 

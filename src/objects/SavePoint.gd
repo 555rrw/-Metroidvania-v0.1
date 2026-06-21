@@ -51,8 +51,10 @@ func _rest_at_bench() -> void:
 		if not (event_name in game.events):
 			game.events.append(event_name)
 		game.save_game()
+		if game.hud:
+			game.hud.show_unlock_message("BENCH RESTED - MAP UPDATED")
 
-	prompt.text = "RESTED - MAP UPDATED"
+	prompt.text = "SAVED!"
 	prompt.modulate = Color(0.75, 0.92, 1.0, 1.0)
 	_fade_glow(1.0)
 	if seat:

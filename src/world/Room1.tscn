@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://cxsc37k2bvdh1"]
+[gd_scene load_steps=28 format=3 uid="uid://cxsc37k2bvdh1"]
 
 [ext_resource type="PackedScene" uid="uid://bchg46k2lv6qu" path="res://src/objects/SavePoint.tscn" id="1_room1"]
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="2_room1"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/column1.png" id="17_room1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/column2.png" id="18_room1"]
 [ext_resource type="PackedScene" path="res://src/enemies/MantisWarrior.tscn" id="19_room1"]
+[ext_resource type="PackedScene" path="res://src/objects/BreakableWall.tscn" id="20_room1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -44,6 +45,12 @@ fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_h_ext"]
+size = Vector2(1760, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v_short"]
+size = Vector2(40, 300)
+
 [node name="Room1" type="Node2D"]
 
 [node name="RoomInstance" type="Node2D" parent="."]
@@ -54,7 +61,7 @@ position = Vector2(600, 592)
 
 [node name="Background" type="ColorRect" parent="."]
 z_index = -30
-offset_right = 1280.0
+offset_right = 1760.0
 offset_bottom = 720.0
 color = Color(0.032, 0.052, 0.085, 1)
 
@@ -62,7 +69,7 @@ color = Color(0.032, 0.052, 0.085, 1)
 z_index = -29
 offset_left = 0.0
 offset_top = 72.0
-offset_right = 1280.0
+offset_right = 1760.0
 offset_bottom = 626.0
 color = Color(0.32, 0.58, 0.77, 0.055)
 
@@ -328,23 +335,37 @@ position = Vector2(1052, 590)
 scale = Vector2(1.05, 1.05)
 texture = ExtResource("5_room1")
 
+[node name="GroundVisual5" type="Sprite2D" parent="."]
+z_index = -1
+centered = false
+position = Vector2(1324, 590)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("5_room1")
+
+[node name="GroundVisual6" type="Sprite2D" parent="."]
+z_index = -1
+centered = false
+position = Vector2(1596, 590)
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("5_room1")
+
 [node name="StaticEnvironment" type="Node2D" parent="."]
 
 [node name="Floor" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(640, 650)
+position = Vector2(880, 650)
 collision_layer = 5
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Floor"]
-shape = SubResource("RectangleShape2D_wall_h")
+shape = SubResource("RectangleShape2D_wall_h_ext")
 
 [node name="Ceiling" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(640, 20)
+position = Vector2(880, 20)
 collision_layer = 5
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/Ceiling"]
-shape = SubResource("RectangleShape2D_wall_h")
+shape = SubResource("RectangleShape2D_wall_h_ext")
 
 [node name="LeftWall" type="StaticBody2D" parent="StaticEnvironment"]
 position = Vector2(20, 360)
@@ -354,12 +375,20 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/LeftWall"]
 shape = SubResource("RectangleShape2D_wall_v")
 
-[node name="RightWall" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(1260, 360)
+[node name="RightWallBottom" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1260, 570)
 collision_layer = 5
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/RightWall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/RightWallBottom"]
+shape = SubResource("RectangleShape2D_wall_v_short")
+
+[node name="RightWallOuter" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1740, 360)
+collision_layer = 5
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/RightWallOuter"]
 shape = SubResource("RectangleShape2D_wall_v")
 
 [node name="HighPlatform" type="StaticBody2D" parent="StaticEnvironment"]
@@ -407,6 +436,9 @@ position = Vector2(1680, 382)
 target_room = "res://src/world/Room5.tscn"
 target_portal_name = "ShortcutReturn"
 
+[node name="BreakableWall" parent="." instance=ExtResource("20_room1")]
+position = Vector2(1480, 362)
+
 [node name="Crawlid" parent="." instance=ExtResource("3_room1")]
 position = Vector2(405, 614)
 
@@ -421,14 +453,14 @@ position = Vector2(520, 300)
 
 [node name="TopFade" type="ColorRect" parent="."]
 z_index = 20
-offset_right = 1280.0
+offset_right = 1760.0
 offset_bottom = 110.0
 color = Color(0, 0, 0, 0.42)
 
 [node name="BottomFade" type="ColorRect" parent="."]
 z_index = 20
 offset_top = 682.0
-offset_right = 1280.0
+offset_right = 1760.0
 offset_bottom = 720.0
 color = Color(0, 0, 0, 0.42)
 
@@ -441,7 +473,7 @@ color = Color(0, 0, 0, 0.58)
 
 [node name="FrontPillarRight" type="ColorRect" parent="."]
 z_index = 21
-offset_left = 1244.0
-offset_right = 1296.0
+offset_left = 1724.0
+offset_right = 1776.0
 offset_bottom = 720.0
 color = Color(0, 0, 0, 0.58)
