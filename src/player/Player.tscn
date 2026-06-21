@@ -41,7 +41,7 @@ shape = SubResource("RectangleShape2D_nail")
 texture_filter = 0
 texture = ExtResource("2_dnyg")
 region_enabled = true
-region_rect = Rect2(0, 0, 96, 96)
+region_rect = Rect2(0, 700, 230, 95)
 
 [node name="SFXPlayer" type="AudioStreamPlayer2D" parent="."]
 bus = &"Master"
