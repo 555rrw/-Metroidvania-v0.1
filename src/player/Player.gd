@@ -212,6 +212,19 @@ func _physics_process(delta: float) -> void:
 			sprite.modulate.g = 1.0
 			sprite.modulate.b = 1.0
 
+	# Debug cheat to unlock all abilities instantly for testing
+	if Input.is_physical_key_pressed(KEY_F1):
+		var added_any := false
+		for ab in [ABILITY_DASH, ABILITY_DOUBLE_JUMP, ABILITY_VENGEFUL_SPIRIT]:
+			if not _has_ability(ab):
+				abilities.append(ab)
+				added_any = true
+		if added_any:
+			var game = get_tree().get_first_node_in_group(&"game")
+			if game and game.hud:
+				game.hud.show_unlock_message("DEBUG: ALL ABILITIES UNLOCKED!")
+			print("DEBUG: All abilities unlocked via F1!")
+
 	_update_common_timers(delta)
 
 	var move_input := Input.get_axis("left", "right")
@@ -480,6 +493,7 @@ func _perform_double_jump() -> void:
 	current_state = State.JUMP
 	current_jumps = 2
 	_play_sfx(sfx_jump)
+	print("Player: Double Jump performed! velocity.y = ", velocity.y)
 
 func _start_wall_slide(direction: int) -> void:
 	current_state = State.WALL_SLIDE
