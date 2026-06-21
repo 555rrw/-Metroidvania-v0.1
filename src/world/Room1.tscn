@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cxsc37k2bvdh1"]
+[gd_scene load_steps=22 format=3 uid="uid://cxsc37k2bvdh1"]
 
 [ext_resource type="PackedScene" uid="uid://bchg46k2lv6qu" path="res://src/objects/SavePoint.tscn" id="1_room1"]
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="2_room1"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/ruins_fences_0003_a.png" id="16_room1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/column1.png" id="17_room1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/column2.png" id="18_room1"]
+[ext_resource type="PackedScene" path="res://src/enemies/Gunner.tscn" id="19_room1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -197,7 +198,7 @@ collision_mask = 0
 shape = SubResource("RectangleShape2D_wall_v")
 
 [node name="HighPlatform" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(1010, 418)
+position = Vector2(1600, 418)
 collision_layer = 5
 collision_mask = 0
 
@@ -211,39 +212,41 @@ shape = SubResource("RectangleShape2D_plat_high")
 one_way_collision = true
 
 [node name="SavePoint" parent="." instance=ExtResource("1_room1")]
-position = Vector2(105, 610)
+position = Vector2(-180, 610)
 
 [node name="PortalToRoom2" parent="." instance=ExtResource("2_room1")]
-position = Vector2(1206, 592)
+position = Vector2(1242, 592)
 target_room = "res://src/world/Room2.tscn"
 target_portal_name = "PortalFromRoom1"
 
 [node name="EntryDoorDecoration" type="Sprite2D" parent="."]
 z_index = -2
-position = Vector2(1206, 588)
-scale = Vector2(0.48, 0.48)
+modulate = Color(0.42, 0.5, 0.68, 0.36)
+position = Vector2(1284, 588)
+scale = Vector2(0.42, 0.42)
 texture = ExtResource("8_room1")
 
 [node name="DoorFrameDecoration" type="Sprite2D" parent="."]
 z_index = -3
-position = Vector2(1206, 580)
-scale = Vector2(0.48, 0.48)
+modulate = Color(0.42, 0.5, 0.68, 0.3)
+position = Vector2(1284, 580)
+scale = Vector2(0.42, 0.42)
 texture = ExtResource("9_room1")
 
 [node name="ShortcutGate" parent="." instance=ExtResource("7_room1")]
-position = Vector2(1110, 365)
+position = Vector2(1600, 365)
 required_ability = &"double_jump"
 
 [node name="PortalToRoom5" parent="." instance=ExtResource("2_room1")]
-position = Vector2(1182, 382)
+position = Vector2(1680, 382)
 target_room = "res://src/world/Room5.tscn"
 target_portal_name = "ShortcutReturn"
 
 [node name="Crawlid" parent="." instance=ExtResource("3_room1")]
 position = Vector2(465, 614)
 
-[node name="Crawlid2" parent="." instance=ExtResource("3_room1")]
-position = Vector2(805, 614)
+[node name="Gunner" parent="." instance=ExtResource("19_room1")]
+position = Vector2(835, 608)
 
 [node name="Vengefly" parent="." instance=ExtResource("12_room1")]
 position = Vector2(520, 300)
