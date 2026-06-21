@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://cxsc37k2bvdh1"]
+[gd_scene load_steps=25 format=3 uid="uid://cxsc37k2bvdh1"]
 
 [ext_resource type="PackedScene" uid="uid://bchg46k2lv6qu" path="res://src/objects/SavePoint.tscn" id="1_room1"]
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="2_room1"]
@@ -29,6 +29,21 @@ size = Vector2(1280, 40)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_plat_high"]
 size = Vector2(220, 24)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_room_add"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_room_halo"]
+offsets = PackedFloat32Array(0, 0.42, 1)
+colors = PackedColorArray(0.78, 0.92, 1, 0.24, 0.36, 0.64, 0.95, 0.08, 0.18, 0.34, 0.65, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_room_halo"]
+gradient = SubResource("Gradient_room_halo")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
 [node name="Room1" type="Node2D"]
 
 [node name="RoomInstance" type="Node2D" parent="."]
@@ -50,6 +65,38 @@ offset_top = 72.0
 offset_right = 1280.0
 offset_bottom = 626.0
 color = Color(0.32, 0.58, 0.77, 0.055)
+
+[node name="CentralBlueBloom" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_room_add")
+z_index = -26
+modulate = Color(0.76, 0.9, 1, 0.55)
+position = Vector2(640, 430)
+scale = Vector2(3.85, 1.55)
+texture = SubResource("GradientTexture2D_room_halo")
+
+[node name="FloorMistBloom" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_room_add")
+z_index = -13
+modulate = Color(0.62, 0.82, 1, 0.44)
+position = Vector2(642, 560)
+scale = Vector2(4.3, 0.82)
+texture = SubResource("GradientTexture2D_room_halo")
+
+[node name="LightShaftLeft" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_room_add")
+z_index = -26
+modulate = Color(0.6, 0.8, 1, 0.28)
+position = Vector2(333, 342)
+scale = Vector2(0.72, 1.9)
+texture = SubResource("GradientTexture2D_room_halo")
+
+[node name="LightShaftRight" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_room_add")
+z_index = -26
+modulate = Color(0.6, 0.8, 1, 0.24)
+position = Vector2(934, 342)
+scale = Vector2(0.74, 1.9)
+texture = SubResource("GradientTexture2D_room_halo")
 
 [node name="WindowLeft" type="Sprite2D" parent="."]
 z_index = -25
@@ -166,11 +213,19 @@ color = Color(0.008, 0.012, 0.022, 0.92)
 
 [node name="LampGlowLeft" type="ColorRect" parent="."]
 z_index = -9
-offset_left = 318.0
-offset_top = 412.0
-offset_right = 386.0
-offset_bottom = 478.0
-color = Color(0.48, 0.72, 0.95, 0.085)
+offset_left = 294.0
+offset_top = 386.0
+offset_right = 410.0
+offset_bottom = 504.0
+color = Color(0.48, 0.72, 0.95, 0)
+
+[node name="LampHaloLeft" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_room_add")
+z_index = -10
+modulate = Color(0.75, 0.9, 1, 0.96)
+position = Vector2(351, 438)
+scale = Vector2(0.82, 0.82)
+texture = SubResource("GradientTexture2D_room_halo")
 
 [node name="LampHeadLeft" type="Sprite2D" parent="."]
 z_index = -7
@@ -189,11 +244,19 @@ color = Color(0.008, 0.012, 0.022, 0.92)
 
 [node name="LampGlowRight" type="ColorRect" parent="."]
 z_index = -9
-offset_left = 898.0
-offset_top = 412.0
-offset_right = 966.0
-offset_bottom = 478.0
-color = Color(0.48, 0.72, 0.95, 0.075)
+offset_left = 874.0
+offset_top = 386.0
+offset_right = 990.0
+offset_bottom = 504.0
+color = Color(0.48, 0.72, 0.95, 0)
+
+[node name="LampHaloRight" type="Sprite2D" parent="."]
+material = SubResource("CanvasItemMaterial_room_add")
+z_index = -10
+modulate = Color(0.75, 0.9, 1, 0.88)
+position = Vector2(931, 438)
+scale = Vector2(0.82, 0.82)
+texture = SubResource("GradientTexture2D_room_halo")
 
 [node name="LampHeadRight" type="Sprite2D" parent="."]
 z_index = -7
