@@ -4,7 +4,8 @@ class_name UnstablePlatform
 @export var trigger_delay: float = 0.28
 @export var respawn_delay: float = 2.5
 @export var frame_time: float = 0.07
-@export var respawn: bool = true
+# gemini3.5: Changed respawn to false to match DanielDFY's permanent destruction until scene reload
+@export var respawn: bool = false
 
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D

@@ -28,4 +28,5 @@ func open(immediate: bool = false) -> void:
 	tween.tween_property(sprite, "modulate:a", 0.0, 0.45)
 
 func on_switch_triggered() -> void:
-	open()
+	# gemini3.5: Changed to open(true) to match DanielDFY's obstacle.SetActive(false) instantaneous behavior
+	open(true)
