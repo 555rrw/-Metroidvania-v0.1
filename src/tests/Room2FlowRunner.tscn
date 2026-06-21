@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/tests/Room2FlowRunner.gd" id="1_room2_flow"]
+
+[node name="Room2FlowRunner" type="Node"]
+script = ExtResource("1_room2_flow")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cxsc37k2bvdh2"]
+[gd_scene load_steps=22 format=3 uid="uid://cxsc37k2bvdh2"]
 
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="1_room2"]
 [ext_resource type="PackedScene" uid="uid://cxsc37k2bvdq7" path="res://src/objects/Spikes.tscn" id="2_room2"]
@@ -17,9 +17,16 @@
 [ext_resource type="PackedScene" path="res://src/objects/SwitchTrigger.tscn" id="15_room2"]
 [ext_resource type="PackedScene" path="res://src/objects/TriggerDoor.tscn" id="16_room2"]
 [ext_resource type="PackedScene" path="res://src/objects/FallingTrap.tscn" id="17_room2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/platform/platform1.png" id="18_room2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_safe_island"]
+size = Vector2(520, 38)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate_ledge"]
+size = Vector2(340, 34)
 
 [node name="Room2" type="Node2D"]
 
@@ -89,19 +96,19 @@ text = "C or Shift: Dash (Press C/Shift to Dash)
 [node name="StaticEnvironment" type="Node2D" parent="."]
 
 [node name="FloorLeft" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(250, 680)
+position = Vector2(300, 680)
 collision_layer = 5
 collision_mask = 0
 
 [node name="ColorRect" type="ColorRect" parent="StaticEnvironment/FloorLeft"]
-offset_left = -250.0
+offset_left = -300.0
 offset_top = -20.0
-offset_right = 250.0
+offset_right = 300.0
 offset_bottom = 20.0
 color = Color(0.121569, 0.180392, 0.141176, 1)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/FloorLeft"]
-polygon = PackedVector2Array(-250, -20, 250, -20, 250, 20, -250, 20)
+polygon = PackedVector2Array(-300, -20, 300, -20, 300, 20, -300, 20)
 
 [node name="FloorRight" type="StaticBody2D" parent="StaticEnvironment"]
 position = Vector2(2310, 680)
@@ -163,6 +170,66 @@ color = Color(0.121569, 0.180392, 0.141176, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/RightWall"]
 shape = SubResource("RectangleShape2D_wall_v")
 
+[node name="SafeIsland" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1540, 640)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/SafeIsland"]
+offset_left = -260.0
+offset_top = -19.0
+offset_right = 260.0
+offset_bottom = 19.0
+color = Color(0.105, 0.16, 0.13, 0.32)
+
+[node name="PlatformSpriteA" type="Sprite2D" parent="StaticEnvironment/SafeIsland"]
+texture_filter = 0
+position = Vector2(-192, -24)
+texture = ExtResource("18_room2")
+
+[node name="PlatformSpriteB" type="Sprite2D" parent="StaticEnvironment/SafeIsland"]
+texture_filter = 0
+position = Vector2(-64, -24)
+texture = ExtResource("18_room2")
+
+[node name="PlatformSpriteC" type="Sprite2D" parent="StaticEnvironment/SafeIsland"]
+texture_filter = 0
+position = Vector2(64, -24)
+texture = ExtResource("18_room2")
+
+[node name="PlatformSpriteD" type="Sprite2D" parent="StaticEnvironment/SafeIsland"]
+texture_filter = 0
+position = Vector2(192, -24)
+texture = ExtResource("18_room2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/SafeIsland"]
+shape = SubResource("RectangleShape2D_safe_island")
+
+[node name="GateLedge" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(2030, 640)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/GateLedge"]
+offset_left = -170.0
+offset_top = -17.0
+offset_right = 170.0
+offset_bottom = 17.0
+color = Color(0.105, 0.16, 0.13, 0.32)
+
+[node name="PlatformSpriteA" type="Sprite2D" parent="StaticEnvironment/GateLedge"]
+texture_filter = 0
+position = Vector2(-64, -24)
+texture = ExtResource("18_room2")
+
+[node name="PlatformSpriteB" type="Sprite2D" parent="StaticEnvironment/GateLedge"]
+texture_filter = 0
+position = Vector2(64, -24)
+texture = ExtResource("18_room2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/GateLedge"]
+shape = SubResource("RectangleShape2D_gate_ledge")
+
 [node name="PortalFromRoom1" parent="." instance=ExtResource("1_room2")]
 position = Vector2(80, 620)
 target_room = "res://src/world/Room1.tscn"
@@ -177,52 +244,55 @@ target_portal_name = "PortalFromRoom2"
 position = Vector2(1280, 696)
 
 [node name="MovingPlatform" parent="." instance=ExtResource("3_room2")]
-position = Vector2(800, 520)
+position = Vector2(760, 540)
+speed = 150.0
+wait_time = 0.35
 
 [node name="Waypoint1" type="Marker2D" parent="MovingPlatform"]
 position = Vector2(0, 0)
 
 [node name="Waypoint2" type="Marker2D" parent="MovingPlatform"]
-position = Vector2(960, 0)
+position = Vector2(430, 0)
 
 [node name="UnstablePlatformA" parent="." instance=ExtResource("12_room2")]
-position = Vector2(1290, 456)
+position = Vector2(1160, 500)
 
 [node name="UnstablePlatformB" parent="." instance=ExtResource("12_room2")]
-position = Vector2(1540, 404)
+position = Vector2(1410, 456)
 
 [node name="UnstablePlatformC" parent="." instance=ExtResource("12_room2")]
-position = Vector2(1780, 354)
+position = Vector2(1660, 500)
 
 [node name="SawTrap" parent="." instance=ExtResource("13_room2")]
-position = Vector2(1360, 638)
+position = Vector2(1510, 596)
 
 [node name="FallingTrap" parent="." instance=ExtResource("17_room2")]
-position = Vector2(1580, 168)
+position = Vector2(1715, 170)
 
 [node name="TriggerDoor" parent="." instance=ExtResource("16_room2")]
-position = Vector2(2072, 590)
+position = Vector2(2140, 586)
 event_name = "room2_switch_door"
 
 [node name="SwitchTrigger" parent="." instance=ExtResource("15_room2")]
-position = Vector2(1900, 610)
+position = Vector2(1735, 594)
 event_name = "room2_switch_door"
 door_path = NodePath("../TriggerDoor")
 trap_path = NodePath("../FallingTrap")
 
 [node name="DashUpgrade" parent="." instance=ExtResource("4_room2")]
-position = Vector2(2300, 640)
+position = Vector2(470, 640)
 ability_name = "dash"
+id = "room2_dash_reward_gpt55"
 
 [node name="DashGate" parent="." instance=ExtResource("11_room2")]
-position = Vector2(2395, 590)
+position = Vector2(2260, 588)
 required_ability = &"dash"
 
 [node name="Vengefly" parent="." instance=ExtResource("5_room2")]
-position = Vector2(1100, 320)
+position = Vector2(1120, 330)
 
 [node name="Vengefly2" parent="." instance=ExtResource("5_room2")]
-position = Vector2(1800, 320)
+position = Vector2(1760, 360)
 
 [node name="Gunner" parent="." instance=ExtResource("14_room2")]
-position = Vector2(2240, 628)
+position = Vector2(2360, 628)
