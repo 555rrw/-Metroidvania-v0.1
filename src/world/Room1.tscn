@@ -408,7 +408,10 @@ target_room = "res://src/world/Room5.tscn"
 target_portal_name = "ShortcutReturn"
 
 [node name="Crawlid" parent="." instance=ExtResource("3_room1")]
-position = Vector2(465, 614)
+position = Vector2(405, 614)
+
+[node name="SpearHunterLeft" parent="." instance=ExtResource("19_room1")]
+position = Vector2(492, 610)
 
 [node name="MantisWarrior" parent="." instance=ExtResource("19_room1")]
 position = Vector2(835, 610)
