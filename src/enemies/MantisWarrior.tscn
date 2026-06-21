@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://src/enemies/MantisWarrior.gd" id="1_mantis"]
+[ext_resource type="Texture2D" path="res://assets/sprites/godot_hk_controller/Warrior_SheetnoEffect.png" id="2_warrior_sheet"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mantis"]
 size = Vector2(42, 76)
@@ -36,6 +37,15 @@ visible = false
 
 [node name="Body" type="Node2D" parent="."]
 scale = Vector2(0.88, 0.88)
+
+[node name="WarriorSheetPose" type="Sprite2D" parent="Body"]
+z_index = -2
+modulate = Color(0.14, 0.19, 0.28, 0.34)
+position = Vector2(-2, -22)
+scale = Vector2(1.42, 1.42)
+texture = ExtResource("2_warrior_sheet")
+region_enabled = true
+region_rect = Rect2(69, 44, 69, 44)
 
 [node name="Cloak" type="Polygon2D" parent="Body"]
 texture = SubResource("GradientTexture2D_cloak")

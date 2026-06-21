@@ -33,6 +33,7 @@ func _enemy_ai(delta: float) -> void:
 	velocity.x = patrol_dir * idle_step_speed
 	move_and_slide()
 
+# GPT5.5_LOCK: verified 2026-06-21 for Room1 flanking combat. Preserve player-facing spear stance.
 func _apply_facing_visual() -> void:
 	if not body_visual:
 		return

@@ -11,7 +11,7 @@ Main scene: `res://src/ui/MainMenu.tscn`.
 | KoBeWi/Metroidvania-System | `d9e456dc535e5e0f9d7831974353e976355e505e` | Full `addons/MetroidvaniaSystem`, autoload, minimap, save data, room map data, `RoomInstance` integration. |
 | gdquest-demos/godot-platformer-2d | `0ea6cb6056dceeba4b1eeca73bddd9e037e0a7ef` | Background art, hook/checkpoint props, moving platform waypoint behavior pattern, source archive indexing. |
 | Antonius-k/CloneProject_HollowKnight | `37006ddcd7377dff5c31ae0034e7a2d7fcb76368` | Enemy/boss sprites, False Knight audio, boss encounter behavior and reward loop. |
-| ChrisMGeo/GodotHollowKnightController | `0f076abfc008ea99b68dd08f9b40c5b08cd1427e` | Controller movement ideas ported into `Player.gd`; warrior sheet appears as controller echo in boss room; full repo indexed. |
+| ChrisMGeo/GodotHollowKnightController | `0f076abfc008ea99b68dd08f9b40c5b08cd1427e` | Controller movement ideas ported into `Player.gd`; warrior sheet appears as controller echo in boss room and as Room1 MantisWarrior pose underlay; full repo indexed. |
 
 ## Full Source Retention
 
@@ -24,7 +24,7 @@ The five upstream repositories are retained as git submodules under `cloned_repo
 - Five MetSys rooms: Crossroads/Spawn-style start, Greenpath trap room, False Knight chamber, Spirit Sanctum, shortcut cache.
 - Player movement: run, tuned acceleration/deceleration, coyote jump, jump buffer, variable jump height, dash unlock, double jump unlock, wall slide/jump, look up/down camera.
 - Combat: directional nail hitboxes, pogo bounce, hit pause, recoil, Soul gain, Focus heal, Vengeful Spirit spell, hurt/invincibility, save respawn.
-- Enemies: DanielDFY-skinned Crawlid patrol, Vengefly chase/hover, Gunner projectile enemy, False Knight phase boss with leap/slam/shockwave/stagger/death reward.
+- Enemies: DanielDFY-skinned Crawlid patrol, Vengefly chase/hover, Gunner projectile enemy, Warrior-sheet-supported spear enemy, False Knight phase boss with leap/slam/shockwave/stagger/death reward.
 - Objects: save point, room portals, DanielDFY spikes/saw, moving platform, unstable platform, switch-triggered door, falling trap, ability gates, spell/ability unlocks, secret Soul pickup.
 - UI: health masks, Soul meter, unlock popup, pause overlay, MetSys minimap.
 

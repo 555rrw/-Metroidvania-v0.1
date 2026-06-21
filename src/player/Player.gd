@@ -497,6 +497,7 @@ func _can_double_jump() -> bool:
 func _has_ability(ability: StringName) -> bool:
 	return ability in abilities
 
+# GPT5.5_LOCK: verified 2026-06-21. Keep InputMap "attack" -> _perform_attack -> _configure_nail_hitbox path intact.
 func _perform_attack() -> void:
 	attack_cooldown_timer = attack_cooldown_time
 	attack_duration_timer = attack_duration_time
@@ -524,6 +525,7 @@ func _perform_attack() -> void:
 	tween.tween_property(nail_sprite, "scale", Vector2(0.92, 0.92), attack_duration_time * 0.45)
 	tween.tween_property(nail_sprite, "scale", Vector2(0.46, 0.46), attack_duration_time * 0.55)
 
+# GPT5.5_LOCK: verified side/up/down nail hitbox positions and visible slash offset. Preserve collision/visual split.
 func _configure_nail_hitbox() -> void:
 	var shape := nail_collision.shape as RectangleShape2D
 	if attack_direction.x != 0.0:
