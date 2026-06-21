@@ -10,6 +10,10 @@ func _fail(message: String) -> void:
 	get_tree().quit(1)
 
 func _run() -> void:
+	# gemini3.5: Clean up save file at test startup to avoid auto-freed collectibles
+	if FileAccess.file_exists("user://hollow_knight_save.sav"):
+		DirAccess.remove_absolute("user://hollow_knight_save.sav")
+
 	var game = GAME_SCENE.instantiate()
 	add_child(game)
 	await get_tree().process_frame
