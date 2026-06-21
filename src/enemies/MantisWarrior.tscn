@@ -1,0 +1,97 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://src/enemies/MantisWarrior.gd" id="1_mantis"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mantis"]
+size = Vector2(42, 76)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
+size = Vector2(58, 78)
+
+[sub_resource type="Gradient" id="Gradient_cloak"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0.1, 0.135, 0.19, 1, 0.55, 0.62, 0.72, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_cloak"]
+gradient = SubResource("Gradient_cloak")
+width = 96
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_add"]
+blend_mode = 1
+
+[node name="MantisWarrior" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("1_mantis")
+max_health = 3
+contact_damage = 1
+knockback_resistance = 0.2
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+
+[node name="Body" type="Node2D" parent="."]
+scale = Vector2(0.88, 0.88)
+
+[node name="Cloak" type="Polygon2D" parent="Body"]
+texture = SubResource("GradientTexture2D_cloak")
+polygon = PackedVector2Array(-23, -12, -5, -48, 20, -34, 27, 18, 8, 43, -22, 30)
+
+[node name="BackCloak" type="Polygon2D" parent="Body"]
+color = Color(0.065, 0.088, 0.13, 0.95)
+polygon = PackedVector2Array(-14, -30, -48, 22, -18, 13, -22, 42, 4, 28)
+
+[node name="Mask" type="Polygon2D" parent="Body"]
+position = Vector2(-6, -53)
+color = Color(0.86, 0.88, 0.9, 1)
+polygon = PackedVector2Array(-18, -10, -4, -22, 15, -16, 22, 0, 12, 15, -8, 17, -22, 4)
+
+[node name="Eye" type="Polygon2D" parent="Body"]
+position = Vector2(-3, -52)
+color = Color(0.018, 0.02, 0.028, 1)
+polygon = PackedVector2Array(4, -4, 13, -2, 12, 6, 3, 5)
+
+[node name="HornA" type="Line2D" parent="Body"]
+points = PackedVector2Array(-16, -66, -36, -88)
+width = 4.0
+default_color = Color(0.88, 0.9, 0.94, 1)
+
+[node name="HornB" type="Line2D" parent="Body"]
+points = PackedVector2Array(8, -67, 30, -88)
+width = 4.0
+default_color = Color(0.88, 0.9, 0.94, 1)
+
+[node name="Spear" type="Line2D" parent="Body"]
+points = PackedVector2Array(-74, -24, 58, -16)
+width = 5.0
+default_color = Color(0.82, 0.85, 0.9, 1)
+
+[node name="SpearTip" type="Polygon2D" parent="Body"]
+color = Color(0.92, 0.95, 1, 1)
+polygon = PackedVector2Array(-86, -25, -70, -34, -72, -17)
+
+[node name="Hand" type="Polygon2D" parent="Body"]
+color = Color(0.14, 0.17, 0.22, 1)
+polygon = PackedVector2Array(-7, -23, 10, -22, 12, -9, -4, -7)
+
+[node name="GlowRim" type="Line2D" parent="Body"]
+material = SubResource("CanvasItemMaterial_add")
+points = PackedVector2Array(-20, -12, -5, -48, 20, -34)
+width = 2.0
+default_color = Color(0.68, 0.82, 1, 0.28)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_mantis")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -18)
+shape = SubResource("RectangleShape2D_hitbox")

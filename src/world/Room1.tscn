@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/ruins_fences_0003_a.png" id="16_room1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/column1.png" id="17_room1"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/column2.png" id="18_room1"]
-[ext_resource type="PackedScene" path="res://src/enemies/Gunner.tscn" id="19_room1"]
+[ext_resource type="PackedScene" path="res://src/enemies/MantisWarrior.tscn" id="19_room1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -347,8 +347,8 @@ target_portal_name = "ShortcutReturn"
 [node name="Crawlid" parent="." instance=ExtResource("3_room1")]
 position = Vector2(465, 614)
 
-[node name="Gunner" parent="." instance=ExtResource("19_room1")]
-position = Vector2(835, 608)
+[node name="MantisWarrior" parent="." instance=ExtResource("19_room1")]
+position = Vector2(835, 610)
 
 [node name="Vengefly" parent="." instance=ExtResource("12_room1")]
 position = Vector2(520, 300)
