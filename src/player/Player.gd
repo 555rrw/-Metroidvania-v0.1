@@ -213,8 +213,8 @@ func _physics_process(delta: float) -> void:
 			sprite.modulate.g = 1.0
 			sprite.modulate.b = 1.0
 
-	# gemini3.5: Debug cheat to unlock all abilities instantly for testing
-	if Input.is_physical_key_pressed(KEY_F1):
+	# gemini3.5: Debug cheat to unlock all abilities instantly for testing (supports F1 or U keys)
+	if Input.is_physical_key_pressed(KEY_F1) or Input.is_physical_key_pressed(KEY_U):
 		var added_any := false
 		for ab in [ABILITY_DASH, ABILITY_DOUBLE_JUMP, ABILITY_VENGEFUL_SPIRIT]:
 			if not _has_ability(ab):
@@ -533,7 +533,11 @@ func _can_dash() -> bool:
 	return _has_ability(ABILITY_DASH) and dash_cooldown_timer <= 0.0 and current_state != State.WALL_SLIDE
 
 func _can_double_jump() -> bool:
-	return _has_ability(ABILITY_DOUBLE_JUMP) and current_jumps < 2
+	var has_ab := _has_ability(ABILITY_DOUBLE_JUMP)
+	# gemini3.5: Diagnostic log if player tries to double jump in mid-air but lacks the ability
+	if Input.is_action_just_pressed("jump") and not has_ab and not is_on_floor():
+		print("Player: Tried to double jump but lack ABILITY_DOUBLE_JUMP! Current abilities: ", abilities)
+	return has_ab and current_jumps < 2
 
 func _has_ability(ability: StringName) -> bool:
 	# gemini3.5: Robust string comparison for ability checking
