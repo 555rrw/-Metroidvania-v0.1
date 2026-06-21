@@ -138,7 +138,7 @@ color = Color(0.121569, 0.180392, 0.141176, 1)
 shape = SubResource("RectangleShape2D_wall_v")
 
 [node name="Platform1" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(800, 560)
+position = Vector2(800, 590)
 collision_layer = 5
 collision_mask = 0
 
@@ -150,7 +150,7 @@ texture = ExtResource("18_room2")
 shape = SubResource("RectangleShape2D_platform")
 
 [node name="Platform2" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(1100, 440)
+position = Vector2(1100, 500)
 collision_layer = 5
 collision_mask = 0
 
@@ -162,7 +162,7 @@ texture = ExtResource("18_room2")
 shape = SubResource("RectangleShape2D_platform")
 
 [node name="Platform3" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(1450, 320)
+position = Vector2(1450, 410)
 collision_layer = 5
 collision_mask = 0
 
@@ -174,7 +174,7 @@ texture = ExtResource("18_room2")
 shape = SubResource("RectangleShape2D_platform")
 
 [node name="Platform4" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(1750, 480)
+position = Vector2(1750, 510)
 collision_layer = 5
 collision_mask = 0
 
@@ -199,15 +199,15 @@ wait_time = 0.45
 position = Vector2(260, 0)
 
 [node name="UnstablePlatformA" parent="." instance=ExtResource("15_room2")]
-position = Vector2(1030, 545)
+position = Vector2(1030, 565)
 trigger_delay = 0.22
 
 [node name="UnstablePlatformB" parent="." instance=ExtResource("15_room2")]
-position = Vector2(1360, 430)
+position = Vector2(1360, 485)
 trigger_delay = 0.22
 
 [node name="UnstablePlatformC" parent="." instance=ExtResource("15_room2")]
-position = Vector2(1700, 545)
+position = Vector2(1700, 565)
 trigger_delay = 0.22
 
 [node name="SawTrap" parent="." instance=ExtResource("16_room2")]

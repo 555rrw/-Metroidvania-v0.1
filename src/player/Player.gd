@@ -533,8 +533,7 @@ func _can_dash() -> bool:
 	return _has_ability(ABILITY_DASH) and dash_cooldown_timer <= 0.0 and current_state != State.WALL_SLIDE
 
 func _can_double_jump() -> bool:
-	# gemini3.5: removed ABILITY_DOUBLE_JUMP check to replicate DanielDFY's logic (always 2 jumps)
-	return current_jumps < 2
+	return _has_ability(ABILITY_DOUBLE_JUMP) and current_jumps < 2
 
 func _has_ability(ability: StringName) -> bool:
 	# gemini3.5: Robust string comparison for ability checking
