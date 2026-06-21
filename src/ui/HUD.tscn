@@ -26,26 +26,31 @@ theme_override_constants/separation = 4
 [node name="Mask1" type="TextureRect" parent="MasksContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+expand_mode = 1
 stretch_mode = 5
 
 [node name="Mask2" type="TextureRect" parent="MasksContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+expand_mode = 1
 stretch_mode = 5
 
 [node name="Mask3" type="TextureRect" parent="MasksContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+expand_mode = 1
 stretch_mode = 5
 
 [node name="Mask4" type="TextureRect" parent="MasksContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+expand_mode = 1
 stretch_mode = 5
 
 [node name="Mask5" type="TextureRect" parent="MasksContainer"]
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+expand_mode = 1
 stretch_mode = 5
 
 [node name="SoulMeter" type="Control" parent="."]
