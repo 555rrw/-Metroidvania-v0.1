@@ -514,31 +514,34 @@ func _perform_attack() -> void:
 	_configure_nail_hitbox()
 	nail_collision.disabled = false
 	nail_sprite.visible = true
+	nail_sprite.modulate = Color(1, 1, 1, 0.92)
 
 	play_anim("attack", 15.0)
 	_play_sfx(sfx_hit)
 
 	var tween = create_tween()
 	nail_sprite.scale = Vector2(0.25, 0.25)
-	tween.tween_property(nail_sprite, "scale", Vector2(1.08, 1.08), attack_duration_time * 0.45)
-	tween.tween_property(nail_sprite, "scale", Vector2(0.55, 0.55), attack_duration_time * 0.55)
+	tween.tween_property(nail_sprite, "scale", Vector2(0.92, 0.92), attack_duration_time * 0.45)
+	tween.tween_property(nail_sprite, "scale", Vector2(0.46, 0.46), attack_duration_time * 0.55)
 
 func _configure_nail_hitbox() -> void:
 	var shape := nail_collision.shape as RectangleShape2D
 	if attack_direction.x != 0.0:
 		nail_area.position = Vector2(56.0 * facing_direction, -4.0)
+		nail_sprite.position = Vector2(32.0 * facing_direction, -2.0)
 		if shape:
 			shape.size = Vector2(90, 42)
 	elif attack_direction == Vector2.UP:
 		nail_area.position = Vector2(0.0, -58.0)
+		nail_sprite.position = Vector2.ZERO
 		if shape:
 			shape.size = Vector2(48, 96)
 	else:
 		nail_area.position = Vector2(0.0, 58.0)
+		nail_sprite.position = Vector2.ZERO
 		if shape:
 			shape.size = Vector2(48, 96)
 
-	nail_sprite.position = Vector2.ZERO
 	nail_sprite.rotation = attack_direction.angle()
 
 func _on_nail_area_body_entered(body: Node2D) -> void:
