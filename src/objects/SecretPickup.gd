@@ -16,6 +16,7 @@ func _ready() -> void:
 
 	body_entered.connect(_on_body_entered)
 
+# GPT5.5_LOCK: verified 2026-06-21. Room5 shortcut reward must grant soul, event, save state.
 func _on_body_entered(body: Node2D) -> void:
 	if not (body is Player):
 		return

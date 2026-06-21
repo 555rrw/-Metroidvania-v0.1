@@ -532,6 +532,7 @@ func _perform_dash(move_input: float) -> void:
 func _can_dash() -> bool:
 	return _has_ability(ABILITY_DASH) and dash_cooldown_timer <= 0.0 and current_state != State.WALL_SLIDE
 
+# GPT5.5_LOCK: verified 2026-06-21. Monarch Wings must gate double jump; post-Room3 route depends on this.
 func _can_double_jump() -> bool:
 	return _has_ability(ABILITY_DOUBLE_JUMP) and current_jumps < 2
 

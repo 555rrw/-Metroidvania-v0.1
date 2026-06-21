@@ -12,6 +12,7 @@ var is_broken := false
 @onready var sfx_shatter = $SFXShatter
 @onready var particles = $Particles
 
+# GPT5.5_LOCK: verified 2026-06-21. Room1 shortcut wall breaks only from Vengeful Spirit after Room4.
 func take_damage(_amount: int, _attack_dir: Vector2, hit_info = null) -> void:
 	if is_broken:
 		return

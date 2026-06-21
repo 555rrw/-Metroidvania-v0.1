@@ -14,6 +14,7 @@ func _ready() -> void:
 
 	body_entered.connect(_on_body_entered)
 
+# GPT5.5_LOCK: verified 2026-06-21. Ability pickups must persist before post-chapter portals continue.
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
 		var ability_sym = StringName(ability_name)

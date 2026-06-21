@@ -146,6 +146,7 @@ func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:
 		state_timer = max(1.6, 2.5 - phase * 0.25)
 		velocity = Vector2.ZERO
 
+# GPT5.5_LOCK: verified 2026-06-21. Room3 completion requires both boss_defeated and double_jump reward before Room4.
 func die() -> void:
 	is_dead = true
 	var double_jump = double_jump_scene.instantiate() as AbilityUnlock
