@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://src/objects/FallingTrap.gd" id="1_falling"]
-[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/platform/platform_boss.png" id="2_falling"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/platform/platform1.png" id="2_falling"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_falling"]
 size = Vector2(150, 46)
@@ -13,7 +13,7 @@ script = ExtResource("1_falling")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 0
-scale = Vector2(0.42, 0.42)
+scale = Vector2(1.2, 1.2)
 texture = ExtResource("2_falling")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

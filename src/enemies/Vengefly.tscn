@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cxsc85y2l7gdw"]
 
 [ext_resource type="Script" path="res://src/enemies/Vengefly.gd" id="1_dnyg"]
-[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/enemy/fly_insect1.png" id="2_dnyg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/clean/vengefly_clean.png" id="2_dnyg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vengefly"]
 radius = 24.0
@@ -16,10 +16,8 @@ script = ExtResource("1_dnyg")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 0
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.72, 0.72)
 texture = ExtResource("2_dnyg")
-region_enabled = true
-region_rect = Rect2(250, 590, 160, 150)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_vengefly")
