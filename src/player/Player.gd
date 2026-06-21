@@ -371,6 +371,12 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+	# gemini3.5: Out-of-bounds safety check. Reset player to safety and take damage if falling off the map.
+	if global_position.y > 750.0:
+		global_position = reset_position
+		velocity = Vector2.ZERO
+		take_damage(1, Vector2.UP)
+
 func _update_animation(delta: float) -> void:
 	if animations.has(current_animation_name) and not animations[current_animation_name].is_empty():
 		var frames: Array = animations[current_animation_name]
