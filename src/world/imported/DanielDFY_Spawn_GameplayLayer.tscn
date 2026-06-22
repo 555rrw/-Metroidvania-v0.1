@@ -1,0 +1,103 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://src/objects/Portal.tscn" id="res_1"]
+
+[sub_resource type="RectangleShape2D" id="ImportedShape_1"]
+size = Vector2(48.000, 360.000)
+
+[sub_resource type="RectangleShape2D" id="ImportedShape_2"]
+size = Vector2(48.000, 360.000)
+
+[sub_resource type="RectangleShape2D" id="ImportedShape_3"]
+size = Vector2(48.000, 360.000)
+
+[sub_resource type="RectangleShape2D" id="ImportedShape_4"]
+size = Vector2(180.000, 32.000)
+
+[sub_resource type="RectangleShape2D" id="ImportedShape_5"]
+size = Vector2(180.000, 32.000)
+
+
+[node name="DanielDFY_Spawn_GameplayLayer" type="Node2D"]
+metadata/source_scene = "Assets/Scenes/Spawn.unity"
+metadata/gameplay_only = true
+
+[node name="ImportedObjects" type="Node2D" parent="."]
+
+[node name="airwall_left" type="StaticBody2D" parent="ImportedObjects"]
+position = Vector2(-155.600, 701.000)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="ImportedObjects/airwall_left"]
+offset_left = -24.000
+offset_top = -180.000
+offset_right = 24.000
+offset_bottom = 180.000
+color = Color(0.18, 0.22, 0.24, 0.35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ImportedObjects/airwall_left"]
+shape = SubResource("ImportedShape_1")
+
+[node name="airwall_right" type="StaticBody2D" parent="ImportedObjects"]
+position = Vector2(82.800, 663.600)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="ImportedObjects/airwall_right"]
+offset_left = -24.000
+offset_top = -180.000
+offset_right = 24.000
+offset_bottom = 180.000
+color = Color(0.18, 0.22, 0.24, 0.35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ImportedObjects/airwall_right"]
+shape = SubResource("ImportedShape_2")
+
+[node name="AirWalls" type="StaticBody2D" parent="ImportedObjects"]
+position = Vector2(82.800, 663.600)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="ImportedObjects/AirWalls"]
+offset_left = -24.000
+offset_top = -180.000
+offset_right = 24.000
+offset_bottom = 180.000
+color = Color(0.18, 0.22, 0.24, 0.35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ImportedObjects/AirWalls"]
+shape = SubResource("ImportedShape_3")
+
+[node name="NextLevel" parent="ImportedObjects" instance=ExtResource("res_1")]
+position = Vector2(1.174, 784.800)
+
+[node name="platform_spawn" type="StaticBody2D" parent="ImportedObjects"]
+position = Vector2(-49.000, 706.400)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="ImportedObjects/platform_spawn"]
+offset_left = -90.000
+offset_top = -16.000
+offset_right = 90.000
+offset_bottom = 16.000
+color = Color(0.18, 0.22, 0.24, 0.35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ImportedObjects/platform_spawn"]
+shape = SubResource("ImportedShape_4")
+
+[node name="Platforms" type="StaticBody2D" parent="ImportedObjects"]
+position = Vector2(0.000, 717.400)
+collision_layer = 5
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="ImportedObjects/Platforms"]
+offset_left = -90.000
+offset_top = -16.000
+offset_right = 90.000
+offset_bottom = 16.000
+color = Color(0.18, 0.22, 0.24, 0.35)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ImportedObjects/Platforms"]
+shape = SubResource("ImportedShape_5")

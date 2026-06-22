@@ -38,12 +38,16 @@ class CellData:
 		scene = load_next_chunk()
 		if not scene.begins_with("uid://"):
 		# Compat.
-			if scene.begins_with(":"):
+			if scene.begins_with("res://"):
+				pass
+			elif scene.begins_with(":"):
 				scene = "uid://" + scene.trim_prefix(":")
 			else:
 				scene = ResourceUID.path_to_uid(MetSys.settings._legacy_map_root.path_join(scene))
 		elif OS.has_feature("template"): # Bugfix for exported projects.
-			scene = ResourceUID.uid_to_path(scene)
+			var scene_path := ResourceUID.uid_to_path(scene)
+			if not scene_path.is_empty() and scene_path != "res://":
+				scene = scene_path
 
 		loading = null
 
@@ -545,10 +549,16 @@ func commit_transfer():
 	transfer.clear()
 
 func get_room_from_scene_path(scene: String, safe := true) -> String:
-	if scene.begins_with("res://") and OS.has_feature("editor"):
-		scene = ResourceUID.path_to_uid(scene)
+	# GPT5.5_LOCK: runtime rooms may load by res:// path while MapData stores UID; keep both resolving.
+	var original_scene := scene
+	if scene.begins_with("res://"):
+		var uid_scene := ResourceUID.path_to_uid(scene)
+		if uid_scene in assigned_scenes:
+			scene = uid_scene
 
 	scene = scene_remaps.get(scene, scene)
+	if not scene in assigned_scenes and original_scene in assigned_scenes:
+		scene = original_scene
 	if safe:
 		assert(scene in assigned_scenes)
 	return scene

@@ -1,0 +1,348 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/framework/ancient_wall_pieces_0007_Color-Balance-1-copy-13.png" id="res_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/decoration/antique_sign_main.png" id="res_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/decoration/direction_sign_breakable_0006_Layer-0.png" id="res_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/framework/floor2.png" id="res_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/decoration/fung_floor_03.png" id="res_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/door & entry/SpriteAtlasTexture-Town (Group 0)-2048x2048-fmt12_2.png" id="res_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/door & entry/door_entry.png" id="res_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/switch & obstacle/trigger & door.png" id="res_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/framework/ruin_add_wall.png" id="res_9"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/framework/cd_big_roof_0004_03.png" id="res_10"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/decoration/ruin_lamp_01.png" id="res_11"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/framework/ruins_fences_0003_a.png" id="res_12"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/decoration/ruins_watcher_desk_0003_1.png" id="res_13"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/trap/spike/spike1.png" id="res_14"]
+
+[node name="DanielDFY_Level1_VisualLayer" type="Node2D"]
+metadata/source_scene = "Assets/Scenes/Level1.unity"
+metadata/visual_only = true
+
+[node name="ancient_wall_pieces_0007_Color_Balance_1_copy_13" type="Sprite2D" parent="."]
+position = Vector2(739.000, 168.000)
+scale = Vector2(-1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_1")
+metadata/source_name = "ancient_wall_pieces_0007_Color-Balance-1-copy-13"
+
+[node name="antique_sign_main" type="Sprite2D" parent="."]
+position = Vector2(2068.600, 381.458)
+scale = Vector2(1.200, 1.200)
+z_index = 1
+texture_filter = 0
+texture = ExtResource("res_2")
+metadata/source_name = "antique_sign_main"
+
+[node name="direction_sign_breakable_0006_Layer_0" type="Sprite2D" parent="."]
+position = Vector2(2068.800, 411.800)
+scale = Vector2(2.000, 2.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_3")
+metadata/source_name = "direction_sign_breakable_0006_Layer-0"
+
+[node name="floor1_1" type="Sprite2D" parent="."]
+position = Vector2(-56.200, 763.800)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_4")
+metadata/source_name = "floor1 (1)"
+
+[node name="floor1_2" type="Sprite2D" parent="."]
+position = Vector2(233.400, 802.800)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_4")
+metadata/source_name = "floor1 (2)"
+
+[node name="floor1_3" type="Sprite2D" parent="."]
+position = Vector2(628.200, 650.600)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_4")
+metadata/source_name = "floor1 (3)"
+
+[node name="floor1_4" type="Sprite2D" parent="."]
+position = Vector2(282.400, 450.400)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_4")
+metadata/source_name = "floor1 (4)"
+
+[node name="floor1_5" type="Sprite2D" parent="."]
+position = Vector2(169.200, 336.200)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_4")
+metadata/source_name = "floor1 (5)"
+
+[node name="floor1_6" type="Sprite2D" parent="."]
+position = Vector2(1003.800, 283.400)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_4")
+metadata/source_name = "floor1 (6)"
+
+[node name="floor1_7" type="Sprite2D" parent="."]
+position = Vector2(1505.400, 519.400)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_4")
+metadata/source_name = "floor1 (7)"
+
+[node name="floor1_8" type="Sprite2D" parent="."]
+position = Vector2(2262.000, 490.000)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_4")
+metadata/source_name = "floor1 (8)"
+
+[node name="fung_floor_03" type="Sprite2D" parent="."]
+position = Vector2(25.000, 725.400)
+scale = Vector2(3.000, 3.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_5")
+metadata/source_name = "fung_floor_03"
+
+[node name="fung_floor_03_1" type="Sprite2D" parent="."]
+position = Vector2(-10.800, 725.400)
+scale = Vector2(3.000, 3.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_5")
+metadata/source_name = "fung_floor_03 (1)"
+
+[node name="fung_floor_03_2" type="Sprite2D" parent="."]
+position = Vector2(448.200, 612.800)
+scale = Vector2(3.000, 3.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_5")
+metadata/source_name = "fung_floor_03 (2)"
+
+[node name="House" type="Sprite2D" parent="."]
+position = Vector2(2416.000, 332.000)
+scale = Vector2(2.500, 2.500)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_6")
+metadata/source_name = "House"
+
+[node name="NextLevel" type="Sprite2D" parent="."]
+position = Vector2(2270.757, 413.600)
+scale = Vector2(2.000, 2.000)
+z_index = 1
+texture_filter = 0
+texture = ExtResource("res_7")
+metadata/source_name = "NextLevel"
+
+[node name="obstacle" type="Sprite2D" parent="."]
+position = Vector2(995.400, 205.200)
+scale = Vector2(1.500, 1.500)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_8")
+metadata/source_name = "obstacle"
+
+[node name="ruin_add_wall" type="Sprite2D" parent="."]
+position = Vector2(390.200, 725.000)
+scale = Vector2(-1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_9")
+metadata/source_name = "ruin_add_wall"
+
+[node name="ruin_add_wall_1" type="Sprite2D" parent="."]
+position = Vector2(-197.400, 622.400)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_9")
+metadata/source_name = "ruin_add_wall (1)"
+
+[node name="ruin_add_wall_2" type="Sprite2D" parent="."]
+position = Vector2(711.000, 363.400)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_9")
+metadata/source_name = "ruin_add_wall (2)"
+
+[node name="ruin_add_wall_3" type="Sprite2D" parent="."]
+position = Vector2(624.000, 376.800)
+scale = Vector2(-1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_9")
+metadata/source_name = "ruin_add_wall (3)"
+
+[node name="ruin_add_wall_4" type="Sprite2D" parent="."]
+position = Vector2(671.600, 501.000)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_9")
+metadata/source_name = "ruin_add_wall (4)"
+
+[node name="ruin_add_wall_5" type="Sprite2D" parent="."]
+position = Vector2(866.200, 443.200)
+scale = Vector2(-1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_9")
+metadata/source_name = "ruin_add_wall (5)"
+
+[node name="ruin_add_wall_6" type="Sprite2D" parent="."]
+position = Vector2(1139.800, 335.800)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_9")
+metadata/source_name = "ruin_add_wall (6)"
+
+[node name="ruin_add_wall_7" type="Sprite2D" parent="."]
+position = Vector2(1886.400, 521.600)
+scale = Vector2(-1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_9")
+metadata/source_name = "ruin_add_wall (7)"
+
+[node name="ruin_break_roof" type="Sprite2D" parent="."]
+position = Vector2(165.600, 529.000)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_10")
+metadata/source_name = "ruin_break_roof"
+
+[node name="ruin_break_roof_1" type="Sprite2D" parent="."]
+position = Vector2(409.000, 251.400)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_10")
+metadata/source_name = "ruin_break_roof (1)"
+
+[node name="ruin_break_roof_2" type="Sprite2D" parent="."]
+position = Vector2(1313.800, 136.800)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_10")
+metadata/source_name = "ruin_break_roof (2)"
+
+[node name="ruin_break_roof_3" type="Sprite2D" parent="."]
+position = Vector2(2293.800, 136.800)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_10")
+metadata/source_name = "ruin_break_roof (3)"
+
+[node name="ruin_lamp_01" type="Sprite2D" parent="."]
+position = Vector2(-108.600, 693.600)
+scale = Vector2(1.500, 1.500)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_11")
+metadata/source_name = "ruin_lamp_01"
+
+[node name="ruin_lamp_01_1" type="Sprite2D" parent="."]
+position = Vector2(668.400, 579.600)
+scale = Vector2(1.500, 1.500)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_11")
+metadata/source_name = "ruin_lamp_01 (1)"
+
+[node name="ruins_fences_0004_a" type="Sprite2D" parent="."]
+position = Vector2(383.800, 472.400)
+scale = Vector2(2.000, 2.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_12")
+metadata/source_name = "ruins_fences_0004_a"
+
+[node name="ruins_watcher_desk_0003_1" type="Sprite2D" parent="."]
+position = Vector2(329.800, 417.400)
+scale = Vector2(1.500, 1.500)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_13")
+metadata/source_name = "ruins_watcher_desk_0003_1"
+
+[node name="spike1_0" type="Sprite2D" parent="."]
+position = Vector2(1507.400, 481.600)
+scale = Vector2(1.200, 1.400)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_14")
+metadata/source_name = "spike1_0"
+
+[node name="spike1_0" type="Sprite2D" parent="."]
+position = Vector2(229.600, 756.800)
+scale = Vector2(1.200, 1.400)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_14")
+metadata/source_name = "spike1_0"
+
+[node name="spike1_0_2" type="Sprite2D" parent="."]
+position = Vector2(731.200, 402.000)
+scale = Vector2(1.200, -1.400)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_14")
+metadata/source_name = "spike1_0 (2)"
+
+[node name="spike1_0_3" type="Sprite2D" parent="."]
+position = Vector2(846.600, 539.200)
+scale = Vector2(1.200, 1.400)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_14")
+metadata/source_name = "spike1_0 (3)"
+
+[node name="spike1_0_4" type="Sprite2D" parent="."]
+position = Vector2(845.800, 293.600)
+scale = Vector2(1.200, 1.400)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_14")
+metadata/source_name = "spike1_0 (4)"
+
+[node name="spike1_0_5" type="Sprite2D" parent="."]
+position = Vector2(1162.000, 345.400)
+scale = Vector2(1.200, -1.400)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_14")
+metadata/source_name = "spike1_0 (5)"
+
+[node name="spike1_0_6" type="Sprite2D" parent="."]
+position = Vector2(1867.200, 509.200)
+scale = Vector2(1.200, 1.400)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_14")
+metadata/source_name = "spike1_0 (6)"
+
+[node name="switch" type="Sprite2D" parent="."]
+position = Vector2(256.600, 407.400)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_8")
+metadata/source_name = "switch"

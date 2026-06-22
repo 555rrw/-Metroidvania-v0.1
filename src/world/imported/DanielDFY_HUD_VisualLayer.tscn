@@ -1,0 +1,6 @@
+[gd_scene load_steps=1 format=3]
+
+
+[node name="DanielDFY_HUD_VisualLayer" type="Node2D"]
+metadata/source_scene = "Assets/Scenes/HUD.unity"
+metadata/visual_only = true

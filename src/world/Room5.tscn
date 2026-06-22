@@ -1,11 +1,22 @@
-[gd_scene load_steps=11 format=3 uid="uid://room5_uid_1234"]
+[gd_scene load_steps=20 format=3 uid="uid://croomfive001b"]
 
-[ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="1_r5"]
-[ext_resource type="PackedScene" uid="uid://cxsc37k2bvdq7" path="res://src/objects/Spikes.tscn" id="2_r5"]
-[ext_resource type="Script" path="res://addons/MetroidvaniaSystem/Scripts/RoomInstance.gd" id="6_r5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/sky.png" id="7_r5"]
-[ext_resource type="PackedScene" path="res://src/objects/UnstablePlatform.tscn" id="11_r5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/platform/platform1.png" id="18_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/Portal.tscn" id="1_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/Spikes.tscn" id="2_r5"]
+[ext_resource type="Script" path="res://addons/MetroidvaniaSystem/Scripts/RoomInstance.gd" id="3_r5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/sky.png" id="4_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/UnstablePlatform.tscn" id="5_r5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/platform/platform1.png" id="6_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/AbilityGate.tscn" id="7_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/BreakableWall.tscn" id="8_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/MovingPlatform.tscn" id="9_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/SawTrap.tscn" id="10_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/SwitchTrigger.tscn" id="11_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/TriggerDoor.tscn" id="12_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/FallingTrap.tscn" id="13_r5"]
+[ext_resource type="PackedScene" path="res://src/enemies/Gunner.tscn" id="14_r5"]
+[ext_resource type="PackedScene" path="res://src/objects/SecretPickup.tscn" id="15_r5"]
+[ext_resource type="PackedScene" path="res://src/world/imported/DanielDFY_Level2_VisualLayer.tscn" id="16_r5"]
+[ext_resource type="PackedScene" path="res://src/world/imported/DanielDFY_Level2_GameplayLayer.tscn" id="17_r5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -14,19 +25,28 @@ size = Vector2(40, 720)
 size = Vector2(128, 32)
 
 [node name="Room5" type="Node2D"]
+metadata/gpt55_lock = "GPT5.5_LOCK: post-chapter Room5 must visibly instance DanielDFY Level2 visual and gameplay layers."
 
 [node name="RoomInstance" type="Node2D" parent="."]
-script = ExtResource("6_r5")
+script = ExtResource("3_r5")
 
 [node name="SpawnPoint" type="Marker2D" parent="."]
-position = Vector2(120, 622)
+position = Vector2(180, 622)
 
 [node name="SkyBackdrop" type="Sprite2D" parent="."]
 z_index = -9
 modulate = Color(0.12, 0.23, 0.16, 0.45)
 centered = false
 scale = Vector2(3.0, 1.4)
-texture = ExtResource("7_r5")
+texture = ExtResource("4_r5")
+
+[node name="DanielDFYLevel2VisualCopy" parent="." instance=ExtResource("16_r5")]
+z_index = -8
+modulate = Color(1, 1, 1, 0.64)
+
+[node name="DanielDFYLevel2GameplayCopy" parent="." instance=ExtResource("17_r5")]
+z_index = -6
+modulate = Color(1, 1, 1, 0.82)
 
 [node name="Background" type="ColorRect" parent="."]
 z_index = -10
@@ -51,25 +71,26 @@ color = Color(0.121569, 0.180392, 0.141176, 1)
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/FloorLeft"]
 polygon = PackedVector2Array(-300, -20, 300, -20, 300, 20, -300, 20)
 
-[node name="FloorRight" type="StaticBody2D" parent="StaticEnvironment"]
-position = Vector2(2310, 680)
+[node name="ShortcutFloor" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(1960, 680)
 collision_layer = 5
 collision_mask = 0
 
-[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/FloorRight"]
-offset_left = -250.0
+[node name="ColorRect" type="ColorRect" parent="StaticEnvironment/ShortcutFloor"]
+offset_left = -560.0
 offset_top = -20.0
-offset_right = 250.0
+offset_right = 560.0
 offset_bottom = 20.0
 color = Color(0.121569, 0.180392, 0.141176, 1)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/FloorRight"]
-polygon = PackedVector2Array(-250, -20, 250, -20, 250, 20, -250, 20)
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticEnvironment/ShortcutFloor"]
+polygon = PackedVector2Array(-560, -20, 560, -20, 560, 20, -560, 20)
 
 [node name="LeftWall" type="StaticBody2D" parent="StaticEnvironment"]
 position = Vector2(20, 360)
 collision_layer = 5
 collision_mask = 0
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/LeftWall"]
 shape = SubResource("RectangleShape2D_wall_v")
 
@@ -77,8 +98,20 @@ shape = SubResource("RectangleShape2D_wall_v")
 position = Vector2(2540, 360)
 collision_layer = 5
 collision_mask = 0
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/RightWall"]
 shape = SubResource("RectangleShape2D_wall_v")
+
+[node name="SecretLedge" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(2250, 520)
+collision_layer = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticEnvironment/SecretLedge"]
+texture_filter = 0
+texture = ExtResource("6_r5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/SecretLedge"]
+shape = SubResource("RectangleShape2D_platform")
 
 [node name="PortalFromRoom4" parent="." instance=ExtResource("1_r5")]
 position = Vector2(80, 620)
@@ -88,24 +121,67 @@ target_portal_name = "PortalToRoom5"
 [node name="ShortcutReturn" parent="." instance=ExtResource("1_r5")]
 position = Vector2(2480, 620)
 target_room = "res://src/world/Room1.tscn"
-target_portal_name = "PortalFromRoom5"
+target_portal_name = "PortalToRoom5"
 
 [node name="AcidPool" parent="." instance=ExtResource("2_r5")]
 position = Vector2(1280, 696)
 scale = Vector2(2.5, 1)
 
-[node name="UnstablePlatform1" parent="." instance=ExtResource("11_r5")]
-position = Vector2(800, 560)
+[node name="SpellGate" parent="." instance=ExtResource("7_r5")]
+position = Vector2(410, 590)
+required_ability = &"vengeful_spirit"
+
+[node name="SpellShortcutWall" parent="." instance=ExtResource("8_r5")]
+position = Vector2(620, 590)
+
+[node name="MovingPlatform" parent="." instance=ExtResource("9_r5")]
+position = Vector2(760, 540)
+speed = 145.0
+
+[node name="OuterPoint" type="Marker2D" parent="MovingPlatform"]
+position = Vector2(330, -150)
+
+[node name="UnstablePlatformA" parent="." instance=ExtResource("5_r5")]
+position = Vector2(1120, 540)
 respawn = false
 
-[node name="UnstablePlatform2" parent="." instance=ExtResource("11_r5")]
-position = Vector2(1150, 480)
+[node name="UnstablePlatformB" parent="." instance=ExtResource("5_r5")]
+position = Vector2(1320, 445)
 respawn = false
 
-[node name="UnstablePlatform3" parent="." instance=ExtResource("11_r5")]
-position = Vector2(1500, 400)
+[node name="UnstablePlatformC" parent="." instance=ExtResource("5_r5")]
+position = Vector2(1520, 520)
 respawn = false
 
-[node name="UnstablePlatform4" parent="." instance=ExtResource("11_r5")]
-position = Vector2(1850, 480)
-respawn = false
+[node name="SawTrapA" parent="." instance=ExtResource("10_r5")]
+position = Vector2(1280, 620)
+
+[node name="SawTrapB" parent="." instance=ExtResource("10_r5")]
+position = Vector2(1650, 620)
+
+[node name="ShortcutFallingTrap" parent="." instance=ExtResource("13_r5")]
+position = Vector2(1840, 140)
+
+[node name="ShortcutDoor" parent="." instance=ExtResource("12_r5")]
+position = Vector2(2070, 590)
+event_name = "room5_shortcut_door"
+
+[node name="ShortcutSwitch" parent="." instance=ExtResource("11_r5")]
+position = Vector2(1810, 610)
+event_name = "room5_shortcut_door"
+door_path = NodePath("../ShortcutDoor")
+trap_path = NodePath("../ShortcutFallingTrap")
+
+[node name="ShortcutSeal" parent="." instance=ExtResource("7_r5")]
+position = Vector2(2180, 590)
+required_ability = &"shortcut_switch_only"
+open_event = &"room5_shortcut_door"
+
+[node name="ShortcutGunner" parent="." instance=ExtResource("14_r5")]
+position = Vector2(1940, 610)
+
+[node name="SecretPickup" parent="." instance=ExtResource("15_r5")]
+position = Vector2(2260, 470)
+soul_amount = 33
+event_name = "shortcut_secret_found"
+message = "SECRET CACHE"

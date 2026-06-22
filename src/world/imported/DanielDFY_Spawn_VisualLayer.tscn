@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/UI/controller_button_skins_0028_Arrow_Down.png" id="res_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/background/spawn.png" id="res_2"]
+
+[node name="DanielDFY_Spawn_VisualLayer" type="Node2D"]
+metadata/source_scene = "Assets/Scenes/Spawn.unity"
+metadata/visual_only = true
+
+[node name="ArrowHint" type="Sprite2D" parent="."]
+position = Vector2(-72.903, 713.641)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_1")
+metadata/source_name = "ArrowHint"
+
+[node name="SpawnBG" type="Sprite2D" parent="."]
+position = Vector2(1.600, 666.600)
+scale = Vector2(2.000, 2.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_2")
+metadata/source_name = "SpawnBG"

@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://src/ui/MainMenu.tscn" id="res_1"]
+
+[node name="DanielDFY_Menu_GameplayLayer" type="Node2D"]
+metadata/source_scene = "Assets/Scenes/Menu.unity"
+metadata/gameplay_only = true
+
+[node name="ImportedObjects" type="Node2D" parent="."]
+
+[node name="Menu" parent="ImportedObjects" instance=ExtResource("res_1")]
+position = Vector2(0.000, 650.000)

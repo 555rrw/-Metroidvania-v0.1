@@ -1,0 +1,8 @@
+[gd_scene load_steps=1 format=3]
+
+
+[node name="DanielDFY_HUD_GameplayLayer" type="Node2D"]
+metadata/source_scene = "Assets/Scenes/HUD.unity"
+metadata/gameplay_only = true
+
+[node name="ImportedObjects" type="Node2D" parent="."]

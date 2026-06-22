@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/danieldfy/Images/background/806257.jpg" id="res_1"]
+
+[node name="DanielDFY_Menu_VisualLayer" type="Node2D"]
+metadata/source_scene = "Assets/Scenes/Menu.unity"
+metadata/visual_only = true
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(0.000, 650.000)
+scale = Vector2(1.000, 1.000)
+z_index = 0
+texture_filter = 0
+texture = ExtResource("res_1")
+metadata/source_name = "Background"
