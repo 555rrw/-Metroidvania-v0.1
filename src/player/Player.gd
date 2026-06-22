@@ -21,35 +21,39 @@ const ABILITY_VENGEFUL_SPIRIT := StringName("vengeful_spirit")
 @onready var nail_sprite = $NailArea/Sprite2D
 @onready var sfx_player = $SFXPlayer
 
+# Hollow Knight tuned movement.
 @export_group("Movement")
-@export var walk_speed: float = 360.0
-@export var air_speed: float = 350.0
-@export var ground_acceleration: float = 3200.0
-@export var ground_deceleration: float = 3600.0
-@export var air_acceleration: float = 2300.0
-@export var air_deceleration: float = 1300.0
-@export var max_fall_speed: float = 860.0
+@export var walk_speed: float = 320.0
+@export var air_speed: float = 360.0
+@export var ground_acceleration: float = 3800.0
+@export var ground_deceleration: float = 4200.0
+@export var air_acceleration: float = 2800.0
+@export var air_deceleration: float = 1800.0
+@export var max_fall_speed: float = 800.0
 
+# Hollow Knight tuned jump.
 @export_group("Jump")
-@export var jump_velocity: float = -620.0
-@export var double_jump_velocity: float = -580.0
-@export var gravity: float = 1900.0
-@export var fall_gravity: float = 2300.0
-@export var vy_multiplier: float = 0.4
-@export var coyote_time: float = 0.12
-@export var jump_buffer_time: float = 0.1
+@export var jump_velocity: float = -640.0
+@export var double_jump_velocity: float = -600.0
+@export var gravity: float = 2200.0
+@export var fall_gravity: float = 2900.0
+@export var vy_multiplier: float = 0.35
+@export var coyote_time: float = 0.10
+@export var jump_buffer_time: float = 0.10
 
+# Hollow Knight tuned wall.
 @export_group("Wall")
-@export var wall_slide_velocity: float = 140.0
-@export var wall_jump_speed_x: float = 430.0
-@export var wall_jump_speed_y: float = -560.0
-@export var wall_jump_time: float = 0.14
+@export var wall_slide_velocity: float = 70.0
+@export var wall_jump_speed_x: float = 480.0
+@export var wall_jump_speed_y: float = -580.0
+@export var wall_jump_time: float = 0.16
 
+# Hollow Knight tuned dash.
 @export_group("Dash")
-@export var dash_speed: float = 880.0
-@export var dash_time: float = 0.18
-@export var dash_cooldown: float = 0.32
-@export var dash_exit_speed_multiplier: float = 0.62
+@export var dash_speed: float = 900.0
+@export var dash_time: float = 0.17
+@export var dash_cooldown: float = 0.25
+@export var dash_exit_speed_multiplier: float = 0.60
 
 @export_group("Combat")
 @export var max_health: int = 5
@@ -110,6 +114,9 @@ var anim_fps: float = 10.0
 var sfx_jump = preload("res://assets/audio/PlayerJump.wav")
 var sfx_damage = preload("res://assets/audio/PlayerDamage.wav")
 var sfx_hit = preload("res://assets/audio/PlayerBash.wav")
+
+# GPT5.5_LOCK: room reload after death must be single-shot to prevent spawn/death loops.
+var _kill_pending_room_load: String = ""
 
 func _ready() -> void:
 	add_to_group(&"player")
@@ -201,7 +208,6 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		play_anim("idle")
-		# gemini3.5: Apply blue glow pulse modulation when sitting at a bench
 		var pulse := 0.85 + 0.15 * sin(Time.get_ticks_msec() * 0.005)
 		sprite.modulate.r = 0.72 * pulse
 		sprite.modulate.g = 0.88 * pulse
@@ -213,7 +219,6 @@ func _physics_process(delta: float) -> void:
 			sprite.modulate.g = 1.0
 			sprite.modulate.b = 1.0
 
-	# gemini3.5: Debug cheat to unlock all abilities instantly for testing (supports F1 or U keys)
 	if Input.is_physical_key_pressed(KEY_F1) or Input.is_physical_key_pressed(KEY_U):
 		var added_any := false
 		for ab in [ABILITY_DASH, ABILITY_DOUBLE_JUMP, ABILITY_VENGEFUL_SPIRIT]:
@@ -224,7 +229,6 @@ func _physics_process(delta: float) -> void:
 			var game = get_tree().get_first_node_in_group(&"game")
 			if game and game.hud:
 				game.hud.show_unlock_message("DEBUG: ALL ABILITIES UNLOCKED!")
-			print("DEBUG: All abilities unlocked via F1!")
 
 	_update_common_timers(delta)
 
@@ -320,7 +324,6 @@ func _physics_process(delta: float) -> void:
 					dash_timer = 0.0
 					_perform_jump()
 				elif _can_double_jump():
-					# gemini3.5: Allow canceling mid-air dash with double jump
 					dash_timer = 0.0
 					_perform_double_jump()
 
@@ -344,7 +347,6 @@ func _physics_process(delta: float) -> void:
 
 			if Input.is_action_just_released("jump") and velocity.y < 0.0:
 				velocity.y *= vy_multiplier
-			# gemini3.5: Allow double jump from active wall jump state
 			if Input.is_action_just_pressed("jump") and _can_double_jump():
 				_perform_double_jump()
 			elif wall_jump_timer <= 0.0:
@@ -371,11 +373,16 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
-	# gemini3.5: Out-of-bounds safety check. Reset player to safety and take damage if falling off the map.
+	# GPT5.5_LOCK: OOB fallback must teleport to current room spawn without damage; Room4/Room5 direct entry depend on this.
+	# Safe fall-back: teleport to reset position if fallen out of world.
+	# Does NOT deal damage - just teleports safely to avoid death loops.
 	if global_position.y > 750.0:
-		global_position = reset_position
+		var safe_room := get_tree().get_first_node_in_group(&"game")
+		if safe_room and safe_room.has_method("get_spawn_position"):
+			global_position = safe_room.get_spawn_position()
+		else:
+			global_position = reset_position
 		velocity = Vector2.ZERO
-		take_damage(1, Vector2.UP)
 
 func _update_animation(delta: float) -> void:
 	if animations.has(current_animation_name) and not animations[current_animation_name].is_empty():
@@ -502,13 +509,10 @@ func _perform_double_jump() -> void:
 	current_state = State.JUMP
 	current_jumps = 2
 	_play_sfx(sfx_jump)
-	# gemini3.5: Double jump tracing log
-	print("Player: Double Jump performed! velocity.y = ", velocity.y)
 
 func _start_wall_slide(direction: int) -> void:
 	current_state = State.WALL_SLIDE
 	wall_direction = direction
-	# gemini3.5: Reset jumps when wall sliding
 	current_jumps = 0
 
 func _perform_wall_jump() -> void:
@@ -537,7 +541,6 @@ func _can_double_jump() -> bool:
 	return _has_ability(ABILITY_DOUBLE_JUMP) and current_jumps < 2
 
 func _has_ability(ability: StringName) -> bool:
-	# gemini3.5: Robust string comparison for ability checking
 	for a in abilities:
 		if str(a) == str(ability):
 			return true
@@ -642,7 +645,12 @@ func _spend_soul(amount: int) -> bool:
 	return true
 
 func take_damage(amount: int, dir: Vector2) -> void:
+	# Skip damage during invincibility, hurt state, or event (bench/portal)
 	if invincible_timer > 0.0 or current_state == State.HURT or event:
+		return
+
+	# Skip damage during room transition (kill already pending)
+	if _kill_pending_room_load != "":
 		return
 
 	focus_timer = 0.0
@@ -665,10 +673,16 @@ func take_damage(amount: int, dir: Vector2) -> void:
 		invincible_timer = 1.15
 		hurt_knockback_dir = -1.0 if dir.x > 0.0 else 1.0
 		velocity = Vector2(hurt_knockback_dir * knockback_force, -250.0)
-		# gemini3.5: Reset jumps when taking damage
 		current_jumps = 0
 
 func kill() -> void:
+	# Prevent re-entry if a room load is already queued
+	if _kill_pending_room_load != "":
+		return
+
+	# Set invincibility BEFORE room load starts to prevent
+	# any hazard body_entered from firing during map instantiation
+	invincible_timer = 2.0
 	position = reset_position
 	health = max_health
 	health_changed.emit(health)
@@ -676,7 +690,8 @@ func kill() -> void:
 	velocity = Vector2.ZERO
 
 	var game_node = get_tree().get_first_node_in_group(&"game")
-	if game_node:
+	if game_node and game_node.has_method("load_room"):
+		_kill_pending_room_load = MetSys.get_current_room_id()
 		game_node.load_room(MetSys.get_current_room_id())
 
 func on_enter() -> void:
@@ -687,6 +702,11 @@ func on_enter() -> void:
 	focus_timer = 0.0
 	modulate.a = 1.0
 	reset_position = position
+
+	# Grant invincibility after respawn to prevent instant re-death on hazards.
+	# Also acts as a safety net if kill() couldn't set it before load.
+	invincible_timer = 2.0
+	_kill_pending_room_load = ""
 
 func _play_sfx(stream: AudioStream) -> void:
 	if sfx_player:

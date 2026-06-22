@@ -22,6 +22,8 @@ var events: Array[String] = []
 var source_archive_summary: Dictionary = {}
 var developer_mode_open: bool = false
 
+var _pending_spawn_position: Vector2 = Vector2.ZERO
+
 @onready var hud: HUD = $CanvasLayer/HUD
 @onready var developer_panel: Control = $CanvasLayer/DeveloperPanel
 @onready var developer_info_label: Label = $CanvasLayer/DeveloperPanel/InfoLabel
@@ -65,8 +67,11 @@ func _ready() -> void:
 		# Save default layout
 		MetSys.set_save_data()
 
-	# Connect transition callback
-	room_loaded.connect(_on_room_loaded, CONNECT_DEFERRED)
+	# GPT5.5_LOCK: post-chapter room loads must position player before next physics tick to avoid room bounce.
+	# Connect transition callback.
+	# CRITICAL: Do NOT use CONNECT_DEFERRED here. The player must be positioned before
+	# the next physics frame to avoid spawning inside hazards (spikes/pits).
+	room_loaded.connect(_on_room_loaded)
 
 	# Load start map
 	load_room(starting_map)
@@ -96,44 +101,66 @@ func save_game() -> void:
 	save_mgr.set_value("current_room", MetSys.get_current_room_id())
 	save_mgr.save_as_text(SAVE_PATH)
 
-func _on_room_loaded() -> void:
-	# Executed after MetSys instantiates the room
-	# Locate the target portal or spawn location
-	var target_spawn_pos = Vector2.ZERO
-	var found_spawn = false
-	var room_size := _get_room_size()
-
-	_apply_camera_limits(room_size)
-
-	# Search room children for portals/bench
-	if not target_portal_name.is_empty() and map:
-		# Search for portal with matching name
-		var portals = _find_nodes_of_type(map, "Portal")
-		for p in portals:
-			if p.name == target_portal_name:
-				target_spawn_pos = _get_portal_exit_position(p, room_size)
-				found_spawn = true
-				break
-
-	if not found_spawn and map:
+# Called by Player.gd's out-of-bounds check to safely teleport without damage.
+func get_spawn_position() -> Vector2:
+	if _pending_spawn_position != Vector2.ZERO:
+		return _pending_spawn_position
+	if map:
 		var spawn_point = map.get_node_or_null("SpawnPoint")
 		if spawn_point:
-			target_spawn_pos = spawn_point.global_position
-			found_spawn = true
+			return spawn_point.global_position
+	return $Player.reset_position if $Player else Vector2(120, 300)
 
-	if not found_spawn and map:
-		# Default to room origin plus a small offset
-		target_spawn_pos = map.global_position + Vector2(120, max(120.0, room_size.y - 98.0))
+func _on_room_loaded() -> void:
+	# Executed after MetSys instantiates the room.
+	# Since room_loaded is NOT deferred, this runs before the next physics frame.
+	var room_size := _get_room_size()
 
-	# Teleport player
+	# Apply camera limits before positioning player so camera is ready
+	_apply_camera_limits(room_size)
+
+	var target_spawn_pos := _calculate_spawn_position()
+
+	# Store for OOB safety
+	_pending_spawn_position = target_spawn_pos
+
+	# Teleport player immediately
 	$Player.global_position = target_spawn_pos
 	$Player.velocity = Vector2.ZERO
 	$Player.on_enter()
+
+	# CRITICAL: Immediately sync MetSys player position so that
+	# _physics_tick doesn't see a stale last_player_position from the
+	# previous room. Without this, visit_cell() detects a room-scene
+	# mismatch between the old cell and the new cell, emits room_changed,
+	# and RoomTransitions bounces the player back to the old room.
+	MetSys.set_player_position($Player.position)
 
 	# Fade player back in
 	$Player.modulate.a = 1.0
 	target_portal_name = ""
 	_update_developer_panel()
+
+func _calculate_spawn_position() -> Vector2:
+	var room_size := _get_room_size()
+
+	# Search room children for portals/bench
+	if not target_portal_name.is_empty() and map:
+		var portals = _find_nodes_of_type(map, "Portal")
+		for p in portals:
+			if p.name == target_portal_name:
+				return _get_portal_exit_position(p, room_size)
+
+	if map:
+		var spawn_point = map.get_node_or_null("SpawnPoint")
+		if spawn_point:
+			return spawn_point.global_position
+
+	# Default to room origin plus a small offset
+	if map:
+		return map.global_position + Vector2(120, max(120.0, room_size.y - 98.0))
+
+	return Vector2(120, 300)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -183,6 +210,9 @@ func dev_jump_to_room(room_number: int) -> void:
 		player.event = false
 		player.velocity = Vector2.ZERO
 		player.modulate.a = 1.0
+		player.current_state = Player.State.IDLE
+		player.invincible_timer = 2.0
+		player._kill_pending_room_load = ""
 
 	load_room(str(room["path"]))
 	if hud:

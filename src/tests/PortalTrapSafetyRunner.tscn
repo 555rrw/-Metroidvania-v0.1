@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/tests/PortalTrapSafetyRunner.gd" id="1_portal_trap_safety"]
+
+[node name="PortalTrapSafetyRunner" type="Node"]
+script = ExtResource("1_portal_trap_safety")
