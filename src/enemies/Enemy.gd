@@ -50,7 +50,7 @@ func _physics_process(delta: float) -> void:
 # -- Internal Helpers ---------------------------------------------------------------
 # Virtual method to be overridden by child classes
 func _enemy_ai(_delta: float) -> void:
-	pass
+	return
 
 # -- Public API ---------------------------------------------------------------
 func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:

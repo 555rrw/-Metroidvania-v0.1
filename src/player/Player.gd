@@ -266,8 +266,8 @@ func _physics_process(delta: float) -> void:
 				_perform_jump()
 			elif not is_on_floor():
 				current_state = State.FALL
-			elif _try_start_dash(move_input):
-				pass
+			else:
+				_try_start_dash(move_input)
 
 		State.RUN:
 			play_anim("walk", 12.0)
@@ -281,8 +281,8 @@ func _physics_process(delta: float) -> void:
 				_perform_jump()
 			elif not is_on_floor():
 				current_state = State.FALL
-			elif _try_start_dash(move_input):
-				pass
+			else:
+				_try_start_dash(move_input)
 
 		State.JUMP:
 			if current_jumps == 2:
@@ -300,9 +300,7 @@ func _physics_process(delta: float) -> void:
 				current_state = State.FALL
 			elif is_on_floor():
 				current_state = State.IDLE
-			elif _try_start_dash(move_input):
-				pass
-			elif wall_sum != 0 and move_input == wall_sum:
+			elif not _try_start_dash(move_input) and wall_sum != 0 and move_input == wall_sum:
 				_start_wall_slide(wall_sum)
 
 		State.FALL:
@@ -316,9 +314,7 @@ func _physics_process(delta: float) -> void:
 				_perform_double_jump()
 			elif is_on_floor():
 				current_state = State.IDLE
-			elif _try_start_dash(move_input):
-				pass
-			elif wall_sum != 0 and move_input == wall_sum:
+			elif not _try_start_dash(move_input) and wall_sum != 0 and move_input == wall_sum:
 				_start_wall_slide(wall_sum)
 
 		State.DASH:
@@ -373,9 +369,6 @@ func _physics_process(delta: float) -> void:
 
 			if hurt_timer <= 0.0:
 				current_state = State.IDLE if is_on_floor() else State.FALL
-
-		State.FOCUS:
-			pass
 
 	sprite.flip_h = facing_direction == 1
 

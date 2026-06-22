@@ -98,7 +98,8 @@ static func get_singleton() -> Node:
 	return _singleton
 
 func reset_map_starting_coords() -> void:
-	pass
+	# MetSys template hook retained for compatibility; this game manages spawn state directly.
+	return
 
 func save_game() -> void:
 	var save_mgr = SaveManager.new()
