@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/SubEditor.gd"#"uid://cyob148ixrqef"
 
+# -- Node References ---------------------------------------------------------------
 @onready var file_dialog: EditorFileDialog = $FileDialog
 @onready var create_dialog: ConfirmationDialog = $CreateDialog
 
@@ -10,6 +12,7 @@ extends "res://addons/MetroidvaniaSystem/Database/Editor/SubEditor.gd"#"uid://cy
 @onready var error_label: Label = %ErrorLabel
 @onready var ok_button := create_dialog.get_ok_button()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init() -> void:
 	use_cursor = false
 	overlay_mode = true
@@ -65,6 +68,7 @@ func _editor_draw(map_overlay: CanvasItem):
 		map_overlay.draw_string(get_theme_font(&"font", &"Label"), Vector2(0, 40),
 				editor.get_assigned_scene_display(MetSys.map_data.get_cell_at(highlighted_room.front()).scene))
 
+# -- Public API ---------------------------------------------------------------
 func clear_scene(from: Array[Vector3i]) -> String:
 	if from.is_empty():
 		return ""

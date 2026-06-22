@@ -1,12 +1,15 @@
+# -- Identity ---------------------------------------------------------------
 ## Displays a portion of the map on a [CanvasItem].
 ##
 ## [MapView] is a low-level interface for displaying map data. It's very optimized, capable of drawing large maps and update them partially. This is an advanced feature, for basic needs consider using Minimap.tscn.
 class_name MapView extends RefCounted
 
+# -- Constants And Types ---------------------------------------------------------------
 const CellView = MetroidvaniaSystem.CellView
 const CustomElement = MetroidvaniaSystem.MapData.CustomElement
 const _SURROUND = [Vector3i(-1, -1, 0), Vector3i(0, -1, 0), Vector3i(1, -1, 0), Vector3i(-1, 0, 0), Vector3i(1, 0, 0), Vector3i(-1, 1, 0), Vector3i(0, 1, 0), Vector3i(1, 1, 0)]
 
+# -- Runtime State ---------------------------------------------------------------
 ## Coordinates of the top-left corner of the displayed area. Changing this value will internally call [method move] and only update edge cells whenever possible.
 var begin: Vector2i:
 	set(b):
@@ -54,6 +57,7 @@ var _update_queue: Array[Object]
 
 var _force_mapped: bool
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _init(parent_item: RID) -> void:
 	_canvas_item = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_parent(_canvas_item, parent_item)
@@ -65,6 +69,7 @@ func _notification(what: int) -> void:
 		for cell in _cache.values():
 			cell.free()
 
+# -- Public API ---------------------------------------------------------------
 ## Discards all cached cells and initializes the whole map again. This method can update cell coordinates and map size, but it's rarely needed to be called manually.
 func recreate_cache():
 	for cell in _cache.values():
@@ -197,6 +202,7 @@ func move(offset: Vector2i, new_layer := layer):
 func move_to(coords: Vector3i):
 	move(Vector2i(coords.x, coords.y) - _begin, coords.z)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _make_custom_element_instance(coords: Vector3i, element: CustomElement) -> CustomElementInstance:
 	var element_instance := CustomElementInstance.new(_canvas_item)
 	element_instance.coords = coords
@@ -205,6 +211,7 @@ func _make_custom_element_instance(coords: Vector3i, element: CustomElement) -> 
 	_custom_elements_cache[coords] = element_instance
 	return element_instance
 
+# -- Public API ---------------------------------------------------------------
 ## Updates all currently visible cells. This will only refresh their state (symbols, colors etc.), while keeping the current coordinates. It's recommended to call this when [signal MetroidvaniaSystem.map_updated] is received (the [MapView] does not do it automatically).
 func update_all():
 	for cell: CellView in _cache.values():
@@ -254,6 +261,7 @@ func update_rect(rect: Rect2i):
 		for x in rect.size.x:
 			update_cell(Vector3i(rect.position.x + x, rect.position.y + y, layer))
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_cell(cell: CellView):
 	if not queue_updates:
 		cell.update()
@@ -294,6 +302,7 @@ func _update_all_with_mapped():
 		cell._force_mapped = _force_mapped
 		cell.update()
 
+# -- Constants And Types ---------------------------------------------------------------
 class CustomElementInstance:
 	var canvas_item: RID
 	var coords: Vector3i

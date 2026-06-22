@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any
 
 
+# -- Constants ---------------------------------------------------------------
 UNITY_CLASS_NAMES = {
     "1": "GameObject",
     "4": "Transform",
@@ -73,6 +74,7 @@ SCENE_BASELINE_Y = 650.0
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 
 
+# -- Data Models ---------------------------------------------------------------
 @dataclass
 class Component:
     file_id: str
@@ -104,6 +106,7 @@ class SceneObject:
     world_scale: dict[str, float] | None = None
 
 
+# -- Resource Registry ---------------------------------------------------------------
 class ResourceRegistry:
     def __init__(self) -> None:
         self._paths: dict[tuple[str, str], str] = {}
@@ -125,6 +128,7 @@ class ResourceRegistry:
         ]
 
 
+# -- Unity YAML Parsing ---------------------------------------------------------------
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8-sig", errors="replace")
 
@@ -210,6 +214,7 @@ def parse_unity_yaml(path: Path) -> tuple[dict[str, SceneObject], list[Component
     return objects, components
 
 
+# -- Transform Mapping ---------------------------------------------------------------
 def apply_world_transforms(objects: dict[str, SceneObject], components: list[Component]) -> None:
     transforms = {component.file_id: component for component in components if component.class_name == "Transform"}
     memo: dict[str, tuple[dict[str, float], dict[str, float]]] = {}
@@ -248,6 +253,7 @@ def apply_world_transforms(objects: dict[str, SceneObject], components: list[Com
         scene_object.world_position, scene_object.world_scale = resolve(scene_object.transform)
 
 
+# -- Asset And Object Mapping ---------------------------------------------------------------
 def build_guid_index(root: Path) -> dict[str, str]:
     result: dict[str, str] = {}
     for meta_path in root.rglob("*.meta"):
@@ -378,6 +384,7 @@ def scene_target_is_instance(target: str) -> bool:
     return target.startswith("res://") and target.endswith(".tscn")
 
 
+# -- Godot Scene Generation ---------------------------------------------------------------
 def render_generated_object(
     scene_object: SceneObject,
     index: int,
@@ -617,6 +624,7 @@ def generate_gameplay_layer(
     }
 
 
+# -- Reporting ---------------------------------------------------------------
 def scene_report(scene_path: Path, source_root: Path, guid_index: dict[str, str]) -> dict[str, Any]:
     objects, components = parse_unity_yaml(scene_path)
     apply_world_transforms(objects, components)
@@ -806,6 +814,7 @@ def render_markdown(
     return "\n".join(lines).rstrip() + "\n"
 
 
+# -- CLI ---------------------------------------------------------------
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(

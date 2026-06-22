@@ -1,10 +1,13 @@
+# -- Identity ---------------------------------------------------------------
 extends CharacterBody2D
 class_name Player
 
+# -- Signals ---------------------------------------------------------------
 signal health_changed(current_health: int)
 signal soul_changed(current_soul: int, max_soul: int)
 signal player_died()
 
+# -- Constants And Types ---------------------------------------------------------------
 const HitInfo = preload("res://src/combat/HitInfo.gd")
 const VENGEFUL_SPIRIT_SCENE = preload("res://src/player/VengefulSpirit.tscn")
 
@@ -12,6 +15,7 @@ const ABILITY_DASH := StringName("dash")
 const ABILITY_DOUBLE_JUMP := StringName("double_jump")
 const ABILITY_VENGEFUL_SPIRIT := StringName("vengeful_spirit")
 
+# -- Node References ---------------------------------------------------------------
 @onready var sprite = $Sprite2D
 @onready var collision_shape = $CollisionShape2D
 @onready var left_wall_ray = $LeftWallRay
@@ -21,6 +25,7 @@ const ABILITY_VENGEFUL_SPIRIT := StringName("vengeful_spirit")
 @onready var nail_sprite = $NailArea/Sprite2D
 @onready var sfx_player = $SFXPlayer
 
+# -- Exports ---------------------------------------------------------------
 # Hollow Knight tuned movement.
 @export_group("Movement")
 @export var walk_speed: float = 320.0
@@ -74,8 +79,10 @@ const ABILITY_VENGEFUL_SPIRIT := StringName("vengeful_spirit")
 @export var spell_damage: int = 2
 @export var spell_cooldown_time: float = 0.35
 
+# -- Constants And Types ---------------------------------------------------------------
 enum State { IDLE, RUN, JUMP, FALL, DASH, WALL_SLIDE, WALL_JUMP, HURT, FOCUS }
 
+# -- Runtime State ---------------------------------------------------------------
 var current_state: State = State.IDLE
 var health: int = 5
 var soul: int = 0
@@ -118,6 +125,7 @@ var sfx_hit = preload("res://assets/audio/PlayerBash.wav")
 # GPT5.5_LOCK: room reload after death must be single-shot to prevent spawn/death loops.
 var _kill_pending_room_load: String = ""
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	add_to_group(&"player")
 	health = max_health
@@ -138,6 +146,7 @@ func _ready() -> void:
 	health_changed.emit(health)
 	soul_changed.emit(soul, max_soul)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _load_all_animations() -> void:
 	animations["idle"] = _load_animation_frames("idle")
 	animations["walk"] = _load_animation_frames("walk")
@@ -182,6 +191,7 @@ func _load_animation_frames_range(dir_name: String, start_idx: int, end_idx: int
 				frames.append(load(path) as Texture2D)
 	return frames
 
+# -- Public API ---------------------------------------------------------------
 func play_anim(anim_name: String, fps: float = 10.0) -> void:
 	if current_animation_name == "attack" and attack_duration_timer > 0.0 and anim_name in ["idle", "walk", "jump", "fall", "double_jump"]:
 		return
@@ -194,6 +204,7 @@ func play_anim(anim_name: String, fps: float = 10.0) -> void:
 	if animations.has(anim_name) and not animations[anim_name].is_empty():
 		sprite.texture = animations[anim_name][0]
 
+# -- Lifecycle ---------------------------------------------------------------
 func _process(delta: float) -> void:
 	_update_animation(delta)
 	_update_attack_window(delta)
@@ -208,6 +219,7 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 		move_and_slide()
 		play_anim("idle")
+
 		var pulse := 0.85 + 0.15 * sin(Time.get_ticks_msec() * 0.005)
 		sprite.modulate.r = 0.72 * pulse
 		sprite.modulate.g = 0.88 * pulse
@@ -235,8 +247,7 @@ func _physics_process(delta: float) -> void:
 	var move_input := Input.get_axis("left", "right")
 	var wall_sum := _get_wall_sum()
 
-	if _try_cast_spell():
-		pass
+	_try_cast_spell()
 
 	if _handle_focus(delta):
 		move_and_slide()
@@ -384,8 +395,10 @@ func _physics_process(delta: float) -> void:
 			global_position = reset_position
 		velocity = Vector2.ZERO
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_animation(delta: float) -> void:
 	if animations.has(current_animation_name) and not animations[current_animation_name].is_empty():
+
 		var frames: Array = animations[current_animation_name]
 		anim_timer += delta
 		if anim_timer >= (1.0 / anim_fps):
@@ -595,12 +608,14 @@ func _configure_nail_hitbox() -> void:
 
 	nail_sprite.rotation = attack_direction.angle()
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_nail_area_body_entered(body: Node2D) -> void:
 	if attack_duration_timer <= 0.0 or body == self or body in attack_hit_bodies:
 		return
 
 	if body.has_method("take_damage"):
 		attack_hit_bodies.append(body)
+
 		var attack_name := &"nail_side"
 		if attack_direction == Vector2.UP:
 			attack_name = &"nail_up"
@@ -613,6 +628,7 @@ func _on_nail_area_body_entered(body: Node2D) -> void:
 		_start_hit_pause(hit_pause_time)
 		_play_sfx(sfx_hit)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _apply_nail_recoil() -> void:
 	if attack_direction == Vector2.DOWN:
 		velocity.y = pogo_bounce_velocity
@@ -625,16 +641,19 @@ func _apply_nail_recoil() -> void:
 
 func _start_hit_pause(duration: float) -> void:
 	hit_pause_timer = max(hit_pause_timer, duration)
+
 	var cam = get_viewport().get_camera_2d()
 	if cam and cam.has_method("shake"):
 		cam.shake(3.0, 0.06)
 
+# -- Public API ---------------------------------------------------------------
 func gain_soul(amount: int) -> void:
 	if amount <= 0:
 		return
 	soul = clampi(soul + amount, 0, max_soul)
 	soul_changed.emit(soul, max_soul)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _spend_soul(amount: int) -> bool:
 	if amount <= 0:
 		return true
@@ -644,6 +663,7 @@ func _spend_soul(amount: int) -> bool:
 	soul_changed.emit(soul, max_soul)
 	return true
 
+# -- Public API ---------------------------------------------------------------
 func take_damage(amount: int, dir: Vector2) -> void:
 	# Skip damage during invincibility, hurt state, or event (bench/portal)
 	if invincible_timer > 0.0 or current_state == State.HURT or event:
@@ -708,6 +728,7 @@ func on_enter() -> void:
 	invincible_timer = 2.0
 	_kill_pending_room_load = ""
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _play_sfx(stream: AudioStream) -> void:
 	if sfx_player:
 		sfx_player.stream = stream

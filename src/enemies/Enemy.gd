@@ -1,24 +1,30 @@
+# -- Identity ---------------------------------------------------------------
 extends CharacterBody2D
 class_name Enemy
 
+# -- Exports ---------------------------------------------------------------
 @export var max_health: int = 2
 @export var contact_damage: int = 1
 @export var knockback_resistance: float = 0.0
 @export var knockback_force: float = 260.0
 @export var death_burst_color: Color = Color(0.65, 0.74, 0.86, 1.0)
 
+# -- Runtime State ---------------------------------------------------------------
 var health: int = 2
 var knockback_timer: float = 0.0
 var flash_timer: float = 0.0
 var is_dead: bool = false
 
+# -- Node References ---------------------------------------------------------------
 @onready var enemy_sprite = $Sprite2D
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	health = max_health
 	add_to_group(&"enemies")
 
 	# Connect local contact damage check
+
 	var hitbox = get_node_or_null("Hitbox")
 	if hitbox:
 		hitbox.body_entered.connect(_on_hitbox_body_entered)
@@ -41,10 +47,12 @@ func _physics_process(delta: float) -> void:
 	else:
 		_enemy_ai(delta)
 
+# -- Internal Helpers ---------------------------------------------------------------
 # Virtual method to be overridden by child classes
 func _enemy_ai(_delta: float) -> void:
 	pass
 
+# -- Public API ---------------------------------------------------------------
 func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:
 	if is_dead:
 		return
@@ -69,6 +77,7 @@ func die() -> void:
 	_spawn_death_burst()
 	# Disable hitboxes but leave world collision (mask 1) so it can fall and bounce
 	set_deferred("collision_layer", 0)
+
 	var hitbox = get_node_or_null("Hitbox")
 	if hitbox:
 		hitbox.set_deferred("monitoring", false)
@@ -82,6 +91,7 @@ func die() -> void:
 	tween.tween_property(self, "modulate:a", 0.0, 1.5)
 	tween.tween_callback(queue_free)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _spawn_death_burst() -> void:
 	if not get_parent():
 		return
@@ -106,8 +116,10 @@ func _spawn_death_burst() -> void:
 	var cleanup := get_tree().create_timer(0.45)
 	cleanup.timeout.connect(burst.queue_free)
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_hitbox_body_entered(body: Node2D) -> void:
 	if body is Player and not is_dead:
+
 		var dir = (body.global_position - global_position).normalized()
 		# If direction is pure vertical or near zero, use facing direction
 		if abs(dir.x) < 0.1:

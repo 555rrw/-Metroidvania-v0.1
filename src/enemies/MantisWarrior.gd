@@ -1,17 +1,22 @@
+# -- Identity ---------------------------------------------------------------
 extends Enemy
 class_name MantisWarrior
 
+# -- Exports ---------------------------------------------------------------
 @export var idle_step_speed: float = 42.0
 @export var patrol_distance: float = 70.0
 @export var attack_stance := true
 @export var stance_forward_offset: float = 8.0
 @export var stance_lean_degrees: float = 4.0
 
+# -- Runtime State ---------------------------------------------------------------
 var origin_x := 0.0
 var patrol_dir := -1.0
 
+# -- Node References ---------------------------------------------------------------
 @onready var body_visual: Node2D = $Body
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	super._ready()
 	origin_x = global_position.x
@@ -19,6 +24,7 @@ func _ready() -> void:
 	health = max_health
 	_apply_facing_visual()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _enemy_ai(delta: float) -> void:
 	var player := get_tree().get_first_node_in_group(&"player") as Player
 	if player:

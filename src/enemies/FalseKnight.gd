@@ -1,12 +1,18 @@
+# -- Identity ---------------------------------------------------------------
 extends Enemy
 class_name FalseKnight
 
+# -- Constants And Types ---------------------------------------------------------------
 const ShockwaveScene = preload("res://src/objects/Shockwave.tscn")
 
+# -- Exports ---------------------------------------------------------------
 @export var speed: float = 82.0
 @export var jump_cooldown: float = 3.4
 
+# -- Constants And Types ---------------------------------------------------------------
 enum BossState { WALK, WINDUP, LEAPING, RECOVER, STAGGER }
+
+# -- Runtime State ---------------------------------------------------------------
 var boss_state: BossState = BossState.WALK
 
 var jump_timer: float = 0.0
@@ -20,8 +26,10 @@ var double_jump_scene = preload("res://src/objects/AbilityUnlock.tscn")
 var sfx_slam = preload("res://assets/audio/false_knight/AttackSound_01.wav")
 var sfx_damage = preload("res://assets/audio/false_knight/Damage_01.wav")
 
+# -- Node References ---------------------------------------------------------------
 @onready var sfx_player = $SFXPlayer
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	max_health = 18
 	health = max_health
@@ -34,6 +42,7 @@ func _ready() -> void:
 	enemy_sprite.frame = 0
 	jump_timer = jump_cooldown
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _enemy_ai(delta: float) -> void:
 	_update_phase()
 
@@ -104,6 +113,7 @@ func _enemy_ai(delta: float) -> void:
 
 func _perform_land_slam() -> void:
 	_play_boss_sfx(sfx_slam)
+
 	var cam = get_viewport().get_camera_2d()
 	if cam and cam.has_method("shake"):
 		cam.shake(18.0 + phase * 3.0, 0.35)
@@ -124,11 +134,13 @@ func _perform_land_slam() -> void:
 func _spawn_shockwave(dir: int) -> void:
 	if not get_parent():
 		return
+
 	var wave = ShockwaveScene.instantiate()
 	get_parent().add_child(wave)
 	wave.global_position = global_position + Vector2(dir * 62.0, 62.0)
 	wave.setup(dir, 330.0 + phase * 70.0)
 
+# -- Public API ---------------------------------------------------------------
 func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:
 	_play_boss_sfx(sfx_damage)
 	if boss_state == BossState.STAGGER:
@@ -149,6 +161,7 @@ func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:
 # GPT5.5_LOCK: verified 2026-06-21. Room3 completion requires both boss_defeated and double_jump reward before Room4.
 func die() -> void:
 	is_dead = true
+
 	var double_jump = double_jump_scene.instantiate() as AbilityUnlock
 	double_jump.ability_name = "double_jump"
 	double_jump.id = "false_knight_double_jump"
@@ -163,6 +176,7 @@ func die() -> void:
 
 	super.die()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_phase() -> void:
 	if health <= 5:
 		phase = 3

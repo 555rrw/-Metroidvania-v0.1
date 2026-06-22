@@ -1,9 +1,11 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 ## The class behind the MetSys singleton. It provides almost all of the public API of the addon.
 ##
 ## MetroidvaniaSystem class has various methods for interacting with various MetSys sub-systems at runtime. All methods and members with a description are "public", while anything that doesn't have a description is supposed to be used only internally. There are a couple of sub-classes that you can use; you can access their documentation from the methods that return them.
 class_name MetroidvaniaSystem extends Node
 
+# -- Constants And Types ---------------------------------------------------------------
 const DEFAULT_SYMBOL = -99
 enum { DISPLAY_CENTER = 1, DISPLAY_OUTLINE = 2, DISPLAY_BORDERS = 4, DISPLAY_SYMBOLS = 8 }
 
@@ -21,6 +23,7 @@ enum { R, ## Right border.
 		U, ## Top border.
 	}
 
+# -- Runtime State ---------------------------------------------------------------
 var settings: MetSysSettings
 var editor_plugin: Node
 
@@ -43,6 +46,7 @@ var current_layer: int:
 		current_layer = layer
 		cell_changed.emit(Vector3i(last_player_position.x, last_player_position.y, current_layer))
 
+# -- Signals ---------------------------------------------------------------
 ## Emitted when the player crosses a cell boundary and visits another cell as a result of [method set_player_position]. The new cell coordinates are provided as an argument.
 signal cell_changed(new_cell: Vector3i)
 ## Emitted when the player enters a new room, i.e. using [method set_player_position] results in a cell that has a different assigned scene. The new scene is provided as an argument, you can use it to easily make room transitions.
@@ -53,6 +57,7 @@ signal map_updated
 signal room_assign_updated
 signal theme_modified(changes: Array[String])
 
+# -- Lifecycle ---------------------------------------------------------------
 func _enter_tree() -> void:
 	var settings_path := "res://MetSysSettings.tres"
 
@@ -83,10 +88,12 @@ func _enter_tree() -> void:
 	if settings.cache_group_reverse_lookup:
 		map_data.cache_groups()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_theme():
 	CELL_SIZE = settings.theme.center_texture.get_size()
 	map_updated.emit()
 
+# -- Public API ---------------------------------------------------------------
 ## Loads map data from the provided map data file. Can be used to support multiple separate world maps (for custom campaigns etc.).
 func load_map_data(file: String):
 	settings.map_data_file = file

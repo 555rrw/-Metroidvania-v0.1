@@ -1,11 +1,17 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/EditorMapView.gd"#"uid://dpi3c1f5q7s70"
 
+# -- Node References ---------------------------------------------------------------
 @onready var grid: Control = %Grid
+
+# -- Runtime State ---------------------------------------------------------------
 var viewer_layers: Dictionary
 
+# -- Exports ---------------------------------------------------------------
 @export var mode_group: ButtonGroup
 
+# -- Runtime State ---------------------------------------------------------------
 var mode: int
 var preview_layer := -1
 
@@ -14,6 +20,7 @@ var preview_layers: Dictionary[int, MapView]
 var undo_redo: UndoRedo
 var saved_version := 1
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
@@ -35,6 +42,7 @@ func _ready() -> void:
 	current_layer_spinbox.editor = self
 	%PreviewLayer.editor = self
 
+# -- Public API ---------------------------------------------------------------
 func refresh():
 	preview_layers.clear()
 	super()
@@ -81,6 +89,7 @@ func preview_layer_changed(value: float) -> void:
 func get_current_sub_editor() -> Control:
 	return mode_group.get_buttons()[mode]
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_overlay_input(event: InputEvent) -> void:
 	super(event)
 	get_current_sub_editor()._editor_input(event)
@@ -122,6 +131,7 @@ func _on_grid_draw() -> void:
 		for y in ceili(grid.size.y / MetSys.CELL_SIZE.y):
 			grid.draw_rect(Rect2(Vector2(x, y) * MetSys.CELL_SIZE, MetSys.CELL_SIZE), Color(Color.WHITE, 0.1), false)
 
+# -- Public API ---------------------------------------------------------------
 func on_zoom_changed(new_zoom: float):
 	super(new_zoom)
 	var new_zoom_vector := Vector2.ONE * new_zoom
@@ -160,12 +170,14 @@ func update_rect(rect: Rect2i):
 	if other:
 		other.update_rect(rect)
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_overlay_can_drop_data(at_pos: Vector2, data) -> bool:
 	return get_current_sub_editor().can_drop_data(at_pos, data)
 
 func _on_overlay_drop_data(at_pos: Vector2, data) -> void:
 	get_current_sub_editor().drop_data(at_pos, data)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_TRANSLATION_CHANGED:

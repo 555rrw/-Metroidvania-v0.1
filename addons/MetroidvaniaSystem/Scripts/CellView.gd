@@ -1,7 +1,10 @@
+# -- Identity ---------------------------------------------------------------
 extends Object
 
+# -- Constants And Types ---------------------------------------------------------------
 const CellData = MetroidvaniaSystem.MapData.CellData
 
+# -- Runtime State ---------------------------------------------------------------
 var use_save_data: bool = true
 
 var coords: Vector3i
@@ -31,6 +34,7 @@ var _cell_size: Vector2
 var _cell_data: CellData
 var _force_mapped: bool
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _init(parent_item: RID, theme: MapTheme = null) -> void:
 	_parent_item = parent_item
 	if theme:
@@ -46,6 +50,7 @@ func _notification(what: int) -> void:
 		if _canvas_item.is_valid():
 			delete_rids()
 
+# -- Public API ---------------------------------------------------------------
 func create_rids():
 	_canvas_item = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_parent(_canvas_item, _parent_item)
@@ -80,6 +85,7 @@ func update():
 
 	_draw()
 
+# -- Lifecycle ---------------------------------------------------------------
 func _draw():
 	var cell_data: CellData
 	if _cell_data:
@@ -131,6 +137,7 @@ func _draw():
 			else:
 				_draw_texture(_theme.symbols[symbol], Color.WHITE, -_theme.symbols[symbol].get_size() * 0.5 + _cell_size * 0.5)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _draw_texture(texture: Texture2D, color := Color.WHITE, offset := Vector2(), direction := 0):
 	match direction:
 		MetroidvaniaSystem.R:

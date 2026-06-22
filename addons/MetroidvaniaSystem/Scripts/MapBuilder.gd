@@ -1,3 +1,4 @@
+# -- Identity ---------------------------------------------------------------
 ## A class for creating custom cells at runtime.
 ##
 ## MapBuilder is obtained with [method MetroidvaniaSystem.get_map_builder] and can be used for procedural map generation or other use-cases where cells that weren't created in the editor need to be used.
@@ -5,9 +6,11 @@
 ## [br][br]Note that, while cells created with this class are part of [method MetroidvaniaSystem.get_save_data]'s dump, you can't differentiate them from regular cell overrides. You need to keep this information yourself.
 extends RefCounted
 
+# -- Runtime State ---------------------------------------------------------------
 ## The cells created with this MapBuilder.
 var cells: Array[MetroidvaniaSystem.MapData.CellOverride]
 
+# -- Public API ---------------------------------------------------------------
 ## Creates a new cell on the world map and returns a CellOverride that can be used to customize the cell. You can destroy created cells using their [code]destroy()[/code] method.
 func create_cell(at: Vector3i) -> MetroidvaniaSystem.MapData.CellOverride:
 	var cell: MetroidvaniaSystem.MapData.CellOverride = MetSys.map_data.create_custom_cell(at)

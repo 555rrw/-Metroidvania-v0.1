@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/SubEditor.gd"#"uid://cyob148ixrqef"
 
+# -- Runtime State ---------------------------------------------------------------
 var erase_mode: bool
 
 var dragging_room_from: Vector2i
@@ -10,6 +12,7 @@ var dragging_drawer: Node2D
 
 var transferred_cells_to_update: Array[Vector3i]
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
@@ -21,6 +24,7 @@ func _ready() -> void:
 	dragging_drawer = Node2D.new()
 	editor.map_view_container.add_child(dragging_drawer)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init() -> void:
 	room_only_cursor = false
 
@@ -135,6 +139,7 @@ func _editor_draw(map_overlay: CanvasItem):
 			if not offset3 in dragging_room and MetSys.map_data.get_cell_at(offset3):
 				map_overlay.draw_rect(Rect2(Vector2(editor.map_offset + offset) * MetSys.CELL_SIZE, MetSys.CELL_SIZE), theme_cache.invalid_room_drop_position)
 
+# -- Public API ---------------------------------------------------------------
 func update_rooms(rect: Rect2i):
 	var map_data: MetroidvaniaSystem.MapData = MetSys.map_data
 	var changed: bool

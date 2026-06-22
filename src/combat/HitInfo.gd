@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 extends RefCounted
 class_name HitInfo
 
+# -- Runtime State ---------------------------------------------------------------
 var attack_name: StringName
 var source: Node
 var damage: int
@@ -8,6 +10,7 @@ var direction: Vector2
 var soul_gain: int
 var breaks_armor: bool
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _init(
 		p_attack_name: StringName = &"nail",
 		p_source: Node = null,

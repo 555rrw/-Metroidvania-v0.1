@@ -1,5 +1,7 @@
+# -- Identity ---------------------------------------------------------------
 extends Control
 
+# -- Node References ---------------------------------------------------------------
 @onready var map_view_container: Control = $MapView
 @onready var map_overlay: Control = %OverlayLayer
 @onready var map: Node2D = %Map
@@ -8,6 +10,7 @@ extends Control
 @onready var zoom_slider: HSlider = %ZoomSlider
 @onready var zoom_value_label: Label = %ZoomValue
 
+# -- Runtime State ---------------------------------------------------------------
 var view_drag: Vector4
 var map_offset := Vector2i(10, 10)
 
@@ -17,6 +20,7 @@ var cursor_inside: bool
 var layers: Dictionary[int, MapView]
 var current_map_view: MapView
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	$Sidebar.custom_minimum_size.x = 200 * EditorInterface.get_editor_scale()
 
@@ -40,6 +44,7 @@ func _ready() -> void:
 	MetSys.settings.theme_changed.connect(refresh)
 	MetSys.theme_modified.connect(refresh.unbind(1))
 
+# -- Public API ---------------------------------------------------------------
 func refresh():
 	update_map_position()
 	layers.clear()
@@ -81,6 +86,7 @@ func on_zoom_changed(new_zoom: float):
 	map_overlay.scale = new_zoom_vector
 	update_map_position()
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_overlay_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		var zoomed_overlay := map_overlay.size / map.scale
@@ -126,6 +132,7 @@ func _on_overlay_input(event: InputEvent) -> void:
 				map_offset += Vector2i(shift / MetSys.CELL_SIZE)
 				update_map_position()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_status_label():
 	status_label.show()
 	status_label.text = str(get_cursor_pos())
@@ -147,9 +154,11 @@ func _notification(what: int) -> void:
 		if map_overlay:
 			map_overlay.queue_redraw()
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_overlay_draw() -> void:
 	pass
 
+# -- Public API ---------------------------------------------------------------
 func update_map_position():
 	map.position = Vector2(map_offset - Vector2i.ONE * MetSys.settings.map_extents) * MetSys.CELL_SIZE * map.scale
 

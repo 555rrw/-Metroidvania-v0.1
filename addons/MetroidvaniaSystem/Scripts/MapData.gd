@@ -1,3 +1,4 @@
+# -- Constants And Types ---------------------------------------------------------------
 const FWD = { MetroidvaniaSystem.R: Vector2i.RIGHT, MetroidvaniaSystem.D: Vector2i.DOWN, MetroidvaniaSystem.L: Vector2i.LEFT, MetroidvaniaSystem.U: Vector2i.UP }
 
 class CellData:
@@ -301,6 +302,7 @@ class TransferredCell:
 	var assigned_scene: String
 	var groups: Array[Array]
 
+# -- Runtime State ---------------------------------------------------------------
 var cells: Dictionary[Vector3i, CellData]
 var custom_cells: Dictionary[Vector3i, CellData]
 var assigned_scenes: Dictionary[String, Array]#[Vector3i]]
@@ -314,6 +316,7 @@ var group_cache: Dictionary[Vector3i, PackedInt32Array]
 
 var transfer: Dictionary[Vector3i, TransferredCell]
 
+# -- Public API ---------------------------------------------------------------
 func load_data():
 	var file := FileAccess.open(get_map_data_path(), FileAccess.READ)
 	if not file:

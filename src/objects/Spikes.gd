@@ -1,12 +1,16 @@
+# -- Identity ---------------------------------------------------------------
 extends Area2D
 class_name Spikes
 
+# -- Exports ---------------------------------------------------------------
 # Damage dealt per tick. Player invincibility frames prevent instant re-death loops.
 @export var damage: int = 999
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
 		# The Player's take_damage already handles invincible_timer checks.

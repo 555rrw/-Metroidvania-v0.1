@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 extends Area2D
 class_name SawTrap
 
+# -- Exports ---------------------------------------------------------------
 @export var damage: int = 1
 @export var spin_speed: float = 6.0
 @export var frame_time: float = 0.08
@@ -11,8 +13,10 @@ class_name SawTrap
 @export var move_limit: float = 120.0  ## Max distance from start position
 @export var move_vertical: bool = false  ## true = move on Y axis, false = X axis
 
+# -- Node References ---------------------------------------------------------------
 @onready var sprite: Sprite2D = $Sprite2D
 
+# -- Runtime State ---------------------------------------------------------------
 var frames: Array[Texture2D] = []
 var frame_index := 0
 var frame_timer := 0.0
@@ -22,6 +26,7 @@ var _base_position := Vector2.ZERO
 var _moving_offset := 0.0
 var _move_direction := 1.0
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	_base_position = position
 	_move_direction = -1.0 if move_speed < 0.0 else 1.0
@@ -58,15 +63,19 @@ func _process(delta: float) -> void:
 		else:
 			position = Vector2(_base_position.x + _moving_offset, _base_position.y)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _load_frames() -> void:
 	frames.clear()
 	for i in range(3):
+
 		var path := "res://assets/sprites/hollow_imitation/trap/saw/saw%04d.png" % i
 		if ResourceLoader.exists(path):
 			frames.append(load(path) as Texture2D)
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
+
 		var dir := (body.global_position - global_position).normalized()
 		if dir == Vector2.ZERO:
 			dir = Vector2.UP

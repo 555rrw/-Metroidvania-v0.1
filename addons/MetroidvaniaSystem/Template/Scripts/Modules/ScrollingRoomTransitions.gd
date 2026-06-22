@@ -1,15 +1,19 @@
+# -- Identity ---------------------------------------------------------------
 ## A MetSysModule that handles room transitions, with a scrolling effect.
 ##
 ## This module is the same as RoomTransitions, but includes a scrolling effect (similar to Zelda or Metroid). When the player moves to another room, both previous and next rooms will be visible and the camera will scroll to the new room.
 ##[br][br]Note that this effect works best when rooms have unified size. If you move e.g. from wide horizontal room to wide vertical room, the camera will shift in both axes, resulting in space out of map bounds being visible. This can be masked by fading the surroundings to black, like in Metroid games. The module in its base form does not allow to implement it easily.
 extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysModule.gd"
 
+# -- Runtime State ---------------------------------------------------------------
 ## Time of the scroll effect. Lower means faster scrolling.
 var SCROLL_TIME = 0.5
 var _SCREEN_SIZE: Vector2i
 
 var _player: Node2D
 var _prev_cell: Vector3i
+
+# -- Internal Helpers ---------------------------------------------------------------
 #var _change_direction: Vector2
 
 func _initialize():
@@ -23,6 +27,7 @@ func _initialize():
 	MetSys.room_changed.connect(_on_room_changed, CONNECT_DEFERRED)
 	MetSys.cell_changed.connect(_on_cell_changed)
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_room_changed(target_room: String):
 	if target_room == MetSys.get_current_room_id():
 		# This can happen when teleporting to another room.

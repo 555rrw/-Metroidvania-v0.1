@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/BorderPaintEditor.gd"#"uid://c1rtahqsg11b4"
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init():
 	can_pick = true
 	update_neighbors = true
@@ -15,6 +17,7 @@ func _editor_exit():
 	super()
 	%Colors.hide()
 
+# -- Public API ---------------------------------------------------------------
 func modify_border(cell_data: MetroidvaniaSystem.MapData.CellData, border: int, mode: int) -> bool:
 	if cell_data.borders[border] == -1:
 		return false

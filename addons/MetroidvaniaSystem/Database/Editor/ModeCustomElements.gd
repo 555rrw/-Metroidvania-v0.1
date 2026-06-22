@@ -1,10 +1,14 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/SubEditor.gd"#"uid://cyob148ixrqef"
 
+# -- Constants And Types ---------------------------------------------------------------
 const CustomElement = MetroidvaniaSystem.MapData.CustomElement
 
+# -- Runtime State ---------------------------------------------------------------
 var current_element: String
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init() -> void:
 	room_only_cursor = false
 	overlay_mode = true
@@ -17,6 +21,7 @@ func _update_theme():
 	theme_cache.inactive_custom_element = get_theme_color(&"inactive_custom_element", &"MetSys")
 	theme_cache.custom_element_marker = get_theme_color(&"custom_element_marker", &"MetSys")
 
+# -- Public API ---------------------------------------------------------------
 func reload_custom_elements():
 	for element in %CustomElementContainer.get_children():
 		element.queue_free()
@@ -41,16 +46,19 @@ func reload_custom_elements():
 			button.button_pressed = true
 			set_current_element(element)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_enter():
 	%CustomElements.show()
 
 func _editor_exit():
 	%CustomElements.hide()
 
+# -- Public API ---------------------------------------------------------------
 func set_current_element(element: String):
 	current_element = element
 	redraw_overlay()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_draw(map_overlay: CanvasItem):
 	super(map_overlay)
 
@@ -90,6 +98,7 @@ func _editor_input(event: InputEvent):
 					editor.current_map_view._update_element_at(coords)
 					undo_end_with_redraw()
 
+# -- Public API ---------------------------------------------------------------
 func add_element(rect: Rect2i):
 	var element := CustomElement.new()
 	element.name = current_element

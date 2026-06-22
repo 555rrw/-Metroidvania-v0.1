@@ -1,10 +1,14 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends Button
 
+# -- Node References ---------------------------------------------------------------
 @onready var collectible_list: VBoxContainer = %CollectibleList
 
+# -- Runtime State ---------------------------------------------------------------
 var initialized: bool
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
@@ -12,6 +16,7 @@ func _ready() -> void:
 	MetSys.editor_plugin.presaved.connect(save_collectible_list)
 	%Settings.show()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
 		if not initialized and is_visible_in_tree() and is_node_ready():
@@ -24,6 +29,7 @@ func _notification(what: int) -> void:
 func _pressed() -> void:
 	%Settings.show()
 
+# -- Public API ---------------------------------------------------------------
 func exit():
 	%Settings.hide()
 

@@ -1,14 +1,18 @@
+# -- Identity ---------------------------------------------------------------
 extends Node
 
+# -- Constants And Types ---------------------------------------------------------------
 const PLAYER_SCENE := preload("res://src/player/Player.tscn")
 const PORTAL_SCENE := preload("res://src/objects/Portal.tscn")
 const SAW_SCENE := preload("res://src/objects/SawTrap.tscn")
 
+# -- Lifecycle ---------------------------------------------------------------
 # GPT5.5_LOCK: portal event guard and MovingTrap bounds protect late-room transitions.
 
 func _ready() -> void:
 	call_deferred("_run")
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _fail(message: String) -> void:
 	push_error(message)
 	get_tree().quit(1)

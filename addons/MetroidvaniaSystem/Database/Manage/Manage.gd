@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends Control
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _notification(what: int) -> void:
 	if is_part_of_edited_scene():
 		return
@@ -8,6 +10,7 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
 		%ValidationPanel.add_theme_stylebox_override(&"panel", get_theme_stylebox(&"panel", &"Tree"))
 
+# -- Public API ---------------------------------------------------------------
 func edit_settings_pressed():
 	EditorInterface.edit_resource(MetSys.settings)
 

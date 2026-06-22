@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/EditorMapView.gd"#"uid://dpi3c1f5q7s70"
 
+# -- Constants And Types ---------------------------------------------------------------
 class FoundElement:
 	var element: String
 	var icon: Texture2D
@@ -16,14 +18,17 @@ class FoundElement:
 
 enum { MODE_LAYOUT = 1, MODE_ROOM_SYMBOL, MODE_ROOM_COLOR, MODE_ROOM_GROUP, MODE_BORDER_TYPE, MODE_BORDER_COLOR, MODE_MAP }
 
+# -- Exports ---------------------------------------------------------------
 @export var mode_group: ButtonGroup
 
+# -- Runtime State ---------------------------------------------------------------
 var theme_cache: Dictionary[StringName, Variant]
 
 var room_under_cursor: MetroidvaniaSystem.MapData.CellData
 var current_hovered_item: Control
 var extra_draw: Callable
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
@@ -32,6 +37,7 @@ func _ready() -> void:
 	MetSys.editor_plugin.scene_changed.connect(map_overlay.queue_redraw.unbind(1))
 	MetSys.map_updated.connect(map.queue_redraw)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
 		theme_cache.marked_collectible_room = get_theme_color(&"marked_collectible_room", &"MetSys")
@@ -41,6 +47,7 @@ func _notification(what: int) -> void:
 		theme_cache.room_not_assigned = get_theme_color(&"room_not_assigned", &"MetSys")
 		theme_cache.room_assigned = get_theme_color(&"room_assigned", &"MetSys")
 
+# -- Public API ---------------------------------------------------------------
 func on_layer_changed(l: int):
 	super(l)
 	map_overlay.queue_redraw()
@@ -49,6 +56,7 @@ func setup_new_layer(layer: MapView):
 	layer._force_mapped = %MappedCheckbox.button_pressed
 	layer._update_all_with_mapped.call_deferred()
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_item_hover(item: Control):
 	item.mouse_exited.connect(_on_item_unhover.bind(item))
 	current_hovered_item = item
@@ -60,6 +68,7 @@ func _on_item_unhover(item: Control):
 		current_hovered_item = null
 		map_overlay.queue_redraw()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_status_label():
 	status_label.show()
 	status_label.modulate = theme_cache.room_assigned
@@ -70,6 +79,7 @@ func _update_status_label():
 			status_label.modulate = theme_cache.room_not_assigned
 		status_label.text = str(get_cursor_pos())
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_overlay_input(event: InputEvent) -> void:
 	super(event)
 
@@ -116,6 +126,7 @@ func _on_overlay_draw() -> void:
 	if extra_draw.is_valid():
 		extra_draw.call(map_overlay)
 
+# -- Public API ---------------------------------------------------------------
 func toggle_mapped(toggled_on: bool) -> void:
 	for map_view: MapView in layers.values():
 		map_view._force_mapped = toggled_on

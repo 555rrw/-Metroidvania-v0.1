@@ -1,20 +1,25 @@
+# -- Identity ---------------------------------------------------------------
 extends AnimatableBody2D
 class_name UnstablePlatform
 
+# -- Exports ---------------------------------------------------------------
 @export var trigger_delay: float = 0.28
 @export var respawn_delay: float = 2.5
 @export var frame_time: float = 0.07
 # gemini3.5: Changed respawn to false to match DanielDFY's permanent destruction until scene reload
 @export var respawn: bool = false
 
+# -- Node References ---------------------------------------------------------------
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
 @onready var trigger_area: Area2D = $TriggerArea
 
+# -- Runtime State ---------------------------------------------------------------
 var frames: Array[Texture2D] = []
 var triggered := false
 var base_position := Vector2.ZERO
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	base_position = position
 	_load_frames()
@@ -22,23 +27,28 @@ func _ready() -> void:
 		sprite.texture = frames[0]
 	trigger_area.body_entered.connect(_on_trigger_area_body_entered)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _load_frames() -> void:
 	frames.clear()
 	for i in range(6):
+
 		var path := "res://assets/sprites/hollow_imitation/platform/unstable_mid/dream_plat_mid%04d.png" % i
 		if ResourceLoader.exists(path):
 			frames.append(load(path) as Texture2D)
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_trigger_area_body_entered(body: Node2D) -> void:
 	if body is Player:
 		trigger()
 
+# -- Public API ---------------------------------------------------------------
 func trigger() -> void:
 	if triggered:
 		return
 	triggered = true
 	_run_collapse.call_deferred()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _run_collapse() -> void:
 	var jitter := create_tween()
 	for i in range(4):

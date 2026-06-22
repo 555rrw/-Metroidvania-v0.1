@@ -1,8 +1,11 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/CellPaintEditor.gd"#"uid://byyfy6e5ygtyx"
 
+# -- Runtime State ---------------------------------------------------------------
 var border_property = &"borders"
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init() -> void:
 	use_cursor = false
 	super()
@@ -30,6 +33,7 @@ func _editor_input(event: InputEvent):
 
 	super(event)
 
+# -- Public API ---------------------------------------------------------------
 func update_hovered_room():
 	if highlighted_border == -1:
 		highlighted_room.clear()

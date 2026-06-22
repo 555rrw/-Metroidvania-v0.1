@@ -1,11 +1,14 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends EditorPlugin
 
+# -- Constants And Types ---------------------------------------------------------------
 const EXTENSION_PATH = "MetroidvaniaSystem/EditorExtension"
 
 enum { TAB_EDITOR, TAB_OVERVIEW, TAB_MANAGE }
 enum { TOOL_PRINT_ID, TOOL_COPY_ID }
 
+# -- Runtime State ---------------------------------------------------------------
 var main: Control
 var theme_scanner: Timer
 var prev_theme_state: Array
@@ -13,9 +16,11 @@ var translation_list: Array[Translation]
 var is_unsaved: bool
 var cumulative_change: Array[StringName]
 
+# -- Signals ---------------------------------------------------------------
 signal presaved
 signal saved
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _has_main_screen() -> bool:
 	return true
 
@@ -31,6 +36,7 @@ func _enable_plugin() -> void:
 func _disable_plugin() -> void:
 	EditorInterface.set_plugin_enabled(EXTENSION_PATH, false)
 
+# -- Lifecycle ---------------------------------------------------------------
 func _enter_tree() -> void:
 	theme_scanner = Timer.new()
 	theme_scanner.wait_time = 0.6
@@ -101,6 +107,7 @@ func _exit_tree() -> void:
 	EditorInterface.get_command_palette().remove_command("met_sys/print_object_id")
 	EditorInterface.get_command_palette().remove_command("met_sys/copy_object_id_to_clipboard")
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _make_visible(visible: bool) -> void:
 	main.visible = visible
 	if visible:
@@ -136,6 +143,7 @@ func _set_window_layout(configuration: ConfigFile) -> void:
 		main.viewer.map_offset = configuration.get_value("MetSys", "viewer_offset")
 		main.viewer.update_map_position()
 
+# -- Public API ---------------------------------------------------------------
 func get_singleton():# -> MetroidvaniaSystem:
 	return get_tree().root.get_node_or_null(^"MetSys")
 

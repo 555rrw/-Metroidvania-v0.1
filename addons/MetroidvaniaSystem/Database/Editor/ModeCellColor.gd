@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/CellPaintEditor.gd"#"uid://byyfy6e5ygtyx"
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init() -> void:
 	super()
 	can_pick = true
@@ -13,6 +15,7 @@ func _editor_exit():
 	super()
 	%Colors.hide()
 
+# -- Public API ---------------------------------------------------------------
 func modify_cell(cell_data: MetroidvaniaSystem.MapData.CellData, mode: int) -> bool:
 	if mode == MODE_PICK:
 		if cell_data.color.a > 0:

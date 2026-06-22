@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 extends RefCounted
 class_name SourceArchive
 
+# -- Constants And Types ---------------------------------------------------------------
 const REPOS: Array[String] = [
 	"Hollow-Knight-Imitation",
 	"Metroidvania-System",
@@ -9,6 +11,7 @@ const REPOS: Array[String] = [
 	"GodotHollowKnightController",
 ]
 
+# -- Public API ---------------------------------------------------------------
 static func scan() -> Dictionary:
 	var summary: Dictionary = {}
 	for repo in REPOS:
@@ -32,6 +35,7 @@ static func totals(summary: Dictionary) -> Dictionary:
 		stats.bytes += int(summary[repo].bytes)
 	return stats
 
+# -- Internal Helpers ---------------------------------------------------------------
 static func _scan_dir(path: String, stats: Dictionary) -> void:
 	var dir := DirAccess.open(path)
 	if not dir:

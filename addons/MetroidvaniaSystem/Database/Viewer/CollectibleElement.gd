@@ -1,20 +1,27 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends PanelContainer
 
+# -- Constants And Types ---------------------------------------------------------------
 const FoundElement = preload("uid://cdl44ebe6tc0h").FoundElement
 
+# -- Node References ---------------------------------------------------------------
 @onready var line_edit: LineEdit = %LineEdit
 
+# -- Runtime State ---------------------------------------------------------------
 var resource_picker: EditorResourcePicker
 var previous_resource: Resource
 var previous_name: String
 
+# -- Signals ---------------------------------------------------------------
 signal delete_request
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_SCENE_INSTANTIATED and not is_part_of_edited_scene():
 		resource_picker = %ResourcePicker
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_resource_selected(new_resource: Resource):
 	var undo_redo := EditorInterface.get_editor_undo_redo()
 	undo_redo.create_action(tr("Set Collectible Icon"))
@@ -33,10 +40,12 @@ func _on_name_changed():
 	undo_redo.add_undo_property(self, &"previous_name", previous_name)
 	undo_redo.commit_action()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _set_text_if_different(to_text: String):
 	if to_text != line_edit.text:
 		line_edit.text = to_text
 
+# -- Public API ---------------------------------------------------------------
 func get_data() -> FoundElement:
 	var data := FoundElement.new()
 	data.element = line_edit.text

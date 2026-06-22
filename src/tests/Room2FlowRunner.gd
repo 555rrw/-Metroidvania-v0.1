@@ -1,10 +1,14 @@
+# -- Identity ---------------------------------------------------------------
 extends Node
 
+# -- Constants And Types ---------------------------------------------------------------
 const GAME_SCENE := preload("res://src/world/Game.tscn")
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	call_deferred("_run")
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _fail(message: String) -> void:
 	push_error(message)
 	get_tree().quit(1)

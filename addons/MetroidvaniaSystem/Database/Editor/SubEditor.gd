@@ -1,7 +1,11 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends Control
 
+# -- Constants And Types ---------------------------------------------------------------
 const EDITOR_SCRIPT = preload("uid://cmjsph053oe5d")
+
+# -- Runtime State ---------------------------------------------------------------
 var editor: EDITOR_SCRIPT
 var theme_cache: Dictionary[StringName, Variant]
 
@@ -19,6 +23,7 @@ var highlighted_border := -1
 
 var top_draw: Callable
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
@@ -26,6 +31,7 @@ func _ready() -> void:
 	editor = owner
 	_editor_init.call_deferred()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init():
 	pass
 
@@ -67,6 +73,7 @@ func _editor_draw(map_overlay: CanvasItem):
 					if cell_data.borders[i] > -1:
 						draw_border_highlight(map_overlay, Vector2(p.x, p.y), i)
 
+# -- Public API ---------------------------------------------------------------
 func draw_border_highlight(map_overlay: CanvasItem, pos: Vector2, border: int):
 		match border:
 			MetSys.R:
@@ -260,6 +267,7 @@ func undo_handle_rect_redraw(rect: Rect2i):
 	editor.undo_redo.add_do_method(editor.update_rect.bind(rect))
 	editor.undo_redo.add_undo_method(editor.update_rect.bind(rect))
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
 		theme_cache.highlighted_room = get_theme_color(&"highlighted_room", &"MetSys")
@@ -267,6 +275,7 @@ func _notification(what: int) -> void:
 		theme_cache.cursor_color = get_theme_color(&"cursor_color", &"MetSys")
 		_update_theme()
 
+# -- Public API ---------------------------------------------------------------
 func can_drop_data(at_position: Vector2, data) -> bool:
 	return false
 

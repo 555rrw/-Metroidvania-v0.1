@@ -1,20 +1,27 @@
 ﻿extends Enemy
+
+# -- Identity ---------------------------------------------------------------
 class_name Gunner
 
+# -- Constants And Types ---------------------------------------------------------------
 const PROJECTILE_SCENE = preload("res://src/enemies/GunnerProjectile.tscn")
 
+# -- Exports ---------------------------------------------------------------
 @export var detect_distance: float = 560.0
 @export var shoot_interval: float = 1.6
 @export var muzzle_offset: Vector2 = Vector2(28, -8)
 
+# -- Runtime State ---------------------------------------------------------------
 var shoot_timer := 0.5
 var is_winding_up := false
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	super._ready()
 	max_health = max(max_health, 2)
 	health = max_health
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _enemy_ai(delta: float) -> void:
 	# Apply gravity
 	velocity.y += 1500.0 * delta
@@ -39,6 +46,7 @@ func _enemy_ai(delta: float) -> void:
 
 func _windup_and_shoot(player: Player) -> void:
 	is_winding_up = true
+
 	var tween = create_tween()
 	# Anticipation squash
 	tween.tween_property(enemy_sprite, "scale", Vector2(0.65, 0.45), 0.3)

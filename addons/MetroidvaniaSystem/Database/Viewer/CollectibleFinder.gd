@@ -1,28 +1,35 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends Button
 
+# -- Constants And Types ---------------------------------------------------------------
 const FoundElement = preload("uid://cdl44ebe6tc0h").FoundElement
 
+# -- Node References ---------------------------------------------------------------
 @onready var scan_progress: ProgressBar = %ScanProgress
 @onready var show_on_map: CheckButton = %ShowOnMap
 @onready var summary: VBoxContainer = %Summary
 @onready var scan_button: Button = %ScanButton
 @onready var finder: Control = %Finder
 
+# -- Runtime State ---------------------------------------------------------------
 var thread: Thread
 var found_elements: Array[FoundElement]
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	scan_progress.hide()
 	show_on_map.hide()
 	exit()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _pressed() -> void:
 	for button in button_group.get_buttons():
 		button.exit()
 
 	finder.show()
 
+# -- Public API ---------------------------------------------------------------
 func exit():
 	finder.hide()
 
@@ -41,6 +48,7 @@ func start_scan() -> void:
 	thread.start(scan_maps.bind(collectible_list))
 	set_process(true)
 
+# -- Lifecycle ---------------------------------------------------------------
 func _process(delta: float) -> void:
 	if not thread:
 		set_process(false)
@@ -72,6 +80,7 @@ func _process(delta: float) -> void:
 		count_label.text = str(count)
 		summary.add_child(HSeparator.new())
 
+# -- Public API ---------------------------------------------------------------
 func scan_maps(element_list: Array[FoundElement]):
 	Thread.set_thread_safety_checks_enabled(false)
 

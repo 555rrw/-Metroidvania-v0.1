@@ -1,13 +1,18 @@
+# -- Identity ---------------------------------------------------------------
 extends Node
 
+# -- Constants And Types ---------------------------------------------------------------
 const GAME_SCENE := preload("res://src/world/Game.tscn")
 
+# -- Runtime State ---------------------------------------------------------------
 var _save_backup := PackedByteArray()
 var _had_save := false
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	call_deferred("_run")
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _backup_save() -> void:
 	_had_save = FileAccess.file_exists(Game.SAVE_PATH)
 	if _had_save:
@@ -15,6 +20,7 @@ func _backup_save() -> void:
 
 func _restore_save() -> void:
 	if _had_save:
+
 		var file := FileAccess.open(Game.SAVE_PATH, FileAccess.WRITE)
 		if file:
 			file.store_buffer(_save_backup)

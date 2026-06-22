@@ -1,9 +1,12 @@
+# -- Identity ---------------------------------------------------------------
 extends Area2D
 class_name AbilityUnlock
 
+# -- Exports ---------------------------------------------------------------
 @export var ability_name: String = "dash" # "dash" or "double_jump"
 @export var id: String = ""
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	if id.is_empty():
 		id = ability_name + "_collectible_" + str(int(global_position.x)) + "_" + str(int(global_position.y))
@@ -14,9 +17,11 @@ func _ready() -> void:
 
 	body_entered.connect(_on_body_entered)
 
+# -- Signal Handlers ---------------------------------------------------------------
 # GPT5.5_LOCK: verified 2026-06-21. Ability pickups must persist before post-chapter portals continue.
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
+
 		var ability_sym = StringName(ability_name)
 		if not (ability_sym in body.abilities):
 			body.abilities.append(ability_sym)
@@ -36,6 +41,7 @@ func _on_body_entered(body: Node2D) -> void:
 		tween.tween_property(self, "scale", Vector2.ZERO, 0.3)
 		tween.tween_callback(queue_free)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _unlock_message() -> String:
 	match ability_name:
 		"dash":

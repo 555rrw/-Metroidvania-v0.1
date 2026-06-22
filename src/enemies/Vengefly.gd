@@ -1,17 +1,25 @@
+# -- Identity ---------------------------------------------------------------
 extends Enemy
 class_name Vengefly
 
+# -- Exports ---------------------------------------------------------------
 @export var speed: float = 130.0
 @export var detect_radius: float = 260.0
 
+# -- Constants And Types ---------------------------------------------------------------
 enum FlyState { HOVER, CHASE }
+
+# -- Runtime State ---------------------------------------------------------------
 var current_fly_state: FlyState = FlyState.HOVER
 
 var start_pos: Vector2
 var hover_timer: float = 0.0
 var frame_timer: float = 0.0
+
+# -- Exports ---------------------------------------------------------------
 @export var anim_fps: float = 10.0
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	super._ready()
 	start_pos = global_position
@@ -19,6 +27,7 @@ func _ready() -> void:
 	enemy_sprite.vframes = 1
 	enemy_sprite.frame = 0
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _enemy_ai(delta: float) -> void:
 	var players = get_tree().get_nodes_in_group(&"player")
 	if players.is_empty():
@@ -58,6 +67,7 @@ func _enemy_ai(delta: float) -> void:
 func _hover(delta: float) -> void:
 	hover_timer += delta
 	# Gently hover up and down around start_pos
+
 	var target_y = start_pos.y + sin(hover_timer * 4.0) * 15.0
 	global_position.y = move_toward(global_position.y, target_y, 40.0 * delta)
 	velocity.x = move_toward(velocity.x, 0.0, 100.0 * delta)

@@ -1,16 +1,21 @@
+# -- Identity ---------------------------------------------------------------
 extends Control
 class_name MainMenu
 
+# -- Constants And Types ---------------------------------------------------------------
 const GAME_SCENE := "res://src/world/Game.tscn"
 const SAVE_PATH := "user://hollow_knight_save.sav"
 
+# -- Node References ---------------------------------------------------------------
 @onready var start_button: Button = $MenuPanel/StartButton
 @onready var load_button: Button = $MenuPanel/LoadButton
 @onready var quit_button: Button = $MenuPanel/QuitButton
 @onready var pointer: TextureRect = $MenuPanel/Pointer
 
+# -- Runtime State ---------------------------------------------------------------
 var buttons: Array[Button] = []
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	get_tree().paused = false
 	buttons = [start_button, load_button, quit_button]
@@ -25,6 +30,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	_sync_pointer()
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_start_pressed() -> void:
 	if FileAccess.file_exists(SAVE_PATH):
 		DirAccess.remove_absolute(SAVE_PATH)
@@ -36,6 +42,7 @@ func _on_load_pressed() -> void:
 func _on_quit_pressed() -> void:
 	get_tree().quit()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _sync_pointer() -> void:
 	var focused := get_viewport().gui_get_focus_owner()
 	if focused is Button and focused in buttons:

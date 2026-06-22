@@ -1,11 +1,14 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends VBoxContainer
 
+# -- Node References ---------------------------------------------------------------
 @onready var editor: Control = %"Map Editor"
 @onready var viewer: Control = %"Map Viewer"
 @onready var changes_detected: ConfirmationDialog = $ChangesDetected
 @onready var tabs = $TabContainer
 
+# -- Runtime State ---------------------------------------------------------------
 var backup_button: Button
 
 var plugin_version: String
@@ -14,11 +17,13 @@ var header_text: String
 var modtime: int
 var md5: String
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _init() -> void:
 	var cfg := ConfigFile.new()
 	cfg.load("res://addons/MetroidvaniaSystem/plugin.cfg")
 	plugin_version = cfg.get_value("plugin", "version", "??")
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	if is_part_of_edited_scene():
 		return
@@ -36,6 +41,7 @@ func _ready() -> void:
 
 	MetSys.settings.map_data_file_changed.connect(%Manage.force_reload)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _notification(what: int) -> void:
 	if is_part_of_edited_scene():
 		return
@@ -55,21 +61,25 @@ func _notification(what: int) -> void:
 
 		$Label.text = tr(header_text) % plugin_version
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_changes_detected_confirmed() -> void:
 	reload_map()
 
 func _on_changes_detected_cancelled() -> void:
 	MetSys.map_data.save_data()
 
+# -- Public API ---------------------------------------------------------------
 func update_md_info():
 	modtime = FileAccess.get_modified_time(MetSys.map_data.get_map_data_path())
 	md5 = FileAccess.get_md5(MetSys.map_data.get_map_data_path())
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_changes_detected_third() -> void:
 	changes_detected.hide()
 	MetSys.map_data.save_data(true)
 	reload_map()
 
+# -- Public API ---------------------------------------------------------------
 func reload_map():
 	%Manage.force_reload()
 	%"Map Editor".refresh()

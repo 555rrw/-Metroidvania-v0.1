@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends EditorPlugin
 
+# -- Runtime State ---------------------------------------------------------------
 var button: Button
 var current_instance: MetroidvaniaSystem.RoomInstance
 var preview_list: Array[Control]
@@ -10,6 +12,7 @@ var inspector_plugin: EditorInspectorPlugin
 var export_plugin: EditorExportPlugin
 var preview_plugin: EditorResourcePreviewGenerator
 
+# -- Lifecycle ---------------------------------------------------------------
 func _enter_tree() -> void:
 	button = Button.new()
 	button.text = "Refresh Adjacent Previews"
@@ -33,6 +36,7 @@ func _exit_tree() -> void:
 	remove_export_plugin(export_plugin)
 	EditorInterface.get_resource_previewer().remove_preview_generator(preview_plugin)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _make_visible(visible: bool) -> void:
 	button.visible = visible
 
@@ -60,6 +64,7 @@ func _refresh():
 	preview_list.clear()
 	current_instance._update_neighbor_previews()
 
+# -- Public API ---------------------------------------------------------------
 func update_preview_list():
 	preview_list.assign(get_tree().get_nodes_in_group(&"_MetSys_RoomPreview_"))
 
@@ -68,6 +73,7 @@ func update_preview_list_after_frame():
 	await get_tree().process_frame
 	update_preview_list()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _forward_canvas_gui_input(event: InputEvent) -> bool:
 	if event is InputEventMouseMotion:
 		var new_hover: Control
@@ -119,6 +125,7 @@ func _forward_canvas_gui_input(event: InputEvent) -> bool:
 
 	return false
 
+# -- Constants And Types ---------------------------------------------------------------
 class RoomLinkPlugin extends EditorInspectorPlugin:
 	func is_valid_property(type: int, hint: int, hint_string: String) -> bool:
 		return type == TYPE_STRING and hint == PROPERTY_HINT_FILE and hint_string == "room_link"

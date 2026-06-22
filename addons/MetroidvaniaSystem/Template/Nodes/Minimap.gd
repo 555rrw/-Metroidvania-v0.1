@@ -1,9 +1,11 @@
+# -- Identity ---------------------------------------------------------------
 ## A [Control] node that displays a part of the world map.
 ##
 ## Instantiate [code]Minimap.tscn[/code] in your GUI scene and it just works™, even in the editor. You can use it as a minimap or as a basis for a map screen.
 @tool
 extends Control
 
+# -- Exports ---------------------------------------------------------------
 ## If [code]true[/code], [member center] and [member layer] will be automatically updated when [signal MetroidvaniaSystem.cell_changed] is received. Enabling this property will make some other properties ineffective.
 @export var track_position := true:
 	set(tp):
@@ -53,14 +55,17 @@ extends Control
 	get:
 		return _center.z
 
+# -- Node References ---------------------------------------------------------------
 @onready var _drawer: Node2D = $Drawer
 
+# -- Runtime State ---------------------------------------------------------------
 var _map_view: MapView
 var _player_location: Node2D
 var _center: Vector3i
 var _center_offset: Vector3i
 var _update_all_queued: bool
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	var actual_size := area
 	if smooth_scroll:
@@ -85,11 +90,13 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	_update_drawer_position()
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_cell_changed(new_cell: Vector3i):
 	_map_view.move_to(new_cell + _center_offset)
 	_center = new_cell
 	_update_drawer_position()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_drawer_position():
 	if smooth_scroll:
 		# gemini3.5: Explicitly type Vector2 to prevent type inference parse error

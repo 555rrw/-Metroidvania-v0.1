@@ -1,19 +1,24 @@
+# -- Identity ---------------------------------------------------------------
 ## Class designed for use in main game scenes.
 ##
 ## MetSysGame is responsible for map management and player tracking. You can extend it by adding MetSysModules.
 extends Node
 
+# -- Constants And Types ---------------------------------------------------------------
 const MetSysModule = preload("res://addons/MetroidvaniaSystem/Template/Scripts/MetSysModule.gd")
 
+# -- Runtime State ---------------------------------------------------------------
 var player: Node2D
 var map: Node2D
 var map_changing: bool
 
 var modules: Array[MetSysModule]
 
+# -- Signals ---------------------------------------------------------------
 ## Emitted when [method load_room] has loaded a room. You can use it when you want to call some methods after loading a room (e.g. positioning the player).
 signal room_loaded
 
+# -- Public API ---------------------------------------------------------------
 ## Sets the node to be tracked by this class. When player was assigned, [method MetroidvaniaSystem.set_player_position] will be called automatically at the end of every physics frame, updating the player position.
 func set_player(p_player: Node2D):
 	player = p_player
@@ -29,10 +34,12 @@ func add_module(module_name: String) -> MetSysModule:
 	modules.append(module)
 	return module
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _physics_tick():
 	if is_inside_tree() and can_process():
 		MetSys.set_player_position(player.position)
 
+# -- Public API ---------------------------------------------------------------
 ## Loads a map and adds as a child of this node. If a map already exists, it will be removed before the new one is loaded. This method is asynchronous, so you should call it with [code]await[/code] if you want to do something after the map is loaded. Alternatively, you can use [signal room_loaded].
 ## [br][br][b]Note:[/b] If you call this method while a map is being loaded, it will fail silently. The earliest when you can load a map again is after [signal room_loaded] is emitted.
 func load_room(path: String):
@@ -53,10 +60,12 @@ func load_room(path: String):
 	map_changing = false
 	room_loaded.emit()
 
+# -- Internal Helpers ---------------------------------------------------------------
 ## Virtual method to be optionally overriden in your game class. Return a Node representing a scene under given path. Overriding it is mainly useful for procedurally generated maps.
 func _load_room(path: String) -> Node:
 	return load(path).instantiate()
 
+# -- Public API ---------------------------------------------------------------
 func get_save_data() -> Dictionary:
 	var data: Dictionary
 	data.merge(_get_save_data())
@@ -66,16 +75,19 @@ func get_save_data() -> Dictionary:
 
 	return data
 
+# -- Internal Helpers ---------------------------------------------------------------
 ## Virtual method to be overriden in your game class. Called by SaveManager's store_game(). Use it to return the data you want to save. Data of added modules is stored automatically.
 func _get_save_data() -> Dictionary:
 	return {}
 
+# -- Public API ---------------------------------------------------------------
 func set_save_data(data: Dictionary):
 	_set_save_data(data)
 
 	for module in modules:
 		module._set_save_data(data)
 
+# -- Internal Helpers ---------------------------------------------------------------
 ## Virtual method to be overriden in your game class. Called by SaveManager's retrieve_game(). The provided [Dictionary] holds your previously saved data.
 func _set_save_data(data: Dictionary):
 	pass

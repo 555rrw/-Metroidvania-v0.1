@@ -1,8 +1,11 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/CellPaintEditor.gd"#"uid://byyfy6e5ygtyx"
 
+# -- Runtime State ---------------------------------------------------------------
 var drawing: int
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init() -> void:
 	super()
 	room_only_cursor = true
@@ -28,6 +31,7 @@ func _editor_draw(map_overlay: CanvasItem):
 		if p.z == editor.current_layer:
 			map_overlay.draw_rect(Rect2(Vector2(p.x, p.y) * MetSys.CELL_SIZE, MetSys.CELL_SIZE), theme_cache.group_color)
 
+# -- Public API ---------------------------------------------------------------
 func modify_coords(coords: Vector3i, mode: int) -> bool:
 	var current_group: int = %CurrentGroup.value
 

@@ -1,11 +1,14 @@
+# -- Identity ---------------------------------------------------------------
 extends Area2D
 class_name SecretPickup
 
+# -- Exports ---------------------------------------------------------------
 @export var id: String = ""
 @export var soul_amount: int = 33
 @export var event_name: String = "secret_found"
 @export var message: String = "SECRET FOUND"
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	if id.is_empty():
 		id = event_name + "_" + str(int(global_position.x)) + "_" + str(int(global_position.y))
@@ -16,6 +19,7 @@ func _ready() -> void:
 
 	body_entered.connect(_on_body_entered)
 
+# -- Signal Handlers ---------------------------------------------------------------
 # GPT5.5_LOCK: verified 2026-06-21. Room5 shortcut reward must grant soul, event, save state.
 func _on_body_entered(body: Node2D) -> void:
 	if not (body is Player):

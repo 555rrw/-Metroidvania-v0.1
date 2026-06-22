@@ -1,5 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysGame.gd"
 class_name Game
+
+# -- Constants And Types ---------------------------------------------------------------
 # Game manager class matching MetSys singleton pattern.
 
 const SaveManager = preload("res://addons/MetroidvaniaSystem/Template/Scripts/SaveManager.gd")
@@ -13,10 +16,13 @@ const DEV_ROOMS := [
 	{"key": "5", "name": "Room5", "path": "res://src/world/Room5.tscn"},
 ]
 
+# -- Exports ---------------------------------------------------------------
 @export_file("*.tscn") var starting_map: String = "res://src/world/Room1.tscn"
 
 # State trackers
 static var _singleton: Node = null
+
+# -- Runtime State ---------------------------------------------------------------
 var target_portal_name: String = ""
 var events: Array[String] = []
 var source_archive_summary: Dictionary = {}
@@ -24,10 +30,12 @@ var developer_mode_open: bool = false
 
 var _pending_spawn_position: Vector2 = Vector2.ZERO
 
+# -- Node References ---------------------------------------------------------------
 @onready var hud: HUD = $CanvasLayer/HUD
 @onready var developer_panel: Control = $CanvasLayer/DeveloperPanel
 @onready var developer_info_label: Label = $CanvasLayer/DeveloperPanel/InfoLabel
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	_singleton = self
 	add_to_group(&"game")
@@ -47,6 +55,7 @@ func _ready() -> void:
 
 	# Load save if present
 	if FileAccess.file_exists(SAVE_PATH):
+
 		var save_mgr = SaveManager.new()
 		save_mgr.load_from_text(SAVE_PATH)
 
@@ -83,6 +92,7 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	reset_map_starting_coords.call_deferred()
 
+# -- Public API ---------------------------------------------------------------
 # Singleton accessor
 static func get_singleton() -> Node:
 	return _singleton
@@ -106,14 +116,17 @@ func get_spawn_position() -> Vector2:
 	if _pending_spawn_position != Vector2.ZERO:
 		return _pending_spawn_position
 	if map:
+
 		var spawn_point = map.get_node_or_null("SpawnPoint")
 		if spawn_point:
 			return spawn_point.global_position
 	return $Player.reset_position if $Player else Vector2(120, 300)
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_room_loaded() -> void:
 	# Executed after MetSys instantiates the room.
 	# Since room_loaded is NOT deferred, this runs before the next physics frame.
+
 	var room_size := _get_room_size()
 
 	# Apply camera limits before positioning player so camera is ready
@@ -141,6 +154,7 @@ func _on_room_loaded() -> void:
 	target_portal_name = ""
 	_update_developer_panel()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _calculate_spawn_position() -> Vector2:
 	var room_size := _get_room_size()
 
@@ -162,6 +176,7 @@ func _calculate_spawn_position() -> Vector2:
 
 	return Vector2(120, 300)
 
+# -- Lifecycle ---------------------------------------------------------------
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_F10:
@@ -170,12 +185,14 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 
 		if developer_mode_open:
+
 			var room_index := _developer_key_to_room_index(event.keycode)
 			if room_index >= 0:
 				dev_jump_to_room(room_index + 1)
 				get_viewport().set_input_as_handled()
 				return
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _developer_key_to_room_index(keycode: Key) -> int:
 	match keycode:
 		KEY_1, KEY_KP_1:
@@ -197,6 +214,7 @@ func _set_developer_mode(open: bool) -> void:
 		developer_panel.visible = developer_mode_open
 	_update_developer_panel()
 
+# -- Public API ---------------------------------------------------------------
 func dev_jump_to_room(room_number: int) -> void:
 	var index := room_number - 1
 	if index < 0 or index >= DEV_ROOMS.size():
@@ -219,6 +237,7 @@ func dev_jump_to_room(room_number: int) -> void:
 		hud.show_unlock_message("DEV WARP: " + str(room["name"]))
 	_update_developer_panel()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_developer_panel() -> void:
 	if not developer_info_label:
 		return

@@ -1,9 +1,11 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 ## A node representing MetSys room.
 ##
 ## RoomInstance is a node that allows for integration between scenes and MetSys database. In editor it will provide drawing for room bounds and in game it provides some helper methods for interacting with the map data. [code]RoomInstance.tscn[/code] scene is provided for convenience. You should add it to every scene used as MetSys room. It's recommended to put the node at [code](0, 0)[/code] global coordinates.
 extends Node2D
 
+# -- Runtime State ---------------------------------------------------------------
 var GRID_COLOR: Color
 var GRID_PASSAGE_COLOR: Color
 
@@ -15,8 +17,10 @@ var min_cell := Vector2i.MAX
 var max_cell := Vector2i.MIN
 var layer: int
 
+# -- Signals ---------------------------------------------------------------
 signal previews_updated
 
+# -- Lifecycle ---------------------------------------------------------------
 func _enter_tree() -> void:
 	if not Engine.is_editor_hint():
 		MetSys.current_room = self
@@ -50,6 +54,7 @@ func _exit_tree() -> void:
 	if MetSys.current_room == self:
 		MetSys.current_room = null
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_assigned_scene():
 	queue_redraw()
 
@@ -114,6 +119,7 @@ func _update_neighbor_previews():
 
 	previews_updated.emit()
 
+# -- Public API ---------------------------------------------------------------
 ## Adjusts the limits of the given [param camera] to be within this room's rectangular bounds.
 func adjust_camera_limits(camera: Camera2D):
 	camera.limit_left = 0
@@ -168,6 +174,7 @@ func get_neighbor_rooms() -> Array[String]:
 
 	return ret
 
+# -- Lifecycle ---------------------------------------------------------------
 func _draw() -> void:
 	if not Engine.is_editor_hint() or cells.is_empty():
 		return

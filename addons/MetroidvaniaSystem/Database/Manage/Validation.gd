@@ -1,24 +1,30 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends PanelContainer
 
+# -- Constants And Types ---------------------------------------------------------------
 enum { SUCCESS, WARNING, ERROR, INFO }
 
+# -- Runtime State ---------------------------------------------------------------
 var warning_color: Color
 var error_color: Color
 var success_color: Color
 
 var has_error: bool
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	if not is_part_of_edited_scene():
 		hide()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_THEME_CHANGED:
 		warning_color = get_theme_color(&"warning_color", &"Editor")
 		error_color = get_theme_color(&"error_color", &"Editor")
 		success_color = get_theme_color(&"success_color", &"Editor")
 
+# -- Public API ---------------------------------------------------------------
 func validate_map_data() -> void:
 	dismiss()
 	has_error = false

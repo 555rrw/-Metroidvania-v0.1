@@ -1,6 +1,9 @@
 ﻿extends Enemy
+
+# -- Identity ---------------------------------------------------------------
 class_name Crawlid
 
+# -- Exports ---------------------------------------------------------------
 @export var walk_speed: float = 70.0
 @export var chase_speed: float = 110.0
 @export var detect_distance: float = 300.0
@@ -8,20 +11,28 @@ class_name Crawlid
 @export var behave_interval_least: float = 1.0
 @export var behave_interval_most: float = 3.0
 
+# -- Constants And Types ---------------------------------------------------------------
 enum State { IDLE, WALK_LEFT, WALK_RIGHT, CHASE }
+
+# -- Runtime State ---------------------------------------------------------------
 var current_state: State = State.IDLE
 
 var state_timer: float = 0.0
 var walk_direction: int = 0
 var is_chasing: bool = false
 
+# -- Node References ---------------------------------------------------------------
 @onready var wall_ray = $WallRay
 @onready var ledge_ray = $LedgeRay
 
+# -- Runtime State ---------------------------------------------------------------
 # Simple frame animation loop
 var frame_timer: float = 0.0
+
+# -- Exports ---------------------------------------------------------------
 @export var anim_fps: float = 8.0
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	super._ready()
 	enemy_sprite.hframes = 1
@@ -29,11 +40,13 @@ func _ready() -> void:
 	enemy_sprite.frame = 0
 	_pick_next_patrol_state()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _enemy_ai(delta: float) -> void:
 	# Apply gravity
 	velocity.y += 1500.0 * delta
 
 	# Update edge detection and wall detection
+
 	var hit_wall = wall_ray.is_colliding()
 	var near_ledge = not ledge_ray.is_colliding()
 
@@ -114,6 +127,7 @@ func _enemy_ai(delta: float) -> void:
 
 func _pick_next_patrol_state() -> void:
 	state_timer = randf_range(behave_interval_least, behave_interval_most)
+
 	var next_state = randi() % 3
 	match next_state:
 		0: current_state = State.IDLE

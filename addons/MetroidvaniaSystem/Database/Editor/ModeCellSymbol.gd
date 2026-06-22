@@ -1,8 +1,11 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/CellPaintEditor.gd"#"uid://byyfy6e5ygtyx"
 
+# -- Runtime State ---------------------------------------------------------------
 var symbol_group: ButtonGroup
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init() -> void:
 	can_pick = true
 	super()
@@ -14,6 +17,7 @@ func _editor_init() -> void:
 		if &"symbols" in changes:
 			reload_symbols())
 
+# -- Public API ---------------------------------------------------------------
 func reload_symbols():
 	for symbol in %SymbolContainer.get_children():
 		symbol.free()
@@ -21,6 +25,7 @@ func reload_symbols():
 	for symbol in MetSys.settings.theme.symbols:
 		add_symbol(symbol)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_enter():
 	super()
 	%Symbols.show()
@@ -29,6 +34,7 @@ func _editor_exit():
 	super()
 	%Symbols.hide()
 
+# -- Public API ---------------------------------------------------------------
 func modify_cell(cell_data: MetroidvaniaSystem.MapData.CellData, mode: int) -> bool:
 	if mode == MODE_PICK:
 		if cell_data.symbol > -1:

@@ -1,13 +1,17 @@
+# -- Identity ---------------------------------------------------------------
 extends RefCounted
 
+# -- Constants And Types ---------------------------------------------------------------
 const SIMPLE_STORABLE_PROPERTIES: Array[StringName] = [&"discovered_cells", &"stored_objects", &"custom_markers"]
 
+# -- Runtime State ---------------------------------------------------------------
 var discovered_cells: Dictionary[Vector3i, int]
 var stored_objects: Dictionary[StringName, bool]
 
 var custom_markers: Dictionary[Vector3i, int]
 var cell_overrides: Dictionary[MetroidvaniaSystem.MapData.CellData, MetroidvaniaSystem.MapData.CellOverride]
 
+# -- Public API ---------------------------------------------------------------
 func discover_cell(coords: Vector3i):
 	if discovered_cells.get(coords, 0) < 1:
 		discovered_cells[coords] = 1

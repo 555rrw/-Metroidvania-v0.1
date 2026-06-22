@@ -1,8 +1,11 @@
+# -- Identity ---------------------------------------------------------------
 extends Control
 class_name HUD
 
+# -- Constants And Types ---------------------------------------------------------------
 const SourceArchive = preload("res://src/integration/SourceArchive.gd")
 
+# -- Node References ---------------------------------------------------------------
 @onready var masks_container = $MasksContainer
 @onready var soul_fill = $SoulMeter/SoulFill
 @onready var soul_label = $SoulMeter/SoulLabel
@@ -14,11 +17,13 @@ const SourceArchive = preload("res://src/integration/SourceArchive.gd")
 @onready var menu_button: Button = $PauseOverlay/MenuPanel/MenuButton
 @onready var quit_button: Button = $PauseOverlay/MenuPanel/QuitButton
 
+# -- Runtime State ---------------------------------------------------------------
 var texture_full = preload("res://assets/sprites/UI/health_full.png")
 var texture_empty = preload("res://assets/sprites/UI/health_empty.png")
 
 var player_ref: Player = null
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	popup_label.visible = false
@@ -29,10 +34,12 @@ func _ready() -> void:
 	quit_button.pressed.connect(_on_quit_pressed)
 
 	# Find player and connect signals
+
 	var players = get_tree().get_nodes_in_group(&"player")
 	if not players.is_empty():
 		setup_player(players[0] as Player)
 
+# -- Public API ---------------------------------------------------------------
 func setup_player(player: Player) -> void:
 	player_ref = player
 	if not player.health_changed.is_connected(update_health):
@@ -45,6 +52,7 @@ func setup_player(player: Player) -> void:
 	# Update ability label
 	_update_abilities()
 
+# -- Lifecycle ---------------------------------------------------------------
 func _process(_delta: float) -> void:
 	# Keep abilities text updated
 	_update_abilities()
@@ -55,6 +63,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_toggle_pause()
 			get_viewport().set_input_as_handled()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _toggle_pause() -> void:
 	_set_paused(not pause_overlay.visible)
 
@@ -64,6 +73,7 @@ func _set_paused(paused: bool) -> void:
 	if paused:
 		continue_button.grab_focus()
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_continue_pressed() -> void:
 	_set_paused(false)
 
@@ -74,8 +84,10 @@ func _on_menu_pressed() -> void:
 func _on_quit_pressed() -> void:
 	get_tree().quit()
 
+# -- Public API ---------------------------------------------------------------
 func update_health(current_health: int) -> void:
 	# Clear or update TextureRect children
+
 	var children = masks_container.get_children()
 	for i in range(children.size()):
 		var mask = children[i] as TextureRect
@@ -87,6 +99,7 @@ func update_health(current_health: int) -> void:
 func update_soul(current_soul: int, max_soul: int) -> void:
 	if not soul_fill:
 		return
+
 	var pct := 0.0
 	if max_soul > 0:
 		pct = clamp(float(current_soul) / float(max_soul), 0.0, 1.0)
@@ -94,9 +107,11 @@ func update_soul(current_soul: int, max_soul: int) -> void:
 	if soul_label:
 		soul_label.text = "SOUL %02d" % current_soul
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _update_abilities() -> void:
 	if not player_ref:
 		return
+
 	var text = "Abilities: "
 	if player_ref.abilities.is_empty():
 		text += "None"
@@ -107,6 +122,7 @@ func _update_abilities() -> void:
 		text += ", ".join(list)
 	ability_label.text = text
 
+# -- Public API ---------------------------------------------------------------
 func show_unlock_message(message: String) -> void:
 	popup_label.text = message
 	popup_label.visible = true

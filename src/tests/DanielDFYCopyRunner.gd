@@ -1,14 +1,18 @@
+# -- Identity ---------------------------------------------------------------
 extends Node
 
+# -- Constants And Types ---------------------------------------------------------------
 const ROOM4 := "res://src/world/Room4.tscn"
 const ROOM5 := "res://src/world/Room5.tscn"
 const SOURCE_SCENE := "Assets/Scenes/Level2.unity"
 
+# -- Lifecycle ---------------------------------------------------------------
 # GPT5.5_LOCK: Room4/Room5 after Chapter 3 must visibly carry DanielDFY Level2 visual and gameplay layers.
 
 func _ready() -> void:
 	call_deferred("_run")
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _fail(message: String) -> void:
 	push_error(message)
 	get_tree().quit(1)

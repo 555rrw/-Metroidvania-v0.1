@@ -1,8 +1,11 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/BorderPaintEditor.gd"#"uid://c1rtahqsg11b4"
 
+# -- Runtime State ---------------------------------------------------------------
 var border_group: ButtonGroup
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init() -> void:
 	use_cursor = false
 	can_pick = true
@@ -15,6 +18,7 @@ func _editor_init() -> void:
 		if &"borders" in changes or &"vertical_borders" or &"vertical_borders" in changes:
 			reload_borders())
 
+# -- Public API ---------------------------------------------------------------
 func reload_borders():
 	for symbol in %BorderContainer.get_children():
 		symbol.free()
@@ -32,6 +36,7 @@ func reload_borders():
 		for border in MetSys.settings.theme.borders:
 			add_border(border)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_enter():
 	super()
 	%Borders.show()
@@ -40,6 +45,7 @@ func _editor_exit():
 	super()
 	%Borders.hide()
 
+# -- Public API ---------------------------------------------------------------
 func modify_border(cell_data: MetroidvaniaSystem.MapData.CellData, border: int, mode: int) -> bool:
 	if cell_data.borders[border] == -1:
 		return false

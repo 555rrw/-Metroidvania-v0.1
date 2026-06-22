@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends Resource
 
+# -- Exports ---------------------------------------------------------------
 ## The theme used for drawing map cells.
 @export var theme: MapTheme:
 	set(t):
@@ -49,19 +51,23 @@ extends Resource
 @export_storage var _last_scene_folder: String
 @export_storage var _collectible_list: Array[Dictionary]
 
+# -- Runtime State ---------------------------------------------------------------
 var custom_elements: MetroidvaniaSystem.CustomElementManager
 var _legacy_map_root: String
 
+# -- Signals ---------------------------------------------------------------
 signal theme_changed
 signal map_data_file_changed
 signal custom_elements_changed
 
+# -- Public API ---------------------------------------------------------------
 func get_scene_folder() -> String:
 	if _last_scene_folder.is_empty():
 		return MetSys.settings.map_data_file.get_base_dir()
 	else:
 		return MetSys.settings._last_scene_folder
 
+# -- Internal Helpers ---------------------------------------------------------------
 # Compatibility
 
 func _set(property: StringName, value: Variant) -> bool:

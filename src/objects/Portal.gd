@@ -1,14 +1,19 @@
+# -- Identity ---------------------------------------------------------------
 extends Area2D
 class_name Portal
 
+# -- Exports ---------------------------------------------------------------
 @export_file("*.tscn") var target_room: String
 @export var target_portal_name: String = ""
 
+# -- Runtime State ---------------------------------------------------------------
 var _transitioning: bool = false
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_body_entered(body: Node2D) -> void:
 	if not (body is Player):
 		return

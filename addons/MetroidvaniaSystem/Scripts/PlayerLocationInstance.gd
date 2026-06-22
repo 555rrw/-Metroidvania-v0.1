@@ -1,12 +1,16 @@
+# -- Identity ---------------------------------------------------------------
 extends Node2D
 
+# -- Runtime State ---------------------------------------------------------------
 var offset: Vector2
 var exact: bool
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	exact = MetSys.settings.theme.show_exact_player_location
 	z_index = 5
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_VISIBILITY_CHANGED:
 		if is_visible_in_tree():
@@ -14,6 +18,7 @@ func _notification(what: int) -> void:
 		else:
 			process_mode = Node.PROCESS_MODE_DISABLED
 
+# -- Lifecycle ---------------------------------------------------------------
 func _process(delta: float) -> void:
 	var last_player_position_2d := Vector2(MetSys.last_player_position.x, MetSys.last_player_position.y)
 	var player_position := last_player_position_2d * MetSys.CELL_SIZE + MetSys.CELL_SIZE / 2

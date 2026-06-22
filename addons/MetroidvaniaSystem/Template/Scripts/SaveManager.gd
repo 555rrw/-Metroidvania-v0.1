@@ -1,3 +1,4 @@
+# -- Identity ---------------------------------------------------------------
 ## Loads and saves game data.
 ##
 ## Save Manager can save and load game data, i.e. MetSys save data and other game-specific values. The class internally stores the data in a [Dictionary], which is then serialized either in text or binary format. The manager does not support [Object]-based data (although it has special methods for handling [Resource]s).
@@ -11,8 +12,10 @@
 ## [/codeblock]
 extends RefCounted
 
+# -- Runtime State ---------------------------------------------------------------
 var data: Dictionary
 
+# -- Public API ---------------------------------------------------------------
 ## Stores the value in the internal [Dictionary]. Call it to set the data you want saved. Only supports non-[Object] values.
 func set_value(field: String, value: Variant):
 	data[field] = value
@@ -131,6 +134,7 @@ func load_from_string(string: String):
 	data = loaded_data
 	MetSys.set_save_data(data)
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _setup_save(path: String) -> FileAccess:
 	data.merge(MetSys.get_save_data())
 

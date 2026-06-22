@@ -1,10 +1,14 @@
+# -- Identity ---------------------------------------------------------------
 extends Node
 
+# -- Constants And Types ---------------------------------------------------------------
 const PLAYER_SCENE := preload("res://src/player/Player.tscn")
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	call_deferred("_run")
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _run() -> void:
 	if not InputMap.has_action(&"attack"):
 		push_error("Missing attack input action")

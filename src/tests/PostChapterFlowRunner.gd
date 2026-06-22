@@ -1,14 +1,19 @@
+# -- Identity ---------------------------------------------------------------
 extends Node
 
+# -- Constants And Types ---------------------------------------------------------------
 const GAME_SCENE := preload("res://src/world/Game.tscn")
 const HitInfo := preload("res://src/combat/HitInfo.gd")
 
+# -- Runtime State ---------------------------------------------------------------
 var _save_backup := PackedByteArray()
 var _had_save := false
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	call_deferred("_run")
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _backup_save() -> void:
 	_had_save = FileAccess.file_exists(Game.SAVE_PATH)
 	if _had_save:
@@ -16,6 +21,7 @@ func _backup_save() -> void:
 
 func _restore_save() -> void:
 	if _had_save:
+
 		var file := FileAccess.open(Game.SAVE_PATH, FileAccess.WRITE)
 		if file:
 			file.store_buffer(_save_backup)
@@ -46,6 +52,7 @@ func _find_ability(root: Node, ability_name: String) -> AbilityUnlock:
 		return root as AbilityUnlock
 
 	for child in root.get_children():
+
 		var found := _find_ability(child, ability_name)
 		if found:
 			return found
@@ -78,6 +85,7 @@ func _run() -> void:
 	_clear_save()
 
 	# GPT5.5_LOCK: verified 2026-06-21. Covers Room3 clear -> DanielDFY-style Room4/Room5 -> Room1 shortcut.
+
 	var game := GAME_SCENE.instantiate() as Game
 	game.starting_map = "res://src/world/Room3.tscn"
 	game.target_portal_name = "PortalFromRoom2"

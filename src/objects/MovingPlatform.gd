@@ -1,6 +1,8 @@
+# -- Identity ---------------------------------------------------------------
 extends AnimatableBody2D
 class_name MovingPlatform
 
+# -- Exports ---------------------------------------------------------------
 # DanielDFY MovingTrap.cs + DragPlayer.cs equivalent:
 # AnimatableBody2D with sync_to_physics automatically carries
 # any CharacterBody2D standing on it (replaces DragPlayer.cs).
@@ -8,12 +10,14 @@ class_name MovingPlatform
 @export var speed: float = 120.0
 @export var wait_time: float = 1.0
 
+# -- Runtime State ---------------------------------------------------------------
 var waypoints: Array[Vector2] = []
 var current_index: int = 0
 var target_pos: Vector2
 var timer: float = 0.0
 var state: int = 0 # 0: Moving, 1: Waiting
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	# Enable sync_to_physics so the platform properly pushes/carries riders
 	# This is the Godot equivalent of Unity's DragPlayer.cs OnCollisionStay2D

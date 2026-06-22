@@ -1,12 +1,16 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 extends "res://addons/MetroidvaniaSystem/Database/Editor/SubEditor.gd"#"uid://cyob148ixrqef"
 
+# -- Constants And Types ---------------------------------------------------------------
 enum { MODE_DRAW, MODE_ERASE, MODE_PICK }
 
+# -- Runtime State ---------------------------------------------------------------
 var can_pick: bool
 var super_use_cursor: bool
 var whole_room: bool
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _editor_init() -> void:
 	super_use_cursor = use_cursor
 
@@ -49,6 +53,7 @@ func _editor_input(event: InputEvent):
 
 			redraw_overlay()
 
+# -- Public API ---------------------------------------------------------------
 func update_hovered_room():
 	var hr := highlighted_room
 	highlighted_room = MetSys.map_data.get_whole_room(get_coords(get_cursor_pos()))

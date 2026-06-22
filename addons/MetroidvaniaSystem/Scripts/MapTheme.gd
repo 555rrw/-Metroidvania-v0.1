@@ -1,3 +1,4 @@
+# -- Identity ---------------------------------------------------------------
 @tool
 ## Resource that defines the cell appearance.
 ##
@@ -5,6 +6,7 @@
 extends Resource
 class_name MapTheme
 
+# -- Constants And Types ---------------------------------------------------------------
 const SQUARE_BORDERS = ["wall", "passage", "separator", "borders"]
 const RECTANGLE_BORDERS = ["vertical_wall", "horizontal_wall", "vertical_passage", "horizontal_passage", "vertical_separator", "horizontal_separator", "vertical_borders", "horizontal_borders"]
 const DEFAULT_CORNERS = ["inner_corner", "outer_corner"]
@@ -21,6 +23,7 @@ enum SeparatorMode {
 	FULL_DOUBLE
 }
 
+# -- Exports ---------------------------------------------------------------
 ## The cell's center texture. The size of all other textures depends on this one. It can be square or rectangular and the shape affects some properties. The texture should be grayscale (preferrably white).
 @export var center_texture: Texture2D:
 	set(ct):
@@ -109,9 +112,11 @@ enum SeparatorMode {
 ## Only available when [member use_shared_borders] is enabled. Corner of 4 borders.
 @export var cross_corner: Texture2D
 
+# -- Runtime State ---------------------------------------------------------------
 var rectangle: bool
 var _property_name_cache: Array[StringName]
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _validate_property(property: Dictionary) -> void:
 	var pname: String = property["name"]
 	if rectangle:
@@ -132,6 +137,7 @@ func _validate_property(property: Dictionary) -> void:
 			property["usage"] = 0
 			return
 
+# -- Public API ---------------------------------------------------------------
 func is_unicorner() -> bool:
 	if use_shared_borders:
 		return l_corner == u_corner and t_corner == u_corner and cross_corner == u_corner

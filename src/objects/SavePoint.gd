@@ -1,12 +1,17 @@
+# -- Identity ---------------------------------------------------------------
 extends Area2D
 class_name SavePoint
 
+# -- Node References ---------------------------------------------------------------
 @onready var prompt = $Label
 @onready var glow = $Glow
 @onready var seat = $Seat
+
+# -- Runtime State ---------------------------------------------------------------
 var player_in_range: Player = null
 var resting: bool = false
 
+# -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
@@ -14,6 +19,7 @@ func _ready() -> void:
 	if glow:
 		glow.modulate.a = 0.0
 
+# -- Signal Handlers ---------------------------------------------------------------
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
 		player_in_range = body
@@ -27,12 +33,15 @@ func _on_body_exited(body: Node2D) -> void:
 		prompt.visible = false
 		_fade_glow(0.0)
 
+# -- Lifecycle ---------------------------------------------------------------
 func _process(_delta: float) -> void:
 	if player_in_range and Input.is_action_just_pressed("up") and not resting:
 		_rest_at_bench()
 
+# -- Internal Helpers ---------------------------------------------------------------
 func _rest_at_bench() -> void:
 	resting = true
+
 	var player := player_in_range
 	if not player:
 		resting = false
@@ -76,5 +85,6 @@ func _rest_at_bench() -> void:
 func _fade_glow(alpha: float) -> void:
 	if not glow:
 		return
+
 	var tween := create_tween()
 	tween.tween_property(glow, "modulate:a", alpha, 0.18)
