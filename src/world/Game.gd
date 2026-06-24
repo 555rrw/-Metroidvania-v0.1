@@ -14,6 +14,7 @@ const DEV_ROOMS := [
 	{"key": "3", "name": "Room3", "path": "res://src/world/Room3.tscn"},
 	{"key": "4", "name": "Room4", "path": "res://src/world/Room4.tscn"},
 	{"key": "5", "name": "Room5", "path": "res://src/world/Room5.tscn"},
+	{"key": "6", "name": "Room6", "path": "res://src/world/Room6.tscn"},
 ]
 
 # CLAUDE4.8_LOCK: area-title map + entry hook. Verified 2026-06-24. Keep the
@@ -27,6 +28,7 @@ const AREA_TITLES := {
 	"res://src/world/Room3.tscn": "偽王座之廳",
 	"res://src/world/Room4.tscn": "魂之聖所",
 	"res://src/world/Room5.tscn": "捷徑試煉道",
+	"res://src/world/Room6.tscn": "祕藏石室",
 }
 
 # -- Exports ---------------------------------------------------------------
@@ -245,6 +247,8 @@ func _developer_key_to_room_index(keycode: Key) -> int:
 			return 3
 		KEY_5, KEY_KP_5:
 			return 4
+		KEY_6, KEY_KP_6:
+			return 5
 		_:
 			return -1
 

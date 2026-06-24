@@ -405,6 +405,61 @@ texture = ExtResource("11_room1")
 shape = SubResource("RectangleShape2D_plat_high")
 one_way_collision = true
 
+[node name="ClimbPlat1" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(160, 567)
+collision_layer = 5
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticEnvironment/ClimbPlat1"]
+texture_filter = 0
+scale = Vector2(0.92, 0.92)
+texture = ExtResource("10_room1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/ClimbPlat1"]
+shape = SubResource("RectangleShape2D_plat_high")
+one_way_collision = true
+
+[node name="ClimbPlat2" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(300, 492)
+collision_layer = 5
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticEnvironment/ClimbPlat2"]
+texture_filter = 0
+scale = Vector2(0.92, 0.92)
+texture = ExtResource("10_room1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/ClimbPlat2"]
+shape = SubResource("RectangleShape2D_plat_high")
+one_way_collision = true
+
+[node name="ClimbPlat3" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(160, 417)
+collision_layer = 5
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticEnvironment/ClimbPlat3"]
+texture_filter = 0
+scale = Vector2(0.92, 0.92)
+texture = ExtResource("10_room1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/ClimbPlat3"]
+shape = SubResource("RectangleShape2D_plat_high")
+one_way_collision = true
+
+[node name="ClimbLedge" type="StaticBody2D" parent="StaticEnvironment"]
+position = Vector2(240, 372)
+collision_layer = 5
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticEnvironment/ClimbLedge"]
+texture_filter = 0
+scale = Vector2(1.05, 1.05)
+texture = ExtResource("11_room1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/ClimbLedge"]
+shape = SubResource("RectangleShape2D_plat_high")
+
 [node name="SavePoint" parent="." instance=ExtResource("1_room1")]
 position = Vector2(-180, 610)
 
@@ -435,6 +490,11 @@ required_ability = &"double_jump"
 position = Vector2(1680, 382)
 target_room = "res://src/world/Room5.tscn"
 target_portal_name = "ShortcutReturn"
+
+[node name="PortalToRoom6" parent="." instance=ExtResource("2_room1")]
+position = Vector2(240, 320)
+target_room = "res://src/world/Room6.tscn"
+target_portal_name = "PortalFromRoom1"
 
 [node name="BreakableWall" parent="." instance=ExtResource("20_room1")]
 position = Vector2(1480, 362)

@@ -1,8 +1,10 @@
 $ln;Abyss
 [0,0,0]
--1,0,0,0||0|res://src/world/Room1.tscn
+-1,0,0,-1||0|res://src/world/Room1.tscn
 [1,0,0]
 1,0,-1,0||0|res://src/world/Room1.tscn
+[0,-1,0]
+0,-1,0,0||4|res://src/world/Room6.tscn
 [2,0,0]
 -1,0,1,0||0|res://src/world/Room2.tscn
 [3,0,0]
