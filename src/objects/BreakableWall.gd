@@ -1,5 +1,6 @@
 # -- Identity ---------------------------------------------------------------
 # gemini3.5: Entire script created for spell-gated breakable wall
+## 可破壞牆：被法術/攻擊擊中後破裂
 extends StaticBody2D
 class_name BreakableWall
 

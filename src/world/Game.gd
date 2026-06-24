@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 遊戲總管：MetSys 房間載入/轉場/存讀檔/開發者傳送/區域標題
 extends "res://addons/MetroidvaniaSystem/Template/Scripts/MetSysGame.gd"
 class_name Game
 

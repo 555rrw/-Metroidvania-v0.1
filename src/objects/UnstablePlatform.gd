@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 崩塌平台：踩上後延遲掉落
 extends AnimatableBody2D
 class_name UnstablePlatform
 

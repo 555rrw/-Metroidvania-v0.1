@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 矛兵敵人：朝玩家移動、接觸傷害（Room1 夾擊）
 extends Enemy
 class_name MantisWarrior
 

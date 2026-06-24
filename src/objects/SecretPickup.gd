@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 祕密拾取物：給 Soul 並記錄事件
 extends Area2D
 class_name SecretPickup
 

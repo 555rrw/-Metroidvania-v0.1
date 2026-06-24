@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 受開關控制開閉的門
 extends StaticBody2D
 class_name TriggerDoor
 

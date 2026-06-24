@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 能力解鎖拾取物（dash/二段跳/法術）
 extends Area2D
 class_name AbilityUnlock
 

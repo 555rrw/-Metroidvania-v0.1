@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 開關：踩下後開門/觸發陷阱/記錄事件
 extends StaticBody2D
 class_name SwitchTrigger
 

@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 能力閘門：需特定能力(或事件)才能通過
 extends StaticBody2D
 class_name AbilityGate
 

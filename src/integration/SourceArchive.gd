@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 掃描 cloned_repos 來源檔做索引，記錄素材出處
 extends RefCounted
 class_name SourceArchive
 

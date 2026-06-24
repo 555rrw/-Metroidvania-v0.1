@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 玩家攝影機：跟隨/震動/上下看
 extends Camera2D
 class_name PlayerCamera
 

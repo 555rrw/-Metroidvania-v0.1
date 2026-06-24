@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 砲手發射的投射物
 extends CharacterBody2D
 class_name GunnerProjectile
 

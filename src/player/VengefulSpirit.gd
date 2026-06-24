@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 復仇之魂法術投射物
 extends Area2D
 class_name VengefulSpirit
 

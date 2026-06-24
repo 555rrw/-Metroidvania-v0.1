@@ -1,4 +1,5 @@
 # -- Identity ---------------------------------------------------------------
+## 來回移動平台（兩點間往返）
 extends AnimatableBody2D
 class_name MovingPlatform
 
