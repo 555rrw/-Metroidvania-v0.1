@@ -7,6 +7,7 @@ class_name Player
 signal health_changed(current_health: int)
 signal soul_changed(current_soul: int, max_soul: int)
 signal player_died()
+signal geo_changed(current_geo: int)
 
 # -- Constants And Types ---------------------------------------------------------------
 const HitInfo = preload("res://src/combat/HitInfo.gd")
@@ -88,6 +89,8 @@ enum State { IDLE, RUN, JUMP, FALL, DASH, WALL_SLIDE, WALL_JUMP, HURT, FOCUS }
 var current_state: State = State.IDLE
 var health: int = 5
 var soul: int = 0
+var geo: int = 0
+var nail_damage: int = 1
 var abilities: Array[StringName] = []
 
 # ---- Movement & Jump Timers ----
@@ -153,6 +156,7 @@ func _ready() -> void:
 
 	health_changed.emit(health)
 	soul_changed.emit(soul, max_soul)
+	geo_changed.emit(geo)
 
 # -- Internal Helpers ---------------------------------------------------------------
 # ---- Animation Loader ----
@@ -480,7 +484,8 @@ func _handle_focus(delta: float) -> bool:
 	_apply_gravity(delta, true)
 	_apply_horizontal(0.0, walk_speed, ground_acceleration, ground_deceleration, delta)
 
-	if focus_timer >= focus_time and _spend_soul(focus_cost):
+	var target_focus_time := focus_time * (0.7 if CharmManager.has_equipped("quick_focus") else 1.0)
+	if focus_timer >= target_focus_time and _spend_soul(focus_cost):
 		health = min(max_health, health + 1)
 		health_changed.emit(health)
 		_play_sfx(sfx_hit)
@@ -599,21 +604,22 @@ func _perform_attack() -> void:
 # GPT5.5_LOCK: verified side/up/down nail hitbox positions and visible slash offset. Preserve collision/visual split.
 func _configure_nail_hitbox() -> void:
 	var shape := nail_collision.shape as RectangleShape2D
+	var scale_factor := 1.2 if CharmManager.has_equipped("long_nail") else 1.0
 	if attack_direction.x != 0.0:
-		nail_area.position = Vector2(56.0 * facing_direction, -4.0)
-		nail_sprite.position = Vector2(32.0 * facing_direction, -2.0)
+		nail_area.position = Vector2(56.0 * facing_direction * scale_factor, -4.0)
+		nail_sprite.position = Vector2(32.0 * facing_direction * scale_factor, -2.0)
 		if shape:
-			shape.size = Vector2(90, 42)
+			shape.size = Vector2(90 * scale_factor, 42 * scale_factor)
 	elif attack_direction == Vector2.UP:
-		nail_area.position = Vector2(0.0, -58.0)
+		nail_area.position = Vector2(0.0, -58.0 * scale_factor)
 		nail_sprite.position = Vector2.ZERO
 		if shape:
-			shape.size = Vector2(48, 96)
+			shape.size = Vector2(48 * scale_factor, 96 * scale_factor)
 	else:
-		nail_area.position = Vector2(0.0, 58.0)
+		nail_area.position = Vector2(0.0, 58.0 * scale_factor)
 		nail_sprite.position = Vector2.ZERO
 		if shape:
-			shape.size = Vector2(48, 96)
+			shape.size = Vector2(48 * scale_factor, 96 * scale_factor)
 
 	nail_sprite.rotation = attack_direction.angle()
 
@@ -631,8 +637,12 @@ func _on_nail_area_body_entered(body: Node2D) -> void:
 		elif attack_direction == Vector2.DOWN:
 			attack_name = &"nail_down"
 
-		var hit_info = HitInfo.new(attack_name, self, 1, attack_direction, soul_per_nail_hit, false)
-		body.take_damage(1, attack_direction, hit_info)
+		var actual_soul_gain := soul_per_nail_hit
+		if CharmManager.has_equipped("greedy_soul"):
+			actual_soul_gain += 7
+
+		var hit_info = HitInfo.new(attack_name, self, nail_damage, attack_direction, actual_soul_gain, false)
+		body.take_damage(nail_damage, attack_direction, hit_info)
 		_apply_nail_recoil()
 		_start_hit_pause(hit_pause_time)
 		_play_sfx(sfx_hit)
@@ -663,6 +673,12 @@ func gain_soul(amount: int) -> void:
 		return
 	soul = clampi(soul + amount, 0, max_soul)
 	soul_changed.emit(soul, max_soul)
+
+func add_geo(amount: int) -> void:
+	if amount <= 0:
+		return
+	geo += amount
+	geo_changed.emit(geo)
 
 # -- Internal Helpers ---------------------------------------------------------------
 func _spend_soul(amount: int) -> bool:
@@ -702,7 +718,7 @@ func take_damage(amount: int, dir: Vector2) -> void:
 	else:
 		current_state = State.HURT
 		hurt_timer = 0.28
-		invincible_timer = 1.15
+		invincible_timer = 1.6 if CharmManager.has_equipped("thick_shell") else 1.15
 		hurt_knockback_dir = -1.0 if dir.x > 0.0 else 1.0
 		velocity = Vector2(hurt_knockback_dir * knockback_force, -250.0)
 		current_jumps = 0

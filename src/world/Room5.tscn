@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://croomfive001b"]
+[gd_scene load_steps=22 format=3 uid="uid://croomfive001b"]
 
 [ext_resource type="PackedScene" path="res://src/objects/Portal.tscn" id="1_r5"]
 [ext_resource type="PackedScene" path="res://src/objects/Spikes.tscn" id="2_r5"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/gdquest/background/sky.png" id="4_r5"]
 [ext_resource type="PackedScene" path="res://src/objects/UnstablePlatform.tscn" id="5_r5"]
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/platform/platform1.png" id="6_r5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/column1.png" id="18_r5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/light1.png" id="19_r5"]
 [ext_resource type="PackedScene" path="res://src/objects/AbilityGate.tscn" id="7_r5"]
 [ext_resource type="PackedScene" path="res://src/objects/BreakableWall.tscn" id="8_r5"]
 [ext_resource type="PackedScene" path="res://src/objects/MovingPlatform.tscn" id="9_r5"]
@@ -35,7 +37,7 @@ position = Vector2(180, 622)
 
 [node name="SkyBackdrop" type="Sprite2D" parent="."]
 z_index = -9
-modulate = Color(0.12, 0.23, 0.16, 0.45)
+modulate = Color(0.22, 0.36, 0.3, 0.82)
 centered = false
 scale = Vector2(3.0, 1.4)
 texture = ExtResource("4_r5")
@@ -113,6 +115,34 @@ texture = ExtResource("6_r5")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticEnvironment/SecretLedge"]
 shape = SubResource("RectangleShape2D_platform")
 
+[node name="TrialColumnLeft" type="Sprite2D" parent="."]
+z_index = -5
+modulate = Color(0.36, 0.5, 0.4, 0.62)
+position = Vector2(150, 450)
+scale = Vector2(0.95, 2.0)
+texture = ExtResource("18_r5")
+
+[node name="TrialColumnRight" type="Sprite2D" parent="."]
+z_index = -5
+modulate = Color(0.36, 0.5, 0.4, 0.62)
+position = Vector2(2420, 450)
+scale = Vector2(0.95, 2.0)
+texture = ExtResource("18_r5")
+
+[node name="TrialGlowA" type="Sprite2D" parent="."]
+z_index = -4
+modulate = Color(0.6, 0.92, 0.68, 0.5)
+position = Vector2(700, 400)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("19_r5")
+
+[node name="TrialGlowB" type="Sprite2D" parent="."]
+z_index = -4
+modulate = Color(0.6, 0.92, 0.68, 0.5)
+position = Vector2(1900, 380)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("19_r5")
+
 [node name="PortalFromRoom4" parent="." instance=ExtResource("1_r5")]
 position = Vector2(80, 620)
 target_room = "res://src/world/Room4.tscn"
@@ -160,7 +190,7 @@ position = Vector2(1280, 620)
 position = Vector2(1650, 620)
 
 [node name="ShortcutFallingTrap" parent="." instance=ExtResource("13_r5")]
-position = Vector2(1840, 140)
+position = Vector2(1990, 140)
 
 [node name="ShortcutDoor" parent="." instance=ExtResource("12_r5")]
 position = Vector2(2070, 590)

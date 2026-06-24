@@ -89,8 +89,16 @@ func _ready() -> void:
 		$Player.max_soul = int(save_mgr.get_value("max_soul", $Player.max_soul))
 		$Player.health = clampi(int(save_mgr.get_value("health", $Player.max_health)), 0, $Player.max_health)
 		$Player.soul = clampi(int(save_mgr.get_value("soul", 0)), 0, $Player.max_soul)
+		$Player.geo = int(save_mgr.get_value("geo", 0))
+		$Player.nail_damage = int(save_mgr.get_value("nail_damage", 1))
 		$Player.health_changed.emit($Player.health)
 		$Player.soul_changed.emit($Player.soul, $Player.max_soul)
+		$Player.geo_changed.emit($Player.geo)
+
+		# Charm system serialization
+		CharmManager.owned.assign(save_mgr.get_value("charms_owned", []))
+		CharmManager.equipped.assign(save_mgr.get_value("charms_equipped", []))
+		CharmManager.notch_limit = int(save_mgr.get_value("charm_notch_limit", 3))
 
 		var current_room = save_mgr.get_value("current_room", "")
 		if not current_room.is_empty():
@@ -133,6 +141,11 @@ func save_game() -> void:
 	save_mgr.set_value("max_health", $Player.max_health)
 	save_mgr.set_value("soul", $Player.soul)
 	save_mgr.set_value("max_soul", $Player.max_soul)
+	save_mgr.set_value("geo", $Player.geo)
+	save_mgr.set_value("nail_damage", $Player.nail_damage)
+	save_mgr.set_value("charms_owned", CharmManager.owned)
+	save_mgr.set_value("charms_equipped", CharmManager.equipped)
+	save_mgr.set_value("charm_notch_limit", CharmManager.notch_limit)
 	save_mgr.set_value("current_room", MetSys.get_current_room_id())
 	save_mgr.save_as_text(SAVE_PATH)
 

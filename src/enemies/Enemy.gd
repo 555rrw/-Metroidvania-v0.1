@@ -9,6 +9,7 @@ class_name Enemy
 @export var knockback_resistance: float = 0.0
 @export var knockback_force: float = 260.0
 @export var death_burst_color: Color = Color(0.65, 0.74, 0.86, 1.0)
+@export var geo_reward: int = 9
 
 # -- Runtime State ---------------------------------------------------------------
 var health: int = 2
@@ -78,6 +79,9 @@ func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:
 func die() -> void:
 	is_dead = true
 	_spawn_death_burst()
+	var geo_target = get_tree().get_first_node_in_group(&"player")
+	if geo_target and geo_target.has_method("add_geo"):
+		geo_target.add_geo(geo_reward)
 	# Disable hitboxes but leave world collision (mask 1) so it can fall and bounce
 	set_deferred("collision_layer", 0)
 

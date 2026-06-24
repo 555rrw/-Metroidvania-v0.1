@@ -29,6 +29,15 @@ var player_ref: Player = null
 var area_title_label: Label = null
 var _area_title_tween: Tween = null
 
+# ---- Geo Counter ----
+var geo_label: Label = null
+
+# ---- Charm Overlay ----
+var charm_overlay: Control = null
+var charm_list_container: VBoxContainer = null
+var charm_info_label: Label = null
+var charm_notch_label: Label = null
+
 # ---- Full-screen Map Overlay ----
 var map_overlay: Control = null
 var map_minimap: Control = null
@@ -42,6 +51,8 @@ func _ready() -> void:
 	pause_overlay.visible = false
 	_setup_area_title()
 	_setup_map_overlay()
+	_setup_geo_label()
+	_setup_charm_overlay()
 	continue_button.pressed.connect(_on_continue_pressed)
 	menu_button.pressed.connect(_on_menu_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
@@ -61,6 +72,9 @@ func setup_player(player: Player) -> void:
 		player.soul_changed.connect(update_soul)
 	update_health(player.health)
 	update_soul(player.soul, player.max_soul)
+	if not player.geo_changed.is_connected(update_geo):
+		player.geo_changed.connect(update_geo)
+	update_geo(player.geo)
 
 	# Update ability label
 	_update_abilities()
@@ -75,6 +89,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		_toggle_map()
 		get_viewport().set_input_as_handled()
 		return
+	if event.is_action_pressed("charm") or (event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_I):
+		_toggle_charm()
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_ESCAPE or event.keycode == KEY_P:
 			_toggle_pause()
@@ -82,8 +100,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # -- Internal Helpers ---------------------------------------------------------------
 func _toggle_pause() -> void:
-	# Map and pause are mutually exclusive.
-	if map_overlay and map_overlay.visible:
+	# Map, charm and pause are mutually exclusive.
+	if (map_overlay and map_overlay.visible) or (charm_overlay and charm_overlay.visible):
 		return
 	_set_paused(not pause_overlay.visible)
 
@@ -282,8 +300,8 @@ func _setup_map_overlay() -> void:
 	map_minimap.position = (vp - scaled) * 0.5
 
 func _toggle_map() -> void:
-	# Map and pause are mutually exclusive.
-	if pause_overlay.visible:
+	# Map, charm and pause are mutually exclusive.
+	if pause_overlay.visible or (charm_overlay and charm_overlay.visible):
 		return
 	_set_map_open(not map_overlay.visible)
 
@@ -293,3 +311,159 @@ func _set_map_open(open: bool) -> void:
 	if open and map_area_label and area_title_label:
 		# Reuse the last shown area name as the map subtitle.
 		map_area_label.text = area_title_label.text
+
+# ---- Geo Counter ----
+func _setup_geo_label() -> void:
+	geo_label = Label.new()
+	geo_label.name = "GeoLabel"
+	geo_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	geo_label.offset_left = 28.0
+	geo_label.offset_top = 120.0
+	geo_label.add_theme_font_size_override("font_size", 20)
+	geo_label.add_theme_color_override("font_color", Color(0.95, 0.9, 0.55, 1.0))
+	geo_label.add_theme_constant_override("outline_size", 4)
+	geo_label.add_theme_color_override("font_outline_color", Color(0.05, 0.05, 0.05, 0.9))
+	geo_label.text = "GEO 0"
+	add_child(geo_label)
+
+func update_geo(current_geo: int) -> void:
+	if geo_label:
+		geo_label.text = "GEO %d" % current_geo
+
+# ---- Charm Overlay ----
+func _setup_charm_overlay() -> void:
+	charm_overlay = Control.new()
+	charm_overlay.name = "CharmOverlay"
+	charm_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	charm_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	charm_overlay.visible = false
+	add_child(charm_overlay)
+
+	var dim := ColorRect.new()
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dim.color = Color(0.04, 0.03, 0.05, 0.92)
+	charm_overlay.add_child(dim)
+
+	var panel := PanelContainer.new()
+	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	panel.offset_left = -300
+	panel.offset_right = 300
+	panel.offset_top = -200
+	panel.offset_bottom = 200
+	charm_overlay.add_child(panel)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 15)
+	panel.add_child(vbox)
+
+	var title := Label.new()
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_override("font", _make_cjk_font())
+	title.add_theme_font_size_override("font_size", 28)
+	title.add_theme_color_override("font_color", Color(0.95, 0.9, 0.6, 1.0))
+	title.text = "護符選單"
+	vbox.add_child(title)
+
+	charm_notch_label = Label.new()
+	charm_notch_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	charm_notch_label.add_theme_font_override("font", _make_cjk_font())
+	charm_notch_label.add_theme_font_size_override("font_size", 18)
+	charm_notch_label.add_theme_color_override("font_color", Color(0.8, 0.85, 0.9, 1.0))
+	vbox.add_child(charm_notch_label)
+
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(0, 200)
+	vbox.add_child(scroll)
+
+	charm_list_container = VBoxContainer.new()
+	charm_list_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(charm_list_container)
+
+	var hint := Label.new()
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.add_theme_font_override("font", _make_cjk_font())
+	hint.add_theme_font_size_override("font_size", 16)
+	hint.add_theme_color_override("font_color", Color(0.5, 0.6, 0.7, 0.8))
+	hint.text = "I：關閉護符選單"
+	vbox.add_child(hint)
+
+func _update_charm_ui() -> void:
+	if not charm_list_container or not charm_notch_label:
+		return
+
+	charm_notch_label.text = "裝備凹槽: %d / %d" % [CharmManager.used_notches(), CharmManager.notch_limit]
+
+	for child in charm_list_container.get_children():
+		child.queue_free()
+
+	for charm_id in CharmManager.CHARMS:
+		var charm_data = CharmManager.CHARMS[charm_id]
+		var name: String = charm_data["name"]
+		var cost: int = charm_data["notch_cost"]
+		var desc: String = charm_data["description"]
+
+		var is_owned = charm_id in CharmManager.owned
+		var is_equipped = CharmManager.has_equipped(charm_id)
+
+		var hbox := HBoxContainer.new()
+		charm_list_container.add_child(hbox)
+
+		var name_label := Label.new()
+		name_label.add_theme_font_override("font", _make_cjk_font())
+		name_label.add_theme_font_size_override("font_size", 16)
+		name_label.custom_minimum_size = Vector2(150, 0)
+		if is_owned:
+			name_label.text = "%s (%d)" % [name, cost]
+			name_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1.0))
+		else:
+			name_label.text = "??? (%d)" % cost
+			name_label.add_theme_color_override("font_color", Color(0.4, 0.4, 0.4, 1.0))
+		hbox.add_child(name_label)
+
+		var desc_label := Label.new()
+		desc_label.add_theme_font_override("font", _make_cjk_font())
+		desc_label.add_theme_font_size_override("font_size", 14)
+		desc_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		if is_owned:
+			desc_label.text = desc
+			desc_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1.0))
+		else:
+			desc_label.text = "未解鎖"
+			desc_label.add_theme_color_override("font_color", Color(0.4, 0.4, 0.4, 1.0))
+		hbox.add_child(desc_label)
+
+		if is_owned:
+			var btn := Button.new()
+			btn.add_theme_font_override("font", _make_cjk_font())
+			btn.add_theme_font_size_override("font_size", 14)
+			if is_equipped:
+				btn.text = "卸下"
+				btn.add_theme_color_override("font_color", Color(0.95, 0.6, 0.6, 1.0))
+			else:
+				btn.text = "裝備"
+				btn.add_theme_color_override("font_color", Color(0.6, 0.95, 0.6, 1.0))
+				if not CharmManager.can_equip(charm_id):
+					btn.disabled = true
+			btn.pressed.connect(func(): _on_charm_button_pressed(charm_id))
+			hbox.add_child(btn)
+
+func _on_charm_button_pressed(charm_id: StringName) -> void:
+	if CharmManager.has_equipped(charm_id):
+		CharmManager.unequip(charm_id)
+	else:
+		CharmManager.equip(charm_id)
+	_update_charm_ui()
+	var game = get_tree().get_first_node_in_group(&"game")
+	if game and game.has_method("save_game"):
+		game.save_game()
+
+func _toggle_charm() -> void:
+	if pause_overlay.visible or (map_overlay and map_overlay.visible):
+		return
+	_set_charm_open(not charm_overlay.visible)
+
+func _set_charm_open(open: bool) -> void:
+	charm_overlay.visible = open
+	get_tree().paused = open
+	if open:
+		_update_charm_ui()
