@@ -83,11 +83,13 @@ const ABILITY_VENGEFUL_SPIRIT := StringName("vengeful_spirit")
 enum State { IDLE, RUN, JUMP, FALL, DASH, WALL_SLIDE, WALL_JUMP, HURT, FOCUS }
 
 # -- Runtime State ---------------------------------------------------------------
+# ---- State & Abilities ----
 var current_state: State = State.IDLE
 var health: int = 5
 var soul: int = 0
 var abilities: Array[StringName] = []
 
+# ---- Movement & Jump Timers ----
 var current_jumps: int = 0
 var coyote_timer: float = 0.0
 var jump_buffer_timer: float = 0.0
@@ -96,11 +98,13 @@ var dash_cooldown_timer: float = 0.0
 var wall_jump_timer: float = 0.0
 var wall_direction: int = 0
 
+# ---- Combat Timers & States ----
 var attack_cooldown_timer: float = 0.0
 var attack_duration_timer: float = 0.0
 var attack_direction: Vector2 = Vector2.RIGHT
 var attack_hit_bodies: Array[Node] = []
 
+# ---- Damage, Focus & Spell Timers ----
 var hurt_timer: float = 0.0
 var invincible_timer: float = 0.0
 var hurt_knockback_dir: float = 0.0
@@ -108,16 +112,19 @@ var focus_timer: float = 0.0
 var spell_cooldown_timer: float = 0.0
 var hit_pause_timer: float = 0.0
 
+# ---- Facing Direction & Flags ----
 var facing_direction: int = 1
 var event: bool = false
 var reset_position: Vector2 = Vector2.ZERO
 
+# ---- Animation States ----
 var animations: Dictionary = {}
 var current_animation_name: String = ""
 var anim_frame_index: int = 0
 var anim_timer: float = 0.0
 var anim_fps: float = 10.0
 
+# ---- Audio Preloads ----
 var sfx_jump = preload("res://assets/audio/PlayerJump.wav")
 var sfx_damage = preload("res://assets/audio/PlayerDamage.wav")
 var sfx_hit = preload("res://assets/audio/PlayerBash.wav")
@@ -147,6 +154,7 @@ func _ready() -> void:
 	soul_changed.emit(soul, max_soul)
 
 # -- Internal Helpers ---------------------------------------------------------------
+# ---- Animation Loader ----
 func _load_all_animations() -> void:
 	animations["idle"] = _load_animation_frames("idle")
 	animations["walk"] = _load_animation_frames("walk")
@@ -192,6 +200,7 @@ func _load_animation_frames_range(dir_name: String, start_idx: int, end_idx: int
 	return frames
 
 # -- Public API ---------------------------------------------------------------
+# ---- Animation & Visuals ----
 func play_anim(anim_name: String, fps: float = 10.0) -> void:
 	if current_animation_name == "attack" and attack_duration_timer > 0.0 and anim_name in ["idle", "walk", "jump", "fall", "double_jump"]:
 		return
@@ -389,6 +398,7 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 
 # -- Internal Helpers ---------------------------------------------------------------
+# ---- Status & Timer Updates ----
 func _update_animation(delta: float) -> void:
 	if animations.has(current_animation_name) and not animations[current_animation_name].is_empty():
 
@@ -430,6 +440,7 @@ func _update_common_timers(delta: float) -> void:
 	invincible_timer = max(0.0, invincible_timer - delta)
 	spell_cooldown_timer = max(0.0, spell_cooldown_timer - delta)
 
+# ---- Physics & Movement Calculations ----
 func _apply_gravity(delta: float, fast_fall: bool) -> void:
 	var current_gravity := fall_gravity if fast_fall else gravity
 	velocity.y = min(velocity.y + current_gravity * delta, max_fall_speed)
@@ -446,6 +457,7 @@ func _get_wall_sum() -> int:
 	var is_against_right_wall = right_wall_ray.is_colliding()
 	return (1 if is_against_right_wall else 0) - (1 if is_against_left_wall else 0)
 
+# ---- Soul & Spell Mechanics ----
 func _handle_focus(delta: float) -> bool:
 	var can_focus := (
 		Input.is_action_pressed("focus")
@@ -495,6 +507,7 @@ func _try_cast_spell() -> bool:
 	_play_sfx(sfx_hit)
 	return true
 
+# ---- Movement State Transitions ----
 func _try_start_dash(move_input: float) -> bool:
 	if Input.is_action_just_pressed("dash") and _can_dash():
 		_perform_dash(move_input)
@@ -539,6 +552,7 @@ func _perform_dash(move_input: float) -> void:
 	current_state = State.DASH
 	_play_sfx(sfx_jump)
 
+# ---- Ability Checks ----
 func _can_dash() -> bool:
 	return _has_ability(ABILITY_DASH) and dash_cooldown_timer <= 0.0 and current_state != State.WALL_SLIDE
 
@@ -553,6 +567,7 @@ func _has_ability(ability: StringName) -> bool:
 	return false
 
 # GPT5.5_LOCK: verified 2026-06-21. Keep InputMap "attack" -> _perform_attack -> _configure_nail_hitbox path intact.
+# ---- Nail & Attack Mechanics ----
 func _perform_attack() -> void:
 	attack_cooldown_timer = attack_cooldown_time
 	attack_duration_timer = attack_duration_time
@@ -632,6 +647,7 @@ func _apply_nail_recoil() -> void:
 	else:
 		velocity.x = -facing_direction * side_recoil_force
 
+# ---- Feedback & Impact Helpers ----
 func _start_hit_pause(duration: float) -> void:
 	hit_pause_timer = max(hit_pause_timer, duration)
 
@@ -640,6 +656,7 @@ func _start_hit_pause(duration: float) -> void:
 		cam.shake(3.0, 0.06)
 
 # -- Public API ---------------------------------------------------------------
+# ---- Soul System ----
 func gain_soul(amount: int) -> void:
 	if amount <= 0:
 		return
@@ -657,6 +674,7 @@ func _spend_soul(amount: int) -> bool:
 	return true
 
 # -- Public API ---------------------------------------------------------------
+# ---- Combat & Damage Reactions ----
 func take_damage(amount: int, dir: Vector2) -> void:
 	# Skip damage during invincibility, hurt state, or event (bench/portal)
 	if invincible_timer > 0.0 or current_state == State.HURT or event:
@@ -688,6 +706,7 @@ func take_damage(amount: int, dir: Vector2) -> void:
 		velocity = Vector2(hurt_knockback_dir * knockback_force, -250.0)
 		current_jumps = 0
 
+# ---- Life State & Transitions ----
 func kill() -> void:
 	# Prevent re-entry if a room load is already queued
 	if _kill_pending_room_load != "":

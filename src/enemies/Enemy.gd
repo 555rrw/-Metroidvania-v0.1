@@ -53,6 +53,7 @@ func _enemy_ai(_delta: float) -> void:
 	return
 
 # -- Public API ---------------------------------------------------------------
+# ---- Damage & Knockback Reaction ----
 func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:
 	if is_dead:
 		return
@@ -72,6 +73,7 @@ func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:
 	if health <= 0:
 		die()
 
+# ---- Death Handling ----
 func die() -> void:
 	is_dead = true
 	_spawn_death_burst()
@@ -92,6 +94,7 @@ func die() -> void:
 	tween.tween_callback(queue_free)
 
 # -- Internal Helpers ---------------------------------------------------------------
+# ---- Visual Effects ----
 func _spawn_death_burst() -> void:
 	if not get_parent():
 		return

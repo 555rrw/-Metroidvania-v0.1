@@ -43,6 +43,7 @@ func _ready() -> void:
 	jump_timer = jump_cooldown
 
 # -- Internal Helpers ---------------------------------------------------------------
+# ---- Boss AI State Loop ----
 func _enemy_ai(delta: float) -> void:
 	_update_phase()
 
@@ -111,6 +112,7 @@ func _enemy_ai(delta: float) -> void:
 
 	move_and_slide()
 
+# ---- Slam & Attack Hazards ----
 func _perform_land_slam() -> void:
 	_play_boss_sfx(sfx_slam)
 
@@ -141,6 +143,7 @@ func _spawn_shockwave(dir: int) -> void:
 	wave.setup(dir, 330.0 + phase * 70.0)
 
 # -- Public API ---------------------------------------------------------------
+# ---- Damage & Stagger Reactions ----
 func take_damage(amount: int, attack_dir: Vector2, hit_info = null) -> void:
 	_play_boss_sfx(sfx_damage)
 	if boss_state == BossState.STAGGER:
@@ -177,6 +180,7 @@ func die() -> void:
 	super.die()
 
 # -- Internal Helpers ---------------------------------------------------------------
+# ---- Phase & Balance Tuning ----
 func _update_phase() -> void:
 	if health <= 5:
 		phase = 3
