@@ -1,0 +1,23 @@
+# Claude 4.8 Locked Systems
+
+Date: 2026-06-24
+
+Same rule as `gpt55_locked_systems.md`: these parts are verified working. Do not delete, rename,
+or rewrite them without preserving the described behavior and re-running the listed checks.
+Inline code carries `CLAUDE4.8_LOCK` comments; scene/config changes (which cannot hold comments)
+are registered only here.
+
+## Locked Runtime Logic
+
+| Area | Files | Behavior to preserve | Required checks before changing |
+| --- | --- | --- | --- |
+| Room1 fair opening | `src/world/Room1.tscn` | Spawn(600,592) kept clear; single Crawlid intro at (840), two MantisWarrior spears flank an arena at (980/1150) before the exit. Preserves the gpt55 flanking-encounter intent while removing the spawn pile-up. | Room1 screenshot; player not hit within ~1s of spawn. |
+| Area-title banner | `src/ui/HUD.gd` (`_setup_area_title`, `show_area_title`, `_make_cjk_font`), `src/world/Game.gd` (`AREA_TITLES`, `_show_area_title_for_current_room`) | Area name fades in on room *scene* change (not same-room respawn / same-scene scroll). CJK renders via SystemFont. | Headless run (no SCRIPT ERROR); screenshot shows title; `[AREATITLE]` mapping resolves. |
+| Full-screen map screen | `src/ui/HUD.gd` (`_setup_map_overlay`, `_toggle_map`, `_set_map_open`, `_unhandled_input` map branch), `project.godot` (`map` action = M) | M toggles map; pauses game; mutually exclusive with pause menu; MetSys Minimap `track_position=true area(11,7) display_player_location=true`; only explored cells shown. | Headless run; screenshot with real M keypress shows map + player marker. |
+| On-screen minimap enabled | `src/ui/HUD.tscn` (`Minimap.visible = true`) | The corner minimap is shown during play (was `visible=false`). | Screenshot shows minimap top-right. |
+
+## Marker Rule
+
+`CLAUDE4.8_LOCK` comments in code mean: do not delete, rename, or rewrite that logic without
+preserving behavior and updating this file with new evidence. Scene/config items above have no
+inline marker because `.tscn`/`project.godot` do not support comments.

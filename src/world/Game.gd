@@ -16,6 +16,9 @@ const DEV_ROOMS := [
 	{"key": "5", "name": "Room5", "path": "res://src/world/Room5.tscn"},
 ]
 
+# CLAUDE4.8_LOCK: area-title map + entry hook. Verified 2026-06-24. Keep the
+# scene-path -> title mapping driving HUD.show_area_title on room change.
+# See docs/claude48_locked_systems.md. (Titles themselves are placeholders — safe to rename.)
 # Hollow Knight-style area titles shown on room entry. Placeholder names themed
 # to 神骸世界 — rename freely.
 const AREA_TITLES := {
