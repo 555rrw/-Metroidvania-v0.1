@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://cxsc37k2bvdh2"]
+[gd_scene load_steps=23 format=3 uid="uid://cxsc37k2bvdh2"]
 
 [ext_resource type="PackedScene" uid="uid://cslbbl2s06c8y" path="res://src/objects/Portal.tscn" id="1_room2"]
 [ext_resource type="PackedScene" uid="uid://cxsc37k2bvdq7" path="res://src/objects/Spikes.tscn" id="2_room2"]
@@ -17,6 +17,9 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/platform/platform1.png" id="18_room2"]
 [ext_resource type="PackedScene" path="res://src/objects/TriggerDoor.tscn" id="19_room2"]
 [ext_resource type="PackedScene" path="res://src/objects/FallingTrap.tscn" id="20_room2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/framework/floor1.png" id="21_room2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/column1.png" id="22_room2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/hollow_imitation/decoration/light1.png" id="23_room2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall_v"]
 size = Vector2(40, 720)
@@ -34,14 +37,14 @@ position = Vector2(120, 622)
 
 [node name="SkyBackdrop" type="Sprite2D" parent="."]
 z_index = -9
-modulate = Color(0.12, 0.23, 0.16, 0.45)
+modulate = Color(0.26, 0.44, 0.32, 0.85)
 centered = false
 scale = Vector2(3.0, 1.4)
 texture = ExtResource("7_room2")
 
 [node name="MountainBackdrop" type="Sprite2D" parent="."]
 z_index = -8
-modulate = Color(0.1, 0.18, 0.12, 0.55)
+modulate = Color(0.2, 0.36, 0.26, 0.9)
 position = Vector2(0, 160)
 centered = false
 scale = Vector2(2.8, 1.2)
@@ -49,10 +52,46 @@ texture = ExtResource("8_room2")
 
 [node name="RuinWallTexture" type="Sprite2D" parent="."]
 z_index = -6
-modulate = Color(0.55, 0.95, 0.65, 0.18)
+modulate = Color(0.42, 0.72, 0.5, 0.4)
 position = Vector2(840, 492)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("10_room2")
+
+[node name="BackLedge" type="Sprite2D" parent="."]
+z_index = -7
+modulate = Color(0.3, 0.5, 0.36, 0.4)
+centered = false
+position = Vector2(900, 250)
+scale = Vector2(2.6, 1.0)
+texture = ExtResource("21_room2")
+
+[node name="ColumnLeft" type="Sprite2D" parent="."]
+z_index = -5
+modulate = Color(0.34, 0.5, 0.38, 0.62)
+position = Vector2(110, 470)
+scale = Vector2(0.85, 1.7)
+texture = ExtResource("22_room2")
+
+[node name="ColumnRight" type="Sprite2D" parent="."]
+z_index = -5
+modulate = Color(0.34, 0.5, 0.38, 0.62)
+position = Vector2(2460, 470)
+scale = Vector2(0.85, 1.7)
+texture = ExtResource("22_room2")
+
+[node name="LampGlowLeft" type="Sprite2D" parent="."]
+z_index = -5
+modulate = Color(0.6, 0.95, 0.68, 0.6)
+position = Vector2(720, 360)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("23_room2")
+
+[node name="LampGlowRight" type="Sprite2D" parent="."]
+z_index = -5
+modulate = Color(0.55, 0.9, 0.64, 0.5)
+position = Vector2(1880, 330)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("23_room2")
 
 [node name="Background" type="ColorRect" parent="."]
 z_index = -10
@@ -214,7 +253,7 @@ trigger_delay = 0.22
 position = Vector2(1510, 640)
 
 [node name="FallingTrap" parent="." instance=ExtResource("20_room2")]
-position = Vector2(2110, 210)
+position = Vector2(2300, 150)
 fall_distance = 450.0
 fall_time = 0.72
 
