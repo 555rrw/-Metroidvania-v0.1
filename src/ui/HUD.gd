@@ -23,12 +23,17 @@ var texture_empty = preload("res://assets/sprites/UI/health_empty.png")
 
 var player_ref: Player = null
 
+# ---- Area Title Banner ----
+var area_title_label: Label = null
+var _area_title_tween: Tween = null
+
 # -- Lifecycle ---------------------------------------------------------------
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	popup_label.visible = false
 	popup_label.modulate.a = 0.0
 	pause_overlay.visible = false
+	_setup_area_title()
 	continue_button.pressed.connect(_on_continue_pressed)
 	menu_button.pressed.connect(_on_menu_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
@@ -145,3 +150,42 @@ func show_unlock_message(message: String) -> void:
 func set_source_summary(summary: Dictionary) -> void:
 	var totals := SourceArchive.totals(summary)
 	source_label.text = "Sources: %d repos / %d files indexed" % [totals.repos, totals.files]
+
+# ---- Area Title Banner ----
+# Hollow Knight-style area name that fades in/out when the player enters a new room.
+func _setup_area_title() -> void:
+	area_title_label = Label.new()
+	area_title_label.name = "AreaTitleLabel"
+	area_title_label.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	area_title_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	# Sit in the upper third so the banner does not cover the player/combat.
+	area_title_label.offset_bottom = -220.0
+	area_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	area_title_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	area_title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# The bundled default font has no CJK glyphs; use an OS font so Chinese area
+	# names render. Falls back across common TC/SC families.
+	var cjk_font := SystemFont.new()
+	cjk_font.font_names = PackedStringArray([
+		"Microsoft JhengHei", "Microsoft YaHei", "Noto Sans CJK TC",
+		"PingFang TC", "Source Han Sans TC", "sans-serif",
+	])
+	area_title_label.add_theme_font_override("font", cjk_font)
+	area_title_label.add_theme_font_size_override("font_size", 46)
+	area_title_label.add_theme_color_override("font_color", Color(0.92, 0.95, 1.0, 1.0))
+	area_title_label.add_theme_constant_override("outline_size", 8)
+	area_title_label.add_theme_color_override("font_outline_color", Color(0.02, 0.03, 0.05, 0.9))
+	area_title_label.modulate.a = 0.0
+	add_child(area_title_label)
+
+func show_area_title(title: String) -> void:
+	if not area_title_label or title.strip_edges().is_empty():
+		return
+	area_title_label.text = title
+	if _area_title_tween and _area_title_tween.is_valid():
+		_area_title_tween.kill()
+	area_title_label.modulate.a = 0.0
+	_area_title_tween = create_tween()
+	_area_title_tween.tween_property(area_title_label, "modulate:a", 1.0, 0.7)
+	_area_title_tween.tween_interval(1.8)
+	_area_title_tween.tween_property(area_title_label, "modulate:a", 0.0, 1.1)

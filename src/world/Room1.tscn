@@ -440,16 +440,16 @@ target_portal_name = "ShortcutReturn"
 position = Vector2(1480, 362)
 
 [node name="Crawlid" parent="." instance=ExtResource("3_room1")]
-position = Vector2(405, 614)
+position = Vector2(840, 614)
 
 [node name="SpearHunterLeft" parent="." instance=ExtResource("19_room1")]
-position = Vector2(492, 610)
+position = Vector2(980, 610)
 
 [node name="MantisWarrior" parent="." instance=ExtResource("19_room1")]
-position = Vector2(835, 610)
+position = Vector2(1150, 610)
 
 [node name="Vengefly" parent="." instance=ExtResource("12_room1")]
-position = Vector2(520, 300)
+position = Vector2(1020, 300)
 
 [node name="TopFade" type="ColorRect" parent="."]
 z_index = 20

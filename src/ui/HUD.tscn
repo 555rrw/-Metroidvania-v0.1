@@ -141,7 +141,7 @@ vertical_alignment = 1
 
 [node name="Minimap" parent="." instance=ExtResource("2_dnyg")]
 unique_name_in_owner = true
-visible = false
+visible = true
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

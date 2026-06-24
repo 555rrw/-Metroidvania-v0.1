@@ -16,19 +16,36 @@ const DEV_ROOMS := [
 	{"key": "5", "name": "Room5", "path": "res://src/world/Room5.tscn"},
 ]
 
+# Hollow Knight-style area titles shown on room entry. Placeholder names themed
+# to 神骸世界 — rename freely.
+const AREA_TITLES := {
+	"res://src/world/Room1.tscn": "神骸十字路",
+	"res://src/world/Room2.tscn": "翠綠幽徑",
+	"res://src/world/Room3.tscn": "偽王座之廳",
+	"res://src/world/Room4.tscn": "魂之聖所",
+	"res://src/world/Room5.tscn": "捷徑試煉道",
+}
+
 # -- Exports ---------------------------------------------------------------
 @export_file("*.tscn") var starting_map: String = "res://src/world/Room1.tscn"
 
 # State trackers
+# ---- Singletons & References ----
 static var _singleton: Node = null
 
 # -- Runtime State ---------------------------------------------------------------
+# ---- Portal & Room Transition state ----
 var target_portal_name: String = ""
+# ---- Game Events & Integration ----
 var events: Array[String] = []
 var source_archive_summary: Dictionary = {}
+# ---- Developer / Debug mode state ----
 var developer_mode_open: bool = false
 
 var _pending_spawn_position: Vector2 = Vector2.ZERO
+# Tracks the last room scene whose area title was shown, so respawning in the
+# same room does not re-trigger the banner.
+var _last_area_title_path: String = ""
 
 # -- Node References ---------------------------------------------------------------
 @onready var hud: HUD = $CanvasLayer/HUD
@@ -101,6 +118,7 @@ func reset_map_starting_coords() -> void:
 	# MetSys template hook retained for compatibility; this game manages spawn state directly.
 	return
 
+# ---- Save / Load System ----
 func save_game() -> void:
 	var save_mgr = SaveManager.new()
 	save_mgr.set_value("events", events)
@@ -113,6 +131,7 @@ func save_game() -> void:
 	save_mgr.save_as_text(SAVE_PATH)
 
 # Called by Player.gd's out-of-bounds check to safely teleport without damage.
+# ---- Spawn Positioning ----
 func get_spawn_position() -> Vector2:
 	if _pending_spawn_position != Vector2.ZERO:
 		return _pending_spawn_position
@@ -154,8 +173,24 @@ func _on_room_loaded() -> void:
 	$Player.modulate.a = 1.0
 	target_portal_name = ""
 	_update_developer_panel()
+	_show_area_title_for_current_room()
+
+# ---- Area Title ----
+# Show the Hollow Knight-style area banner, but only when the room scene actually
+# changed (skip same-room respawns and same-scene cell scrolling).
+func _show_area_title_for_current_room() -> void:
+	if not hud or not map:
+		return
+	var scene_path := map.scene_file_path
+	if scene_path == _last_area_title_path:
+		return
+	_last_area_title_path = scene_path
+	var title: String = AREA_TITLES.get(scene_path, "")
+	if not title.is_empty():
+		hud.show_area_title(title)
 
 # -- Internal Helpers ---------------------------------------------------------------
+# ---- Spawn Calculations ----
 func _calculate_spawn_position() -> Vector2:
 	var room_size := _get_room_size()
 
@@ -194,6 +229,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				return
 
 # -- Internal Helpers ---------------------------------------------------------------
+# ---- Developer Panel ----
 func _developer_key_to_room_index(keycode: Key) -> int:
 	match keycode:
 		KEY_1, KEY_KP_1:
@@ -216,6 +252,7 @@ func _set_developer_mode(open: bool) -> void:
 	_update_developer_panel()
 
 # -- Public API ---------------------------------------------------------------
+# ---- Developer Warps ----
 func dev_jump_to_room(room_number: int) -> void:
 	var index := room_number - 1
 	if index < 0 or index >= DEV_ROOMS.size():
@@ -256,6 +293,7 @@ func _update_developer_panel() -> void:
 		lines.append("%s  %s" % [room["key"], room["name"]])
 	developer_info_label.text = "\n".join(lines)
 
+# ---- Camera & Room Transitions ----
 func _get_room_size() -> Vector2:
 	var fallback := Vector2(
 		ProjectSettings.get_setting("display/window/size/viewport_width", 1280),
